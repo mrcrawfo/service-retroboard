@@ -2,7 +2,6 @@ import React from "react";
 import { useQuery } from "@apollo/client";
 import { Grid, Stack, Typography } from "@mui/material";
 
-// import { NexusGenObjects } from '../../nexus-typegen';
 import { GET_USER_BOARDS, GET_BOARD } from "./graph/board/queries";
 import { BoardColumn as BoardColumnType } from "../entities/BoardColumn";
 import { Card as CardType } from "../entities/Card";

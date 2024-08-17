@@ -3,7 +3,6 @@ import { Grid, GridProps, Stack } from '@mui/material';
 import AddCardButton from '../atoms/AddCardButton';
 import Card from './Card';
 import { Card as CardType } from "../../../entities/Card";
-// import { NexusGenObjects } from 'nexus-typegen';
 
 export interface BoardColumnProps extends GridProps {
     boardId: number;
@@ -27,7 +26,7 @@ const BoardColumn = ({
     setUserVotes,
     ...gridProps
 }: BoardColumnProps) => {
-    const styles = {
+    const styles: any = {
         grid: {
             width: '100%',
             minHeight: '100vh',
@@ -43,11 +42,11 @@ const BoardColumn = ({
         h2: {
             height: '2.25em',
             overflow: 'hidden',
-            display: '-webkit-box',
-            '-webkit-line-clamp': 2,
-            lineClamp: 2,
-            '-webkit-box-orient': 'vertical',
             textOverflow: 'ellipsis',
+            display: '-webkit-box',
+            lineClamp: 2,
+            'WebkitLineClamp': 2,
+            'WebkitBoxOrient': 'vertical',
         }
     };
 
