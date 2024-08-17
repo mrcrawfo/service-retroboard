@@ -38,3 +38,25 @@ export const GET_USER_BOARDS = gql`
         }
     }
 `;
+
+export const GET_BOARD = gql`
+    query getBoard($id: Int!) {
+        getBoard(id: $id) {
+            id
+            name
+            columns {
+                id
+                name
+            }
+            cards {
+                columnId
+                id
+                text
+                votes {
+                    id
+                    userId
+                }
+            }
+        }
+    }
+`;

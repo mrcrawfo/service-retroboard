@@ -26,7 +26,7 @@ const Card = ({
 }: CardProps) => {
     const styles = {
         card: {
-            width: '100%',
+            width: 'calc(100% - 16px)',
             borderRadius: '8px',
             minHeight: '100px',
             backgroundColor: '#0080ff',
