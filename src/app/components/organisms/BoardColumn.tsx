@@ -62,7 +62,7 @@ const BoardColumn = ({
             { cards.length ? (
                 <Stack direction="column" spacing={1} sx={styles.stack}>
                     { cards.map((card: CardType) => (
-                        <Card cardId={card.id} key={card.id} columnId={1} boardId={boardId} votes={card.votes} boardVotesAllowed={boardVotesAllowed} userVotes={userVotes} setUserVotes={setUserVotes} />
+                        <Card cardId={card.id} key={card.id} columnId={1} boardId={boardId} text={card.text} votes={card.votes} boardVotesAllowed={boardVotesAllowed} userVotes={userVotes} setUserVotes={setUserVotes} />
                     ))}
                 </Stack>) : null
             }
