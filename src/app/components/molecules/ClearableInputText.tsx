@@ -77,7 +77,14 @@ const ClearableInputText = ({
                             sx={styles.inputText}
                             value={text}
                             ref={inputElement}
+                            onFocus={(e) =>
+                                e.currentTarget.setSelectionRange(
+                                    e.currentTarget.value.length,
+                                    e.currentTarget.value.length
+                                )
+                            }
                             multiline
+                            autoFocus
                             onChange={(event: React.ChangeEvent<HTMLInputElement>) => setText(event.target.value)}
                             endAdornment={
                                 <InputAdornment position="end">
