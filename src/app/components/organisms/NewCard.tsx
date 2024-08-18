@@ -9,12 +9,14 @@ export interface NewCardProps extends MuiCardProps {
     boardId: number;
     columnId: number;
     setAddingCard: (adding: boolean) => void;
+    setEditingCard: (editing: boolean) => void;
 }
 
 const NewCard = ({
     boardId,
     columnId,
     setAddingCard,
+    setEditingCard,
 }: NewCardProps) => {
     const styles = {
         card: {
@@ -42,10 +44,12 @@ const NewCard = ({
             createCard().then(() => {
                 setCardText('');
                 setAddingCard(false);
+                setEditingCard(false);
             });
         } else {
             setCardText('');
             setAddingCard(false);
+            setEditingCard(false);
         }
     };
 

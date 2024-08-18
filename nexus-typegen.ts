@@ -50,6 +50,9 @@ export interface NexusGenObjects {
     id: number; // Int!
     text: string; // String!
   }
+  CardDeleteResponse: { // root type
+    success: boolean; // Boolean!
+  }
   Mutation: {};
   Query: {};
   User: { // root type
@@ -108,11 +111,15 @@ export interface NexusGenFieldTypes {
     text: string; // String!
     votes: Array<NexusGenRootTypes['Vote'] | null>; // [Vote]!
   }
+  CardDeleteResponse: { // field return type
+    success: boolean; // Boolean!
+  }
   Mutation: { // field return type
     addVoteToCard: NexusGenRootTypes['Vote']; // Vote!
     createBoard: NexusGenRootTypes['Board']; // Board!
     createCard: NexusGenRootTypes['Card']; // Card!
     createColumn: NexusGenRootTypes['BoardColumn']; // BoardColumn!
+    deleteCard: NexusGenRootTypes['CardDeleteResponse']; // CardDeleteResponse!
     login: NexusGenRootTypes['AuthType']; // AuthType!
     register: NexusGenRootTypes['AuthType']; // AuthType!
     subtractVoteFromCard: NexusGenRootTypes['Vote'] | null; // Vote
@@ -180,11 +187,15 @@ export interface NexusGenFieldTypeNames {
     text: 'String'
     votes: 'Vote'
   }
+  CardDeleteResponse: { // field return type name
+    success: 'Boolean'
+  }
   Mutation: { // field return type name
     addVoteToCard: 'Vote'
     createBoard: 'Board'
     createCard: 'Card'
     createColumn: 'BoardColumn'
+    deleteCard: 'CardDeleteResponse'
     login: 'AuthType'
     register: 'AuthType'
     subtractVoteFromCard: 'Vote'
@@ -237,6 +248,9 @@ export interface NexusGenArgTypes {
     createColumn: { // args
       boardId: number; // Int!
       name: string; // String!
+    }
+    deleteCard: { // args
+      id: number; // Int!
     }
     login: { // args
       password: string; // String!

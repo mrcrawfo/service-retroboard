@@ -42,6 +42,13 @@ export const CardType = objectType({
     }
 });
 
+export const CardDeleteResponse = objectType({
+    name: 'CardDeleteResponse',
+    definition(t) {
+        t.nonNull.boolean('success');
+    }
+});
+
 export const CardQuery = extendType({
     type: 'Query',
     definition(t) {
@@ -129,7 +136,36 @@ export const CardMutation = extendType({
 
                 return await Card.save(card);
             }
+        }),
+        t.nonNull.field('deleteCard', {
+            type: 'CardDeleteResponse',
+            args: {
+                id: nonNull(intArg())
+            },
+            async resolve(_parent, args, context: Context, _info) {
+                const { id } = args;
+                const { userId } = context;
+
+                if (!userId) {
+                    throw new Error("Can't create card without logging in");
+                }
+
+                const card: Card = await Card.findOne({ where: { id }});
+
+                if (!card) {
+                    throw new Error("Can't update card that doesn't exist");
+                }
+
+                if (card.creatorId !== userId) {
+                    throw new Error("Can't update card that isn't yours");
+                }
+
+                // TODO: Delete votes or cascade (?)
+
+                await Card.remove(card);
+
+                return { success: true }
+            }
         })
     }
-    // TODO: deleteCard (?)
 });

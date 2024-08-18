@@ -30,6 +30,8 @@ export interface ClearableInputTextProps {
     edit?: boolean;
     onSave: () => void;
     setText: (text: string) => void;
+    editingCard?: boolean;
+    setEditingCard?: (editing: boolean) => void;
 }
 
 const ClearableInputText = ({
@@ -37,6 +39,8 @@ const ClearableInputText = ({
     edit = false,
     onSave,
     setText,
+    editingCard = false,
+    setEditingCard = null,
 }: ClearableInputTextProps) => {
 
     const inputElement = useRef<HTMLInputElement>(null);
@@ -58,6 +62,11 @@ const ClearableInputText = ({
     const onSaveClick = () => {
         onSave();
         setEditMode(false);
+    };
+
+    const onEditClick = () => {
+        setEditMode(true);
+        setEditingCard(true);
     };
 
     return (
@@ -90,7 +99,7 @@ const ClearableInputText = ({
                 ) : (
                     <Stack direction="row" spacing={1}>
                         <Typography variant="body1" sx={styles.outputText}>{text}</Typography>
-                        <IconButton onClick={() => setEditMode(true)}>
+                        <IconButton onClick={onEditClick} disabled={editingCard}>
                             <EditOutlined />
                         </IconButton>
                     </Stack>

@@ -5,7 +5,7 @@ import { CircularProgress, Card as MuiCard, CardProps as MuiCardProps, Stack } f
 import ClearableInputText from '../molecules/ClearableInputText';
 import VoteCounter from '../molecules/VoteCounter';
 import { Vote as VoteType } from '../../../entities/Vote';
-import { UPDATE_CARD } from '../../graph/cards/queries';
+import { DELETE_CARD, UPDATE_CARD } from '../../graph/cards/queries';
 
 export interface CardProps extends MuiCardProps {
     cardId: number;
@@ -16,6 +16,8 @@ export interface CardProps extends MuiCardProps {
     userVotes: number[];
     votes: VoteType[];
     setUserVotes: (userVotes: number[]) => void;
+    editingCard: boolean;
+    setEditingCard: (editing: boolean) => void;
 }
 
 const Card = ({
@@ -27,6 +29,8 @@ const Card = ({
     userVotes,
     votes,
     setUserVotes,
+    editingCard,
+    setEditingCard,
 }: CardProps) => {
     const styles = {
         card: {
@@ -38,9 +42,6 @@ const Card = ({
         },
     };
 
-    console.log('text');
-    console.log(text);
-
     const [cardText, setCardText] = useState<string>(text);
 
     const [updateCard, { loading: updateCardLoading }] = useMutation(UPDATE_CARD, {
@@ -51,20 +52,31 @@ const Card = ({
         refetchQueries: ['getBoard'],
     });
 
+    const [deleteCard, { loading: deleteCardLoading }] = useMutation(DELETE_CARD, {
+        variables: {
+            id: cardId,
+        },
+        refetchQueries: ['getBoard'],
+    });
+
     const onSave = () => {
         if (cardText !== '') {
             updateCard();
-        };
+            setEditingCard(false);
+        } else {
+            deleteCard();
+            setEditingCard(false);
+        }
     };
 
     return (
         <MuiCard id={`card-${cardId}`} sx={styles.card}>
-            { updateCardLoading ? (
+            { (updateCardLoading || deleteCardLoading) ? (
                     <CircularProgress />
                 ) : (
                     <Stack direction="column" spacing={0}>
-                        <ClearableInputText text={cardText} onSave={onSave} setText={setCardText} />
-                        <VoteCounter cardId={cardId} columnId={columnId} boardId={boardId} boardVotesAllowed={boardVotesAllowed} userVotes={userVotes} votes={votes} setUserVotes={setUserVotes} />
+                        <ClearableInputText text={cardText} onSave={onSave} setText={setCardText} editingCard={editingCard} setEditingCard={setEditingCard} />
+                        <VoteCounter cardId={cardId} columnId={columnId} boardId={boardId} boardVotesAllowed={boardVotesAllowed} userVotes={userVotes} votes={votes} setUserVotes={setUserVotes} editingCard={editingCard} />
                     </Stack>
                 )
             }

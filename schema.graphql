@@ -38,11 +38,16 @@ type Card {
   votes: [Vote]!
 }
 
+type CardDeleteResponse {
+  success: Boolean!
+}
+
 type Mutation {
   addVoteToCard(boardId: Int!, cardId: Int!, userId: Int!): Vote!
   createBoard(name: String!): Board!
   createCard(boardId: Int!, columnId: Int!, text: String!): Card!
   createColumn(boardId: Int!, name: String!): BoardColumn!
+  deleteCard(id: Int!): CardDeleteResponse!
   login(password: String!, username: String!): AuthType!
   register(email: String!, password: String!, username: String!): AuthType!
   subtractVoteFromCard(boardId: Int!, cardId: Int!, userId: Int!): Vote

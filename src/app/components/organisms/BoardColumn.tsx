@@ -15,6 +15,8 @@ export interface BoardColumnProps extends GridProps {
     boardVotesAllowed: number;
     userVotes: number[];
     setUserVotes: (userVotes: number[]) => void;
+    editingCard: boolean;
+    setEditingCard: (editing: boolean) => void;
 }
 
 const BoardColumn = ({
@@ -26,6 +28,8 @@ const BoardColumn = ({
     boardVotesAllowed,
     userVotes,
     setUserVotes,
+    editingCard,
+    setEditingCard,
     ...gridProps
 }: BoardColumnProps) => {
     const styles: any = {
@@ -55,19 +59,19 @@ const BoardColumn = ({
     const [addingCard, setAddingCard] = useState<boolean>(false);
 
     const addCardToColumn = () => {
-        console.log('Adding a card to column ' + columnId);
+        setEditingCard(true);
         setAddingCard(true);
     };
 
     return (
         <Grid item xs={Math.floor(12 / columnCount)} id={`column-${columnId}`} sx={styles.grid} { ...gridProps }>
             <h2 style={styles.h2}>{columnName}</h2>
-            <AddCardButton onClick={addCardToColumn} disabled={addingCard} />
+            <AddCardButton onClick={addCardToColumn} disabled={addingCard || editingCard} />
             { (cards.length || addingCard) ? (
                 <Stack direction="column" spacing={1} sx={styles.stack}>
-                    { addingCard ? <NewCard boardId={boardId} columnId={columnId} setAddingCard={setAddingCard} /> : null }
+                    { addingCard ? <NewCard boardId={boardId} columnId={columnId} setAddingCard={setAddingCard} setEditingCard={setEditingCard}/> : null }
                     { cards.map((card: CardType) => (
-                        <Card cardId={card.id} key={card.id} columnId={1} boardId={boardId} text={card.text} votes={card.votes} boardVotesAllowed={boardVotesAllowed} userVotes={userVotes} setUserVotes={setUserVotes} />
+                        <Card cardId={card.id} key={card.id} columnId={1} boardId={boardId} text={card.text} votes={card.votes} boardVotesAllowed={boardVotesAllowed} userVotes={userVotes} setUserVotes={setUserVotes} editingCard={editingCard} setEditingCard={setEditingCard} />
                     ))}
                 </Stack>) : null
             }

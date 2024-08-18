@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useQuery } from "@apollo/client";
 import { Grid } from "@mui/material";
 
@@ -26,6 +26,8 @@ function App() {
   const cards = boardData?.getBoard?.cards || [];
   const columns = boardData?.getBoard?.columns || [];
 
+  const [editingCard, setEditingCard] = useState<boolean>(false);
+
   const styles = {
     grid: {
         width: '100vw',
@@ -50,7 +52,7 @@ function App() {
       <div style={{ height: '80px' }} /> {/* Placeholder for Header/Controls component */}
       <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }} sx={styles.grid}>
         { columns.map((column: BoardColumnType) => (
-          <BoardColumn boardId={boardId} columnCount={columns?.length} columnId={column.id} key={column.id} columnName={column.name} cards={cards.filter((card: CardType) => card.columnId === column.id)} boardVotesAllowed={boardVotesAllowed} userVotes={userVotes} setUserVotes={setUserVotes} />
+          <BoardColumn boardId={boardId} columnCount={columns?.length} columnId={column.id} key={column.id} columnName={column.name} cards={cards.filter((card: CardType) => card.columnId === column.id)} boardVotesAllowed={boardVotesAllowed} userVotes={userVotes} setUserVotes={setUserVotes} editingCard={editingCard} setEditingCard={setEditingCard} />
         ))}
       </Grid>
     </>

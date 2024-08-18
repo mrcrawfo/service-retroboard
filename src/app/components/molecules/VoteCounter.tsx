@@ -38,6 +38,7 @@ export interface VoteCounterProps {
     columnId: number;
     userVotes: number[];
     setUserVotes: (votes: number[]) => void;
+    editingCard: boolean;
 }
 
 const VoteCounter = ({
@@ -47,7 +48,8 @@ const VoteCounter = ({
     boardVotesAllowed,
     // columnId,
     userVotes,
-    setUserVotes
+    setUserVotes,
+    editingCard,
 }: VoteCounterProps) => {
     const { user } = useContext(AuthContext);
     const userId: number = user?.id || 0;
@@ -86,7 +88,7 @@ const VoteCounter = ({
             <IconButton
                 aria-label={`upvote card ${cardId}`}
                 onClick={upvote}
-                disabled={(!canUpvote || downvoteLoading || upvoteLoading)}
+                disabled={(!canUpvote || downvoteLoading || upvoteLoading || editingCard)}
                 size="small"
             >
                 <ThumbUpOffAltIcon fontSize="small" sx={(canUpvote && !upvoteLoading && !downvoteLoading) ? styles.enabledButton : styles.disabledButton} />
@@ -94,13 +96,13 @@ const VoteCounter = ({
             <IconButton
                 aria-label={`downvote card ${cardId}`}
                 onClick={downvote}
-                disabled={(!canDownvote || downvoteLoading || upvoteLoading)}
+                disabled={(!canDownvote || downvoteLoading || upvoteLoading || editingCard)}
                 size="small"
             >
                 <ThumbDownOffAltIcon fontSize="small" sx={(canDownvote && !upvoteLoading && !downvoteLoading) ? styles.enabledButton : styles.disabledButton} />
             </IconButton>
             <div style={{ lineHeight: '2em', verticalAlign: 'middle' }}>
-                { userVotes.filter((id) => cardId === id).map(() => <CircleIcon sx={{ fontSize: '0.6em', padding: '0 2px' }} />) }
+                { userVotes.filter((id) => cardId === id).map((cardId, index) => <CircleIcon key={`${boardId}-${cardId}-${index}`} sx={{ fontSize: '0.6em', padding: '0 2px' }} />) }
             </div>
         </Stack>
     );
