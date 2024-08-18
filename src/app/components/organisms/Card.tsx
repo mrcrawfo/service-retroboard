@@ -61,7 +61,9 @@ const Card = ({
 
     const onSave = () => {
         if (cardText !== '') {
-            updateCard();
+            if (cardText !== text) {
+                updateCard();
+            }
             setEditingCard(false);
         } else {
             deleteCard();
