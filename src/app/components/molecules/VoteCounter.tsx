@@ -1,12 +1,12 @@
 import { useContext, useEffect, useState } from 'react';
+import { useMutation } from '@apollo/client';
 import { IconButton, Stack, Typography } from '@mui/material';
 import ThumbUpOffAltIcon from '@mui/icons-material/ThumbUpOffAlt';
 import ThumbDownOffAltIcon from '@mui/icons-material/ThumbDownOffAlt';
 import CircleIcon from '@mui/icons-material/Circle';
 
 import { AuthContext } from '../../hocs/AuthContext';
-import { NexusGenObjects } from '../../../../nexus-typegen';
-import { useMutation } from '@apollo/client';
+import { Vote as VoteType } from '../../../entities/Vote';
 import { UPVOTE_CARD, DOWNVOTE_CARD } from '../../graph/vote/queries';
 
 const styles = {
@@ -31,7 +31,7 @@ const styles = {
 };
 
 export interface VoteCounterProps {
-    votes: NexusGenObjects['Vote'][];
+    votes: VoteType[];
     cardId: number;
     boardId: number;
     boardVotesAllowed: number;
@@ -82,7 +82,7 @@ const VoteCounter = ({
 
     return (
         <Stack direction="row" spacing={1}>
-            <Typography variant='button' sx={styles.counter}>{userVotes.filter((vote) => vote === cardId).length}</Typography>
+            <Typography variant='button' sx={styles.counter}>{votes.length}</Typography>
             <IconButton
                 aria-label={`upvote card ${cardId}`}
                 onClick={upvote}

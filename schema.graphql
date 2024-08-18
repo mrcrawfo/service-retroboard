@@ -46,6 +46,7 @@ type Mutation {
   login(password: String!, username: String!): AuthType!
   register(email: String!, password: String!, username: String!): AuthType!
   subtractVoteFromCard(boardId: Int!, cardId: Int!, userId: Int!): Vote
+  updateCard(id: Int!, text: String!): Card!
 }
 
 type Query {

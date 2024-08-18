@@ -100,8 +100,36 @@ export const CardMutation = extendType({
 
                 return Card.create({ text, boardId, columnId, creatorId: userId, voteIds: [] }).save();
             }
+        }),
+        t.nonNull.field('updateCard', {
+            type: 'Card',
+            args: {
+                id: nonNull(intArg()),
+                text: nonNull(stringArg())
+            },
+            async resolve(_parent, args, context: Context, _info): Promise<Card> {
+                const { id, text } = args;
+                const { userId } = context;
+
+                if (!userId) {
+                    throw new Error("Can't create card without logging in");
+                }
+
+                const card: Card = await Card.findOne({ where: { id }});
+
+                if (!card) {
+                    throw new Error("Can't update card that doesn't exist");
+                }
+
+                if (card.creatorId !== userId) {
+                    throw new Error("Can't update card that isn't yours");
+                }
+
+                card.text = text;
+
+                return await Card.save(card);
+            }
         })
-        // TODO: updateCard (?)
-        // TODO: deleteCard (?)
     }
+    // TODO: deleteCard (?)
 });

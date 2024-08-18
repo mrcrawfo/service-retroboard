@@ -14,3 +14,23 @@ export const GET_CARDS_BY_BOARD_ID = gql`
         }
     }
 `;
+
+export const CREATE_CARD = gql`
+    mutation CreateCard($text: String!, $boardId: Int!, $columnId: Int!) {
+        createCard(text: $text, boardId: $boardId, columnId: $columnId) {
+            id
+            text
+            boardId
+            creatorId
+        }
+    }
+`;
+
+export const UPDATE_CARD = gql`
+    mutation UpdateCard($id: Int!, $text: String!) {
+        updateCard(id: $id, text: $text) {
+            id
+            text
+        }
+    }
+`;

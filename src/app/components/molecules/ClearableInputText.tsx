@@ -1,7 +1,7 @@
 import { useRef, useState } from 'react';
 import { IconButton, InputAdornment, OutlinedInput, Stack, Typography } from '@mui/material';
 import ClearIcon from '@mui/icons-material/Clear';
-import { CancelOutlined, EditOutlined } from '@mui/icons-material';
+import { CheckOutlined, EditOutlined } from '@mui/icons-material';
 
 const styles = {
     inputText: {
@@ -17,6 +17,7 @@ const styles = {
         minHeight: '40px',
         lineHeight: '1.25em',
         color: '#fff',
+        whiteSpace: 'pre-wrap',
     },
     disabledButton: {
         color: '#ccc',
@@ -26,17 +27,21 @@ const styles = {
 
 export interface ClearableInputTextProps {
     text: string;
+    edit?: boolean;
+    onSave: () => void;
     setText: (text: string) => void;
 }
 
 const ClearableInputText = ({
     text,
+    edit = false,
+    onSave,
     setText,
 }: ClearableInputTextProps) => {
 
     const inputElement = useRef<HTMLInputElement>(null);
 
-    const [editMode, setEditMode] = useState<boolean>(false);
+    const [editMode, setEditMode] = useState<boolean>(edit);
 
     const clearInput = () => {
         // Clear input text after adding it to terms array/chips - Use setTimeout because
@@ -48,6 +53,11 @@ const ClearableInputText = ({
         // }, 0);
         // inputElement?.current?.value = '';
         setText('');
+    };
+
+    const onSaveClick = () => {
+        onSave();
+        setEditMode(false);
     };
 
     return (
@@ -73,8 +83,8 @@ const ClearableInputText = ({
                                 </InputAdornment>
                             }
                         />
-                        <IconButton onClick={() => setEditMode(false)}>
-                            <CancelOutlined />
+                        <IconButton onClick={onSaveClick}>
+                            <CheckOutlined />
                         </IconButton>
                     </Stack>
                 ) : (

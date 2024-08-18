@@ -1,7 +1,9 @@
+import { useState } from 'react';
 import { Grid, GridProps, Stack } from '@mui/material';
 
 import AddCardButton from '../atoms/AddCardButton';
 import Card from './Card';
+import NewCard from './NewCard';
 import { Card as CardType } from "../../../entities/Card";
 
 export interface BoardColumnProps extends GridProps {
@@ -50,17 +52,20 @@ const BoardColumn = ({
         }
     };
 
+    const [addingCard, setAddingCard] = useState<boolean>(false);
+
     const addCardToColumn = () => {
         console.log('Adding a card to column ' + columnId);
-        // TODO: Implement adding a card to a column
+        setAddingCard(true);
     };
 
     return (
         <Grid item xs={Math.floor(12 / columnCount)} id={`column-${columnId}`} sx={styles.grid} { ...gridProps }>
             <h2 style={styles.h2}>{columnName}</h2>
-            <AddCardButton onClick={addCardToColumn} />
-            { cards.length ? (
+            <AddCardButton onClick={addCardToColumn} disabled={addingCard} />
+            { (cards.length || addingCard) ? (
                 <Stack direction="column" spacing={1} sx={styles.stack}>
+                    { addingCard ? <NewCard boardId={boardId} columnId={columnId} setAddingCard={setAddingCard} /> : null }
                     { cards.map((card: CardType) => (
                         <Card cardId={card.id} key={card.id} columnId={1} boardId={boardId} text={card.text} votes={card.votes} boardVotesAllowed={boardVotesAllowed} userVotes={userVotes} setUserVotes={setUserVotes} />
                     ))}
