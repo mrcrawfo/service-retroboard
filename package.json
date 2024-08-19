@@ -6,7 +6,7 @@
     "scripts": {
         "dev:watch": "tsc -w",
         "dev:start": "nodemon dist/src/server.js",
-        "dev:vite": "VITE_CJS_IGNORE_WARNING=true vite",
+        "dev:vite": "vite",
         "build": "tsc -b && vite build",
         "lint": "biome lint .",
         "lint:check": "biome check .",
@@ -16,8 +16,7 @@
         "ts:check": "tsc --noEmit",
         "validate": "npm run format && npm run lint"
     },
-    "author": "",
-    "license": "ISC",
+    "author": "Max Crawford",
     "dependencies": {
         "@apollo/client": "^3.11.1",
         "@emotion/react": "^11.13.0",
@@ -44,8 +43,8 @@
     "devDependencies": {
         "@biomejs/biome": "1.8.3",
         "@commitlint/cli": "^19.4.0",
-        "@tanstack/router-devtools": "^1.45.15",
-        "@tanstack/router-plugin": "^1.45.13",
+        "@tanstack/router-devtools": "^1.48.1",
+        "@tanstack/router-plugin": "^1.48.3",
         "@types/jsonwebtoken": "^9.0.6",
         "@types/react": "^18.3.3",
         "@types/react-dom": "^18.3.0",
@@ -54,6 +53,8 @@
         "lint-staged": "15.2.9"
     },
     "lint-staged": {
-        "*.{js,jsx,ts,tsx,json,md}": ["biome format . --write"]
+        "*.{js,jsx,ts,tsx,json,md}": [
+            "biome format . --write"
+        ]
     }
 }
