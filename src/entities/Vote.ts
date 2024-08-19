@@ -1,27 +1,38 @@
-import { BaseEntity, Column, CreateDateColumn, Entity, ManyToOne, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import {
+    BaseEntity,
+    Column,
+    CreateDateColumn,
+    Entity,
+    ManyToOne,
+    PrimaryGeneratedColumn,
+    UpdateDateColumn,
+} from 'typeorm';
 
-import { Card } from "./Card";
+import { Card } from './Card';
 
 @Entity()
 export class Vote extends BaseEntity {
     @PrimaryGeneratedColumn()
-    id!: number
+    id!: number;
 
     @Column()
-    cardId!: number
+    cardId!: number;
 
-    @ManyToOne(() => Card, (card) => card.votes)
-    card: Card
+    @ManyToOne(
+        () => Card,
+        (card) => card.votes,
+    )
+    card: Card;
 
     @Column()
-    boardId!: number
+    boardId!: number;
 
     @Column()
-    userId!: number
+    userId!: number;
 
     @CreateDateColumn()
-    createdAt: Date
+    createdAt: Date;
 
     @UpdateDateColumn()
-    updatedAt: Date
+    updatedAt: Date;
 }

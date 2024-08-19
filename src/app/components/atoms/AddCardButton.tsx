@@ -1,14 +1,11 @@
-import { Button, ButtonProps } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
+import { Button, ButtonProps } from '@mui/material';
 
 export interface AddCardButtonProps extends ButtonProps {
     onClick: () => void;
 }
 
-const AddCardButton = ({
-    onClick,
-    ...buttonProps
-}: AddCardButtonProps) => {
+const AddCardButton = ({ onClick, ...buttonProps }: AddCardButtonProps) => {
     const styles = {
         button: {
             width: '100%',
@@ -17,7 +14,11 @@ const AddCardButton = ({
         },
     };
 
-    return <Button variant="contained" color="primary" sx={styles.button} onClick={onClick} {...buttonProps}><AddIcon /></Button>;
+    return (
+        <Button variant='contained' color='primary' sx={styles.button} onClick={onClick} {...buttonProps}>
+            <AddIcon />
+        </Button>
+    );
 };
 
 export default AddCardButton;

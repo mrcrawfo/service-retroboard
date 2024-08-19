@@ -1,8 +1,8 @@
 import { extendType, intArg, nonNull, objectType } from 'nexus';
 
-import { Context } from '../types/Context';
 import { User } from '../entities/User';
 import { Vote } from '../entities/Vote';
+import { Context } from '../types/Context';
 
 export const VoteType = objectType({
     name: 'Vote',

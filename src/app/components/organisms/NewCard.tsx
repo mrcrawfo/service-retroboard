@@ -1,9 +1,9 @@
-import { useState } from 'react';
 import { useMutation } from '@apollo/client';
-import { Card as MuiCard, CardProps as MuiCardProps, CircularProgress } from '@mui/material';
+import { CircularProgress, Card as MuiCard, CardProps as MuiCardProps } from '@mui/material';
+import { useState } from 'react';
 
-import ClearableInputText from '../molecules/ClearableInputText';
 import { CREATE_CARD } from '../../graph/cards/queries';
+import ClearableInputText from '../molecules/ClearableInputText';
 
 export interface NewCardProps extends MuiCardProps {
     boardId: number;
@@ -12,12 +12,7 @@ export interface NewCardProps extends MuiCardProps {
     setEditingCard: (editing: boolean) => void;
 }
 
-const NewCard = ({
-    boardId,
-    columnId,
-    setAddingCard,
-    setEditingCard,
-}: NewCardProps) => {
+const NewCard = ({ boardId, columnId, setAddingCard, setEditingCard }: NewCardProps) => {
     const styles = {
         card: {
             width: 'calc(100% - 16px)',
@@ -55,12 +50,11 @@ const NewCard = ({
 
     return (
         <MuiCard id={`card-new`} sx={styles.card}>
-            { createCardLoading ? (
-                    <CircularProgress />
-                ) : (
-                    <ClearableInputText edit={true} text={cardText} onSave={onSave} setText={setCardText} />
-                )
-            }
+            {createCardLoading ? (
+                <CircularProgress />
+            ) : (
+                <ClearableInputText edit={true} text={cardText} onSave={onSave} setText={setCardText} />
+            )}
         </MuiCard>
     );
 };

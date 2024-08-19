@@ -1,4 +1,13 @@
-import { BaseEntity, Column, CreateDateColumn, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import {
+    BaseEntity,
+    Column,
+    CreateDateColumn,
+    Entity,
+    ManyToOne,
+    OneToMany,
+    PrimaryGeneratedColumn,
+    UpdateDateColumn,
+} from 'typeorm';
 
 import { Board } from './Board';
 import { Card } from './Card';
@@ -7,29 +16,38 @@ import { User } from './User';
 @Entity()
 export class BoardColumn extends BaseEntity {
     @PrimaryGeneratedColumn()
-    id!: number
+    id!: number;
 
     @Column()
-    name!: string
+    name!: string;
 
     @Column()
-    creatorId!: number
+    creatorId!: number;
 
-    @ManyToOne(() => User, (user) => user.boards)
-    creator: User
+    @ManyToOne(
+        () => User,
+        (user) => user.boards,
+    )
+    creator: User;
 
     @Column()
-    boardId!: number
+    boardId!: number;
 
-    @ManyToOne(() => Board, (board) => board.columns)
-    board: Board
+    @ManyToOne(
+        () => Board,
+        (board) => board.columns,
+    )
+    board: Board;
 
-    @OneToMany(() => Card, (card) => card.column)
-    cards: Card[]
+    @OneToMany(
+        () => Card,
+        (card) => card.column,
+    )
+    cards: Card[];
 
     @CreateDateColumn()
-    createdAt: Date
+    createdAt: Date;
 
     @UpdateDateColumn()
-    updatedAt: Date
+    updatedAt: Date;
 }

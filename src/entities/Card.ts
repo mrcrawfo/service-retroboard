@@ -1,45 +1,66 @@
-import { BaseEntity, Column, CreateDateColumn, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import {
+    BaseEntity,
+    Column,
+    CreateDateColumn,
+    Entity,
+    ManyToOne,
+    OneToMany,
+    PrimaryGeneratedColumn,
+    UpdateDateColumn,
+} from 'typeorm';
 
-import { Board } from "./Board";
-import { BoardColumn } from "./BoardColumn";
-import { User } from "./User";
-import { Vote } from "./Vote";
+import { Board } from './Board';
+import { BoardColumn } from './BoardColumn';
+import { User } from './User';
+import { Vote } from './Vote';
 
 @Entity()
 export class Card extends BaseEntity {
     @PrimaryGeneratedColumn()
-    id!: number
+    id!: number;
 
     @Column()
-    text!: string
+    text!: string;
 
     @Column()
-    columnId!: number
+    columnId!: number;
 
-    @ManyToOne(() => BoardColumn, (column) => column.cards)
-    column: BoardColumn
-
-    @Column()
-    boardId!: number
-
-    @ManyToOne(() => Board, (board) => board.cards)
-    board: Board
-
-    @Column("int", { array: true })
-    voteIds!: number[]
-
-    @OneToMany(() => Vote, (vote) => vote.card)
-    votes: Vote[]
+    @ManyToOne(
+        () => BoardColumn,
+        (column) => column.cards,
+    )
+    column: BoardColumn;
 
     @Column()
-    creatorId!: number
+    boardId!: number;
 
-    @ManyToOne(() => User, (user) => user.cards)
-    creator: User
+    @ManyToOne(
+        () => Board,
+        (board) => board.cards,
+    )
+    board: Board;
+
+    @Column('int', { array: true })
+    voteIds!: number[];
+
+    @OneToMany(
+        () => Vote,
+        (vote) => vote.card,
+    )
+    votes: Vote[];
+
+    @Column()
+    creatorId!: number;
+
+    @ManyToOne(
+        () => User,
+        (user) => user.cards,
+    )
+    creator: User;
 
     @CreateDateColumn()
-    createdAt: Date
+    createdAt: Date;
 
     @UpdateDateColumn()
-    updatedAt: Date
+    updatedAt: Date;
 }

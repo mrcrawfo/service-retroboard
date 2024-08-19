@@ -1,31 +1,45 @@
-import { BaseEntity, Column, CreateDateColumn, Entity, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import {
+    BaseEntity,
+    Column,
+    CreateDateColumn,
+    Entity,
+    OneToMany,
+    PrimaryGeneratedColumn,
+    UpdateDateColumn,
+} from 'typeorm';
 
-import { Board } from "./Board";
-import { Card } from "./Card";
+import { Board } from './Board';
+import { Card } from './Card';
 
 @Entity()
 export class User extends BaseEntity {
     @PrimaryGeneratedColumn()
-    id!: number
+    id!: number;
 
     @Column({ unique: true })
-    username!: string
+    username!: string;
 
     @Column()
-    password!: string
+    password!: string;
 
     @Column({ unique: true })
-    email!: string
+    email!: string;
 
-    @OneToMany(() => Board, (board) => board.creator)
+    @OneToMany(
+        () => Board,
+        (board) => board.creator,
+    )
     boards: Board[];
 
-    @OneToMany(() => Card, (card) => card.creator)
+    @OneToMany(
+        () => Card,
+        (card) => card.creator,
+    )
     cards: Card[];
 
     @CreateDateColumn()
-    createdAt: Date
+    createdAt: Date;
 
     @UpdateDateColumn()
-    updatedAt: Date
+    updatedAt: Date;
 }

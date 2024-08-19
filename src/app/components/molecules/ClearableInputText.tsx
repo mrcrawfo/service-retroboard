@@ -1,7 +1,7 @@
-import { ChangeEvent, useRef, useState } from 'react';
-import { IconButton, InputAdornment, OutlinedInput, Stack, Typography } from '@mui/material';
-import ClearIcon from '@mui/icons-material/Clear';
 import { CheckOutlined, EditOutlined } from '@mui/icons-material';
+import ClearIcon from '@mui/icons-material/Clear';
+import { IconButton, InputAdornment, OutlinedInput, Stack, Typography } from '@mui/material';
+import { ChangeEvent, useRef, useState } from 'react';
 
 const styles = {
     inputText: {
@@ -22,7 +22,7 @@ const styles = {
     disabledButton: {
         color: '#ccc',
         pointerEvents: 'none',
-    }
+    },
 };
 
 export interface ClearableInputTextProps {
@@ -42,7 +42,6 @@ const ClearableInputText = ({
     editingCard = false,
     setEditingCard = null,
 }: ClearableInputTextProps) => {
-
     const inputElement = useRef<HTMLInputElement>(null);
 
     const [editMode, setEditMode] = useState<boolean>(edit);
@@ -71,47 +70,48 @@ const ClearableInputText = ({
 
     return (
         <>
-            { editMode ? (
-                    <Stack direction="row" spacing={1}>
-                        <OutlinedInput
-                            sx={styles.inputText}
-                            value={text}
-                            ref={inputElement}
-                            onFocus={(e) =>
-                                e.currentTarget.setSelectionRange(
-                                    e.currentTarget.value.length,
-                                    e.currentTarget.value.length
-                                )
-                            }
-                            multiline
-                            autoFocus
-                            onChange={(event: ChangeEvent<HTMLInputElement>) => setText(event.target.value)}
-                            endAdornment={
-                                <InputAdornment position="end">
-                                    <IconButton
-                                        aria-label="clear card input text"
-                                        onClick={clearInput}
-                                        edge="end"
-                                        disabled={!text || text === ''}
-                                    >
-                                        {text && text !== '' ? <ClearIcon /> : <ClearIcon sx={styles.disabledButton} />}
-                                    </IconButton>
-                                </InputAdornment>
-                            }
-                        />
-                        <IconButton onClick={onSaveClick}>
-                            <CheckOutlined />
-                        </IconButton>
-                    </Stack>
-                ) : (
-                    <Stack direction="row" spacing={1}>
-                        <Typography variant="body1" sx={styles.outputText}>{text}</Typography>
-                        <IconButton onClick={onEditClick} disabled={editingCard}>
-                            <EditOutlined />
-                        </IconButton>
-                    </Stack>
-                )
-            }
+            {editMode ? (
+                <Stack direction='row' spacing={1}>
+                    <OutlinedInput
+                        sx={styles.inputText}
+                        value={text}
+                        ref={inputElement}
+                        onFocus={(e) =>
+                            e.currentTarget.setSelectionRange(
+                                e.currentTarget.value.length,
+                                e.currentTarget.value.length,
+                            )
+                        }
+                        multiline
+                        autoFocus
+                        onChange={(event: ChangeEvent<HTMLInputElement>) => setText(event.target.value)}
+                        endAdornment={
+                            <InputAdornment position='end'>
+                                <IconButton
+                                    aria-label='clear card input text'
+                                    onClick={clearInput}
+                                    edge='end'
+                                    disabled={!text || text === ''}
+                                >
+                                    {text && text !== '' ? <ClearIcon /> : <ClearIcon sx={styles.disabledButton} />}
+                                </IconButton>
+                            </InputAdornment>
+                        }
+                    />
+                    <IconButton onClick={onSaveClick}>
+                        <CheckOutlined />
+                    </IconButton>
+                </Stack>
+            ) : (
+                <Stack direction='row' spacing={1}>
+                    <Typography variant='body1' sx={styles.outputText}>
+                        {text}
+                    </Typography>
+                    <IconButton onClick={onEditClick} disabled={editingCard}>
+                        <EditOutlined />
+                    </IconButton>
+                </Stack>
+            )}
         </>
     );
 };

@@ -1,13 +1,13 @@
-import { useContext, useEffect, useState } from 'react';
 import { useMutation } from '@apollo/client';
-import { IconButton, Stack, Typography } from '@mui/material';
-import ThumbUpOffAltIcon from '@mui/icons-material/ThumbUpOffAlt';
-import ThumbDownOffAltIcon from '@mui/icons-material/ThumbDownOffAlt';
 import CircleIcon from '@mui/icons-material/Circle';
+import ThumbDownOffAltIcon from '@mui/icons-material/ThumbDownOffAlt';
+import ThumbUpOffAltIcon from '@mui/icons-material/ThumbUpOffAlt';
+import { IconButton, Stack, Typography } from '@mui/material';
+import { useContext, useEffect, useState } from 'react';
 
-import { AuthContext } from '../../hocs/AuthContext';
 import { Vote as VoteType } from '../../../entities/Vote';
-import { UPVOTE_CARD, DOWNVOTE_CARD } from '../../graph/vote/queries';
+import { DOWNVOTE_CARD, UPVOTE_CARD } from '../../graph/vote/queries';
+import { AuthContext } from '../../hocs/AuthContext';
 
 const styles = {
     counter: {
@@ -63,15 +63,8 @@ const VoteCounter = ({
 
     useEffect(() => {
         setCanUpvote(userVotes.length < boardVotesAllowed);
-        setCanDownvote(userVotes.filter(id => cardId === id).length > 0);
-    }, [
-        userVotes,
-        boardVotesAllowed,
-        setCanUpvote,
-        setCanDownvote,
-        upvoteLoading,
-        downvoteLoading,
-    ]);
+        setCanDownvote(userVotes.filter((id) => cardId === id).length > 0);
+    }, [userVotes, boardVotesAllowed, setCanUpvote, setCanDownvote, upvoteLoading, downvoteLoading]);
 
     const upvote = () => {
         // add one instance of cardId to userVotes (if userVotes.length < boardVotesAllowed)
@@ -103,11 +96,7 @@ const VoteCounter = ({
             >
                 <ThumbUpOffAltIcon
                     fontSize='small'
-                    sx={
-                        canUpvote && !upvoteLoading && !downvoteLoading
-                            ? styles.enabledButton
-                            : styles.disabledButton
-                    }
+                    sx={canUpvote && !upvoteLoading && !downvoteLoading ? styles.enabledButton : styles.disabledButton}
                 />
             </IconButton>
             <IconButton
@@ -119,15 +108,13 @@ const VoteCounter = ({
                 <ThumbDownOffAltIcon
                     fontSize='small'
                     sx={
-                        canDownvote && !upvoteLoading && !downvoteLoading
-                            ? styles.enabledButton
-                            : styles.disabledButton
+                        canDownvote && !upvoteLoading && !downvoteLoading ? styles.enabledButton : styles.disabledButton
                     }
                 />
             </IconButton>
             <div style={{ lineHeight: '2em', verticalAlign: 'middle' }}>
                 {userVotes
-                    .filter(id => cardId === id)
+                    .filter((id) => cardId === id)
                     .map((cardId, index) => (
                         <CircleIcon
                             key={`${boardId}-${cardId}-${index}`}

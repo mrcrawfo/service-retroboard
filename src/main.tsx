@@ -6,11 +6,11 @@ import { ApolloWrapper } from './app/components/atoms/ApolloWrapper';
 import ApolloAuthProvider from './app/hocs/ApolloAuthProvider';
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
-  <React.StrictMode>
-    <ApolloWrapper>
-      <ApolloAuthProvider>
-        <App />
-      </ApolloAuthProvider>
-    </ApolloWrapper>
-  </React.StrictMode>,
+    <React.StrictMode>
+        <ApolloWrapper>
+            <ApolloAuthProvider>
+                <App />
+            </ApolloAuthProvider>
+        </ApolloWrapper>
+    </React.StrictMode>,
 );

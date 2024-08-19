@@ -1,11 +1,11 @@
-import { useState } from 'react';
 import { useMutation } from '@apollo/client';
 import { CircularProgress, Card as MuiCard, CardProps as MuiCardProps, Stack } from '@mui/material';
+import { useState } from 'react';
 
-import ClearableInputText from '../molecules/ClearableInputText';
-import VoteCounter from '../molecules/VoteCounter';
 import { Vote as VoteType } from '../../../entities/Vote';
 import { DELETE_CARD, UPDATE_CARD } from '../../graph/cards/queries';
+import ClearableInputText from '../molecules/ClearableInputText';
+import VoteCounter from '../molecules/VoteCounter';
 
 export interface CardProps extends MuiCardProps {
     cardId: number;
@@ -73,15 +73,29 @@ const Card = ({
 
     return (
         <MuiCard id={`card-${cardId}`} sx={styles.card}>
-            { (updateCardLoading || deleteCardLoading) ? (
-                    <CircularProgress />
-                ) : (
-                    <Stack direction="column" spacing={0}>
-                        <ClearableInputText text={cardText} onSave={onSave} setText={setCardText} editingCard={editingCard} setEditingCard={setEditingCard} />
-                        <VoteCounter cardId={cardId} columnId={columnId} boardId={boardId} boardVotesAllowed={boardVotesAllowed} userVotes={userVotes} votes={votes} setUserVotes={setUserVotes} editingCard={editingCard} />
-                    </Stack>
-                )
-            }
+            {updateCardLoading || deleteCardLoading ? (
+                <CircularProgress />
+            ) : (
+                <Stack direction='column' spacing={0}>
+                    <ClearableInputText
+                        text={cardText}
+                        onSave={onSave}
+                        setText={setCardText}
+                        editingCard={editingCard}
+                        setEditingCard={setEditingCard}
+                    />
+                    <VoteCounter
+                        cardId={cardId}
+                        columnId={columnId}
+                        boardId={boardId}
+                        boardVotesAllowed={boardVotesAllowed}
+                        userVotes={userVotes}
+                        votes={votes}
+                        setUserVotes={setUserVotes}
+                        editingCard={editingCard}
+                    />
+                </Stack>
+            )}
         </MuiCard>
     );
 };
