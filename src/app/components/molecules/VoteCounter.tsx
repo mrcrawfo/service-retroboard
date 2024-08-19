@@ -8,27 +8,7 @@ import { useContext, useEffect, useState } from 'react';
 import { Vote as VoteType } from '../../../entities/Vote';
 import { DOWNVOTE_CARD, UPVOTE_CARD } from '../../graph/vote/queries';
 import { AuthContext } from '../../hocs/AuthContext';
-
-const styles = {
-    counter: {
-        fontWeight: 'bold',
-        padding: '4px',
-    },
-    inputText: {
-        width: '100%',
-        borderRadius: '2px',
-        backgroundColor: '#fff',
-        color: '#000',
-    },
-    enabledButton: {
-        color: '#fff',
-        pointerEvents: 'auto',
-    },
-    disabledButton: {
-        color: '#60a0f0',
-        pointerEvents: 'none',
-    },
-};
+import { ThemeColorSet } from '../../helpers/theme';
 
 export interface VoteCounterProps {
     votes: VoteType[];
@@ -36,6 +16,7 @@ export interface VoteCounterProps {
     boardId: number;
     boardVotesAllowed: number;
     columnId: number;
+    theme?: ThemeColorSet;
     userVotes: number[];
     setUserVotes: (votes: number[]) => void;
     editingCard: boolean;
@@ -47,10 +28,32 @@ const VoteCounter = ({
     boardId,
     boardVotesAllowed,
     // columnId,
+    theme,
     userVotes,
     setUserVotes,
     editingCard,
 }: VoteCounterProps) => {
+    const styles = {
+        counter: {
+            fontWeight: 'bold',
+            padding: '4px',
+        },
+        inputText: {
+            width: '100%',
+            borderRadius: '2px',
+            backgroundColor: '#fff',
+            color: '#000',
+        },
+        enabledButton: {
+            color: '#fff',
+            pointerEvents: 'auto',
+        },
+        disabledButton: {
+            color: theme?.colors?.primaryDisabled || '#60a0f0',
+            pointerEvents: 'none',
+        },
+    };
+
     const { user } = useContext(AuthContext);
     // biome-ignore lint/correctness/noUnusedVariables:
     const userId: number = user?.id || 0;

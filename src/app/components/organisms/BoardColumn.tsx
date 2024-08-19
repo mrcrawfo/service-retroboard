@@ -5,6 +5,7 @@ import { Card as CardType } from '../../../entities/Card';
 import AddCardButton from '../atoms/AddCardButton';
 import Card from './Card';
 import NewCard from './NewCard';
+import { ThemeColorSet } from '../../helpers/theme';
 
 export interface BoardColumnProps extends GridProps {
     boardId: number;
@@ -13,6 +14,7 @@ export interface BoardColumnProps extends GridProps {
     columnName: string;
     cards: CardType[];
     boardVotesAllowed: number;
+    theme?: ThemeColorSet;
     userVotes: number[];
     setUserVotes: (userVotes: number[]) => void;
     editingCard: boolean;
@@ -26,6 +28,7 @@ const BoardColumn = ({
     columnName,
     cards,
     boardVotesAllowed,
+    theme,
     userVotes,
     setUserVotes,
     editingCard,
@@ -39,7 +42,7 @@ const BoardColumn = ({
             maxHeight: '100vh',
         },
         stack: {
-            backgroundColor: '#80a0ff',
+            backgroundColor: theme?.colors?.secondary || '#8080ff',
             color: '#fff',
             borderRadius: '8px',
             minHeight: '0px',
@@ -84,6 +87,7 @@ const BoardColumn = ({
                             columnId={1}
                             boardId={boardId}
                             text={card.text}
+                            theme={theme}
                             votes={card.votes}
                             boardVotesAllowed={boardVotesAllowed}
                             userVotes={userVotes}
