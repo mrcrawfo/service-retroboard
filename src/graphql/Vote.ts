@@ -7,17 +7,17 @@ import { Vote } from '../entities/Vote';
 export const VoteType = objectType({
     name: 'Vote',
     definition(t) {
-        t.nonNull.int('id'),
-        t.nonNull.int('cardId'),
-        t.nonNull.int('boardId'),
-        t.nonNull.int('userId'),
+        t.nonNull.int('id');
+        t.nonNull.int('cardId');
+        t.nonNull.int('boardId');
+        t.nonNull.int('userId');
         t.field('user', {
             type: 'User',
             resolve(parent, _args, _context, _info): Promise<User | null> {
-                return User.findOne({ where: { id: parent.userId }})
-            }
-        })
-    }
+                return User.findOne({ where: { id: parent.userId } });
+            },
+        });
+    },
 });
 
 export const VoteQuery = extendType({
@@ -26,7 +26,7 @@ export const VoteQuery = extendType({
         t.nonNull.list.field('getVotesByCardId', {
             type: 'Vote',
             args: {
-                cardId: nonNull(intArg())
+                cardId: nonNull(intArg()),
             },
             async resolve(_parent, args, context: Context, _info): Promise<Vote[] | []> {
                 const { cardId } = args;
@@ -36,10 +36,10 @@ export const VoteQuery = extendType({
                     throw new Error("Can't query without logging in");
                 }
 
-                return Vote.find({ where: { cardId }}) || [];
-            }
-        })
-    }
+                return Vote.find({ where: { cardId } }) || [];
+            },
+        });
+    },
 });
 
 export const VoteMutation = extendType({
@@ -61,8 +61,8 @@ export const VoteMutation = extendType({
                 }
 
                 return await Vote.create({ boardId, cardId, userId }).save();
-            }
-        }),
+            },
+        });
         t.nullable.field('subtractVoteFromCard', {
             type: 'Vote',
             args: {
@@ -78,7 +78,7 @@ export const VoteMutation = extendType({
                     throw new Error("Can't vote without logging in");
                 }
 
-                const vote = await Vote.findOne({ where: { boardId, cardId, userId }});
+                const vote = await Vote.findOne({ where: { boardId, cardId, userId } });
                 if (vote) {
                     if (vote) {
                         await Vote.remove(vote);
@@ -86,7 +86,7 @@ export const VoteMutation = extendType({
                 }
 
                 return vote;
-            }
-        })
-    }
+            },
+        });
+    },
 });

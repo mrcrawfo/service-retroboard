@@ -8,23 +8,23 @@ import { User } from '../entities/User';
 export const UserType = objectType({
     name: 'User',
     definition(t) {
-        t.nonNull.int('id'),
-        t.nonNull.string('username'),
-        // t.nonNull.string('password'),
-        t.nonNull.string('email')
+        t.nonNull.int('id');
+        t.nonNull.string('username');
+        // t.nonNull.string('password');
+        t.nonNull.string('email');
         t.nonNull.list.field('boards', {
             type: 'Board',
             resolve(parent, _args, _context, _info): Promise<Board[]> {
-                return Board.find({ where: { creatorId: parent.id }});
-            }
-        }),
+                return Board.find({ where: { creatorId: parent.id } });
+            },
+        });
         t.nonNull.list.field('cards', {
             type: 'Card',
             resolve(parent, _args, _context, _info): Promise<Card[]> {
-                return Card.find({ where: { creatorId: parent.id }});
-            }
-        })
-    }
+                return Card.find({ where: { creatorId: parent.id } });
+            },
+        });
+    },
 });
 
 export const UserQuery = extendType({
@@ -40,12 +40,12 @@ export const UserQuery = extendType({
                 }
 
                 return conn.query('select * from user');
-            }
-        }),
+            },
+        });
         t.field('getUser', {
             type: 'User',
             args: {
-                id: nonNull(intArg())
+                id: nonNull(intArg()),
             },
             resolve(_parent, args, context: Context, _info): Promise<User | null> {
                 const { id } = args;
@@ -55,10 +55,10 @@ export const UserQuery = extendType({
                     throw new Error("Can't query without logging in");
                 }
 
-                return User.findOne({ where: { id }}) || null;
-            }
-        })
-    }
+                return User.findOne({ where: { id } }) || null;
+            },
+        });
+    },
 });
 
 // TODO: UserMutation - deleteUser (?) - delete all boards and cards (or change ownership)

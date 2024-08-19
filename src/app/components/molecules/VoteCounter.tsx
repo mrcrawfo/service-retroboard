@@ -27,7 +27,7 @@ const styles = {
     disabledButton: {
         color: '#60a0f0',
         pointerEvents: 'none',
-    }
+    },
 };
 
 export interface VoteCounterProps {
@@ -52,18 +52,26 @@ const VoteCounter = ({
     editingCard,
 }: VoteCounterProps) => {
     const { user } = useContext(AuthContext);
+    // biome-ignore lint/correctness/noUnusedVariables:
     const userId: number = user?.id || 0;
 
-    const [upvoteCard, { loading: upvoteLoading }] = useMutation(UPVOTE_CARD);
-    const [downvoteCard, { loading: downvoteLoading }] = useMutation(DOWNVOTE_CARD);
+    const [_upvoteCard, { loading: upvoteLoading }] = useMutation(UPVOTE_CARD);
+    const [_downvoteCard, { loading: downvoteLoading }] = useMutation(DOWNVOTE_CARD);
 
     const [canUpvote, setCanUpvote] = useState<boolean>(false);
     const [canDownvote, setCanDownvote] = useState<boolean>(false);
 
     useEffect(() => {
         setCanUpvote(userVotes.length < boardVotesAllowed);
-        setCanDownvote(userVotes.filter((id) => cardId === id).length > 0);
-    }, [userVotes, boardVotesAllowed, setCanUpvote, setCanDownvote, upvoteLoading, downvoteLoading]);
+        setCanDownvote(userVotes.filter(id => cardId === id).length > 0);
+    }, [
+        userVotes,
+        boardVotesAllowed,
+        setCanUpvote,
+        setCanDownvote,
+        upvoteLoading,
+        downvoteLoading,
+    ]);
 
     const upvote = () => {
         // add one instance of cardId to userVotes (if userVotes.length < boardVotesAllowed)
@@ -80,29 +88,52 @@ const VoteCounter = ({
             // downvoteCard({ variables: { cardId, boardId, userId }});
             setUserVotes(userVotes.slice(0, uvIndex).concat(userVotes.slice(uvIndex + 1)));
         }
-    }
+    };
 
     return (
-        <Stack direction="row" spacing={1}>
-            <Typography variant='button' sx={styles.counter}>{votes.length}</Typography>
+        <Stack direction='row' spacing={1}>
+            <Typography variant='button' sx={styles.counter}>
+                {votes.length}
+            </Typography>
             <IconButton
                 aria-label={`upvote card ${cardId}`}
                 onClick={upvote}
-                disabled={(!canUpvote || downvoteLoading || upvoteLoading || editingCard)}
-                size="small"
+                disabled={!canUpvote || downvoteLoading || upvoteLoading || editingCard}
+                size='small'
             >
-                <ThumbUpOffAltIcon fontSize="small" sx={(canUpvote && !upvoteLoading && !downvoteLoading) ? styles.enabledButton : styles.disabledButton} />
+                <ThumbUpOffAltIcon
+                    fontSize='small'
+                    sx={
+                        canUpvote && !upvoteLoading && !downvoteLoading
+                            ? styles.enabledButton
+                            : styles.disabledButton
+                    }
+                />
             </IconButton>
             <IconButton
                 aria-label={`downvote card ${cardId}`}
                 onClick={downvote}
-                disabled={(!canDownvote || downvoteLoading || upvoteLoading || editingCard)}
-                size="small"
+                disabled={!canDownvote || downvoteLoading || upvoteLoading || editingCard}
+                size='small'
             >
-                <ThumbDownOffAltIcon fontSize="small" sx={(canDownvote && !upvoteLoading && !downvoteLoading) ? styles.enabledButton : styles.disabledButton} />
+                <ThumbDownOffAltIcon
+                    fontSize='small'
+                    sx={
+                        canDownvote && !upvoteLoading && !downvoteLoading
+                            ? styles.enabledButton
+                            : styles.disabledButton
+                    }
+                />
             </IconButton>
             <div style={{ lineHeight: '2em', verticalAlign: 'middle' }}>
-                { userVotes.filter((id) => cardId === id).map((cardId, index) => <CircleIcon key={`${boardId}-${cardId}-${index}`} sx={{ fontSize: '0.6em', padding: '0 2px' }} />) }
+                {userVotes
+                    .filter(id => cardId === id)
+                    .map((cardId, index) => (
+                        <CircleIcon
+                            key={`${boardId}-${cardId}-${index}`}
+                            sx={{ fontSize: '0.6em', padding: '0 2px' }}
+                        />
+                    ))}
             </div>
         </Stack>
     );

@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react';
+import { ChangeEvent, useRef, useState } from 'react';
 import { IconButton, InputAdornment, OutlinedInput, Stack, Typography } from '@mui/material';
 import ClearIcon from '@mui/icons-material/Clear';
 import { CheckOutlined, EditOutlined } from '@mui/icons-material';
@@ -85,7 +85,7 @@ const ClearableInputText = ({
                             }
                             multiline
                             autoFocus
-                            onChange={(event: React.ChangeEvent<HTMLInputElement>) => setText(event.target.value)}
+                            onChange={(event: ChangeEvent<HTMLInputElement>) => setText(event.target.value)}
                             endAdornment={
                                 <InputAdornment position="end">
                                     <IconButton

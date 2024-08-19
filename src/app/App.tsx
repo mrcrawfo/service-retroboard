@@ -10,7 +10,7 @@ import BoardColumn from "./components/organisms/BoardColumn";
 function App() {
   // const { data: boardsData } = useQuery(GET_USER_BOARDS);
 
-  const [userVotes, setUserVotes] = React.useState<number[]>([]);
+  const [userVotes, setUserVotes] = useState<number[]>([]);
 
   useEffect(() => {
     console.log('userVotes');

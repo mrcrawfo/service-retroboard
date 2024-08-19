@@ -1,0 +1,232 @@
+{
+    "$schema": "https://biomejs.dev/schemas/1.8.3/schema.json",
+    "organizeImports": {
+        "enabled": true
+    },
+    "files": {
+        "ignore": [
+            "node_modules/",
+            "dist/",
+            "build/",
+            "**/*.min.js",
+            "**/vendor/**",
+            ".DS_Store",
+            ".idea/",
+            "package-lock.json",
+            "nexus-typegen.ts",
+            "schema.graphql",
+            "*.css",
+            "*.html",
+            "CHANGELOG.md"
+        ]
+    },
+    "linter": {
+        "enabled": true,
+        "rules": {
+            "recommended": false,
+            "complexity": {
+                "noExtraBooleanCast": "error",
+                "noMultipleSpacesInRegularExpressionLiterals": "error",
+                "noUselessCatch": "error",
+                "noUselessConstructor": "error",
+                "noUselessLabel": "error",
+                "noUselessLoneBlockStatements": "error",
+                "noUselessRename": "error",
+                "noUselessTernary": "error",
+                "noVoid": "error",
+                "noWith": "error",
+                "useLiteralKeys": "error",
+                "useRegexLiterals": "off"
+            },
+            "correctness": {
+                "noConstAssign": "error",
+                "noConstantCondition": "error",
+                "noConstructorReturn": "off",
+                "noEmptyCharacterClassInRegex": "error",
+                "noEmptyPattern": "off",
+                "noGlobalObjectCalls": "error",
+                "noInnerDeclarations": "error",
+                "noInvalidConstructorSuper": "error",
+                "noInvalidUseBeforeDeclaration": "error",
+                "noNewSymbol": "error",
+                "noNodejsModules": "off",
+                "noPrecisionLoss": "off",
+                "noSelfAssign": "error",
+                "noSetterReturn": "off",
+                "noSwitchDeclarations": "error",
+                "noUndeclaredVariables": "error",
+                "noUnreachable": "error",
+                "noUnreachableSuper": "error",
+                "noUnsafeFinally": "error",
+                "noUnusedLabels": "error",
+                "noUnusedVariables": "warn",
+                "useArrayLiterals": "error",
+                "useIsNan": "error",
+                "useValidForDirection": "error",
+                "useYield": "error"
+            },
+            "security": {
+                "noGlobalEval": "error"
+            },
+            "style": {
+                "noArguments": "error",
+                "noCommaOperator": "error",
+                "noDefaultExport": "off",
+                "noNegationElse": "error",
+                "noParameterAssign": "off",
+                "noRestrictedGlobals": {
+                    "level": "error",
+                    "options": {
+                        "deniedGlobals": [
+                            "isFinite",
+                            "addEventListener",
+                            "blur",
+                            "close",
+                            "closed",
+                            "confirm",
+                            "defaultStatus",
+                            "defaultstatus",
+                            "event",
+                            "external",
+                            "find",
+                            "focus",
+                            "frameElement",
+                            "frames",
+                            "history",
+                            "innerHeight",
+                            "innerWidth",
+                            "length",
+                            "location",
+                            "locationbar",
+                            "menubar",
+                            "moveBy",
+                            "moveTo",
+                            "name",
+                            "onblur",
+                            "onwarn",
+                            "onfocus",
+                            "onload",
+                            "onresize",
+                            "onunload",
+                            "open",
+                            "opener",
+                            "opera",
+                            "outerHeight",
+                            "outerWidth",
+                            "pageXOffset",
+                            "pageYOffset",
+                            "parent",
+                            "print",
+                            "removeEventListener",
+                            "resizeBy",
+                            "resizeTo",
+                            "screen",
+                            "screenLeft",
+                            "screenTop",
+                            "screenX",
+                            "screenY",
+                            "scroll",
+                            "scrollbars",
+                            "scrollBy",
+                            "scrollTo",
+                            "scrollX",
+                            "scrollY",
+                            "self",
+                            "status",
+                            "statusbar",
+                            "stop",
+                            "toolbar",
+                            "top"
+                        ]
+                    }
+                },
+                "noUselessElse": "error",
+                "noVar": "error",
+                "useBlockStatements": "error",
+                "useCollapsedElseIf": "error",
+                "useConst": "error",
+                "useDefaultParameterLast": "error",
+                "useExponentiationOperator": "error",
+                "useNumericLiterals": "error",
+                "useShorthandAssign": "error",
+                "useSingleVarDeclarator": "error",
+                "useTemplate": "error"
+            },
+            "suspicious": {
+                "noAsyncPromiseExecutor": "error",
+                "noCatchAssign": "error",
+                "noClassAssign": "error",
+                "noCompareNegZero": "error",
+                "noControlCharactersInRegex": "error",
+                "noDebugger": "warn",
+                "noDoubleEquals": "error",
+                "noDuplicateCase": "error",
+                "noDuplicateClassMembers": "error",
+                "noDuplicateObjectKeys": "error",
+                "noDuplicateParameters": "error",
+                "noEmptyBlockStatements": "error",
+                "noFallthroughSwitchClause": "error",
+                "noFunctionAssign": "error",
+                "noGlobalAssign": "error",
+                "noImportAssign": "error",
+                "noLabelVar": "error",
+                "noMisleadingCharacterClass": "error",
+                "noPrototypeBuiltins": "error",
+                "noRedeclare": "error",
+                "noSelfCompare": "error",
+                "noShadowRestrictedNames": "error",
+                "noUnsafeNegation": "error",
+                "useAwait": "off",
+                "useDefaultSwitchClauseLast": "error",
+                "useGetterReturn": "error",
+                "useValidTypeof": "error"
+            }
+        }
+    },
+    "formatter": {
+        "attributePosition": "auto",
+        "enabled": true,
+        "lineWidth": 120,
+        "indentStyle": "space",
+        "indentWidth": 4
+    },
+    "javascript": {
+        "formatter": {
+            "bracketSpacing": true,
+            "quoteStyle": "single",
+            "jsxQuoteStyle": "single",
+            "arrowParentheses": "always",
+            "trailingCommas": "all"
+        },
+        "globals": [
+            "it",
+            "describe",
+            "beforeEach",
+            "afterEach",
+            "before",
+            "after",
+            "expect",
+            "jest",
+            "test",
+            "beforeAll",
+            "afterAll",
+            "graphqlTestCall"
+        ]
+    },
+    "json": {
+        "formatter": {
+            "trailingCommas": "none"
+        }
+    },
+    "overrides": [
+        {
+            "include": ["*.js"]
+        },
+        {
+            "include": ["*.graphql"],
+            "linter": {
+                "rules": {}
+            }
+        }
+    ]
+}

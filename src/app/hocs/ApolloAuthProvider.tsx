@@ -1,10 +1,11 @@
+import { ReactNode } from 'react';
 import { useQuery } from '@apollo/client';
 
 import { AuthContext } from './AuthContext';
 import { GET_USER_DATA } from '../graph/auth/queries';
 
 export interface ApolloAuthProviderProps {
-    children: React.ReactNode;
+    children: ReactNode;
 };
 
 const ApolloAuthProvider = ({ children }: ApolloAuthProviderProps) => {

@@ -1,36 +1,36 @@
-import { extendType, intArg, nonNull, objectType, stringArg } from "nexus";
+import { extendType, intArg, nonNull, objectType, stringArg } from 'nexus';
 
 import { Board } from '../entities/Board';
-import { BoardColumn } from "../entities/BoardColumn";
-import { Card } from "../entities/Card";
+import { BoardColumn } from '../entities/BoardColumn';
+import { Card } from '../entities/Card';
 import { User } from '../entities/User';
 import { Context } from '../types/Context';
 
 export const BoardType = objectType({
     name: 'Board',
     definition(t) {
-        t.nonNull.int('id'),
-        t.nonNull.string('name'),
+        t.nonNull.int('id');
+        t.nonNull.string('name');
         t.nullable.list.field('cards', {
             type: 'Card',
             resolve(parent, _args, _context, _info): Promise<Card[]> {
-                return Card.find({ where: { boardId: parent.id }});
-            }
-        }),
+                return Card.find({ where: { boardId: parent.id } });
+            },
+        });
         t.nullable.list.field('columns', {
             type: 'BoardColumn',
             resolve(parent, _args, _context, _info): Promise<BoardColumn[]> {
-                return BoardColumn.find({ where: { boardId: parent.id }});
-            }
-        }),
-        t.nonNull.int('creatorId'),
+                return BoardColumn.find({ where: { boardId: parent.id } });
+            },
+        });
+        t.nonNull.int('creatorId');
         t.field('creator', {
             type: 'User',
             resolve(parent, _args, _context, _info): Promise<User | null> {
-                return User.findOne({ where: { id: parent.creatorId }});
-            }
-        })
-    }
+                return User.findOne({ where: { id: parent.creatorId } });
+            },
+        });
+    },
 });
 
 export const BoardQuery = extendType({
@@ -47,8 +47,8 @@ export const BoardQuery = extendType({
                 }
 
                 return conn.query('select * from board');
-            }
-        }),
+            },
+        });
         t.nonNull.list.field('getBoardsByUserId', {
             type: 'Board',
             resolve(_parent, _args, context: Context, _info): Promise<Board[]> {
@@ -57,15 +57,15 @@ export const BoardQuery = extendType({
                 if (!userId) {
                     throw new Error("Can't query without logging in");
                 }
-                
-                return Board.find({ where: { creatorId: userId }});
+
+                return Board.find({ where: { creatorId: userId } });
                 // return conn.query('select * from board where creatorId=' + userId) || [];
-            }
-        }),
+            },
+        });
         t.field('getBoard', {
             type: 'Board',
             args: {
-                id: nonNull(intArg())
+                id: nonNull(intArg()),
             },
             resolve(_parent, args, context: Context, _info): Promise<Board | null> {
                 const { id } = args;
@@ -74,11 +74,11 @@ export const BoardQuery = extendType({
                 if (!userId) {
                     throw new Error("Can't query without logging in");
                 }
-                
-                return Board.findOne({ where: { id }}) || null;
-            }
-        })
-    }
+
+                return Board.findOne({ where: { id } }) || null;
+            },
+        });
+    },
 });
 
 export const BoardMutation = extendType({
@@ -98,9 +98,9 @@ export const BoardMutation = extendType({
                 }
 
                 return Board.create({ name, cards: [], columns: [], creatorId: userId }).save();
-            }
-        })
+            },
+        });
         // TODO: updateBoard (?)
         // TODO: deleteBoard (?)
-    }
+    },
 });

@@ -1,18 +1,18 @@
-import { extendType, nonNull, objectType, stringArg } from "nexus";
+import { extendType, nonNull, objectType, stringArg } from 'nexus';
 import argon2 from 'argon2';
 import * as jwt from 'jsonwebtoken';
 
 import { Context } from '../types/Context';
-import { User } from "../entities/User";
+import { User } from '../entities/User';
 
 export const AuthType = objectType({
     name: 'AuthType',
     definition(t) {
-        t.nonNull.string('token'),
+        t.nonNull.string('token');
         t.nonNull.field('user', {
-            type: 'User'
-        })
-    }
+            type: 'User',
+        });
+    },
 });
 
 export type Auth = { user: Promise<User> } & { token: string | undefined | null };
@@ -29,10 +29,10 @@ export const AuthQuery = extendType({
                     throw new Error("Can't query without logging in");
                 }
 
-                return User.findOne({ where: { id: userId }});
-            }
-        })
-    }
+                return User.findOne({ where: { id: userId } });
+            },
+        });
+    },
 });
 
 export const AuthMutation = extendType({
@@ -42,40 +42,40 @@ export const AuthMutation = extendType({
             type: 'AuthType',
             args: {
                 username: nonNull(stringArg()),
-                password: nonNull(stringArg())
+                password: nonNull(stringArg()),
             },
             async resolve(_parent, args, _context: Context, _info): Promise<{ token: string; user: User } | null> {
                 const { username, password } = args;
-                const user = await User.findOne({ where: { username }});
+                const user = await User.findOne({ where: { username } });
 
                 if (!user) {
-                    throw new Error("User not found");
+                    throw new Error('User not found');
                 }
 
                 const isValid = await argon2.verify(user.password, password);
 
                 if (!isValid) {
-                    throw new Error("Incorrect password");
+                    throw new Error('Incorrect password');
                 }
 
-                const token = jwt.sign({ userId: user.id }, process.env.TOKEN_SECRET as jwt.Secret) || null;;
+                const token = jwt.sign({ userId: user.id }, process.env.TOKEN_SECRET as jwt.Secret) || null;
 
                 if (token) {
                     return {
                         user,
-                        token
-                    }
+                        token,
+                    };
                 }
 
                 return null;
-            }
-        }),
+            },
+        });
         t.nonNull.field('register', {
             type: 'AuthType',
             args: {
                 username: nonNull(stringArg()),
                 email: nonNull(stringArg()),
-                password: nonNull(stringArg())
+                password: nonNull(stringArg()),
             },
             async resolve(_parent, args, context: Context, _info): Promise<{ token: string; user: User } | null> {
                 const { username, password, email } = args;
@@ -91,7 +91,7 @@ export const AuthMutation = extendType({
                         .values({ username, email, password: hashedPassword })
                         .returning('*')
                         .execute();
-                    
+
                     user = result.raw[0];
                     token = jwt.sign({ userId: user.id }, process.env.TOKEN_SECRET as jwt.Secret) || '';
                 } catch (err) {
@@ -101,13 +101,13 @@ export const AuthMutation = extendType({
                 if (user && token) {
                     return {
                         user,
-                        token
-                    }
+                        token,
+                    };
                 }
 
                 return null;
-            }
-        })
+            },
+        });
         // TODO: Add logout mutation
-    }
+    },
 });

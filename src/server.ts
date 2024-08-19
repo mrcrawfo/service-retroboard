@@ -13,13 +13,13 @@ const init = async () => {
     const server = new ApolloServer({
         schema,
         context: ({ req }): Context => {
-            const token = req?.headers?.authorization ? auth(req.headers.authorization) : null
+            const token = req?.headers?.authorization ? auth(req.headers.authorization) : null;
             return { conn, userId: token?.userId };
-        }
+        },
     });
 
     server.listen(process.env.GRAPHQL_PORT || 4000).then(({ url }) => {
-        console.log('Server started - listening on ' + url)
+        console.log(`Server started - listening on ${url}`);
     });
 };
 
