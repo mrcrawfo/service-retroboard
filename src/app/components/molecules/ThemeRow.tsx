@@ -1,9 +1,8 @@
 import { Stack } from '@mui/material';
-import Card from '../organisms/Card';
-import BoardColumn from '../organisms/BoardColumn';
-import { Card as CardType } from '../../../entities/Card';
-import { ThemeColor } from '../../helpers/theme';
-import AddCardButton from '../atoms/AddCardButton';
+
+import Card from '../organisms/Card.js';
+import { ThemeColor } from '../../helpers/theme.js';
+import AddCardButton from '../atoms/AddCardButton.js';
 
 export interface ThemeRowProps {
     themeColor: ThemeColor;

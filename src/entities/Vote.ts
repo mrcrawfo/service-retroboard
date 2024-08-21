@@ -5,10 +5,11 @@ import {
     Entity,
     ManyToOne,
     PrimaryGeneratedColumn,
+    Relation,
     UpdateDateColumn,
 } from 'typeorm';
 
-import { Card } from './Card';
+import { Card } from './Card.js';
 
 @Entity()
 export class Vote extends BaseEntity {
@@ -18,11 +19,8 @@ export class Vote extends BaseEntity {
     @Column()
     cardId!: number;
 
-    @ManyToOne(
-        () => Card,
-        (card) => card.votes,
-    )
-    card: Card;
+    @ManyToOne('Card', 'votes')
+    card: Relation<Card>;
 
     @Column()
     boardId!: number;

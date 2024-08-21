@@ -2,11 +2,11 @@ import { StrictMode } from 'react';
 import ReactDOM from 'react-dom/client';
 import { RouterProvider, createRouter } from '@tanstack/react-router';
 
-import { ApolloWrapper } from './app/components/atoms/ApolloWrapper';
-import ApolloAuthProvider from './app/hocs/ApolloAuthProvider';
+import { ApolloWrapper } from './app/components/atoms/ApolloWrapper.js';
+import ApolloAuthProvider from './app/hocs/ApolloAuthProvider.js';
 
 // Import the generated route tree
-import { routeTree } from './app/routeTree.gen';
+import { routeTree } from './app/routeTree.gen.js';
 
 // Create a new router instance
 const router = createRouter({ routeTree });

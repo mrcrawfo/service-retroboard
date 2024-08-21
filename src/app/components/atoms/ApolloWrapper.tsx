@@ -1,6 +1,6 @@
 import { ApolloClient, ApolloProvider, InMemoryCache } from '@apollo/client';
 
-import { IProps } from '../../types/interfaces';
+import { IProps } from '../../types/interfaces.js';
 // import Env from '../../helpers/Env';
 
 export const ApolloWrapper = ({ children }: IProps) => {

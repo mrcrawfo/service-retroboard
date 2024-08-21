@@ -1,11 +1,11 @@
 import { Grid, GridProps, Stack } from '@mui/material';
 import { useState } from 'react';
 
-import { Card as CardType } from '../../../entities/Card';
-import AddCardButton from '../atoms/AddCardButton';
-import Card from './Card';
-import NewCard from './NewCard';
-import { ThemeColor } from '../../helpers/theme';
+import { Card as CardType } from '../../../entities/Card.js';
+import AddCardButton from '../atoms/AddCardButton.js';
+import Card from './Card.js';
+import NewCard from './NewCard.js';
+import { ThemeColor } from '../../helpers/theme.js';
 
 export interface BoardColumnProps extends GridProps {
     boardId: number;

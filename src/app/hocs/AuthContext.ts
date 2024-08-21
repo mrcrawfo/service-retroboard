@@ -1,7 +1,7 @@
 import { ApolloError } from '@apollo/client';
 import { createContext } from 'react';
 
-import { NexusGenObjects } from '../../../nexus-typegen';
+import { NexusGenObjects } from '../../../nexus-typegen.js';
 
 export type AuthContextProps = {
     user: NexusGenObjects['User'] | null;

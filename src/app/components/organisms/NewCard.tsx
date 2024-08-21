@@ -2,8 +2,8 @@ import { useMutation } from '@apollo/client';
 import { CircularProgress, Card as MuiCard, CardProps as MuiCardProps } from '@mui/material';
 import { useState } from 'react';
 
-import { CREATE_CARD } from '../../graph/cards/queries';
-import ClearableInputText from '../molecules/ClearableInputText';
+import { CREATE_CARD } from '../../graph/cards/queries.js';
+import ClearableInputText from '../molecules/ClearableInputText.js';
 
 export interface NewCardProps extends MuiCardProps {
     boardId: number;

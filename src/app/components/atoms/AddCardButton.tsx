@@ -1,7 +1,7 @@
-import AddIcon from '@mui/icons-material/Add';
+import { AddOutlined } from '@mui/icons-material';
 import { Button, ButtonProps } from '@mui/material';
 
-import { ThemeColor } from 'src/app/helpers/theme';
+import { ThemeColor } from 'src/app/helpers/theme.js';
 
 export interface AddCardButtonProps extends ButtonProps {
     themeColor?: ThemeColor;
@@ -25,7 +25,7 @@ const AddCardButton = ({ themeColor, onClick, ...buttonProps }: AddCardButtonPro
 
     return (
         <Button variant='contained' sx={styles.button} onClick={onClick} {...buttonProps}>
-            <AddIcon />
+            <AddOutlined />
         </Button>
     );
 };

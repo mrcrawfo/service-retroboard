@@ -2,8 +2,8 @@ import argon2 from 'argon2';
 import * as jwt from 'jsonwebtoken';
 import { extendType, nonNull, objectType, stringArg } from 'nexus';
 
-import { User } from '../entities/User';
-import { Context } from '../types/Context';
+import { User } from '../entities/User.js';
+import { Context } from '../types/Context.js';
 
 export const AuthType = objectType({
     name: 'AuthType',

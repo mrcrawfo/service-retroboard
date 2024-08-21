@@ -1,14 +1,12 @@
 import { useMutation } from '@apollo/client';
-import CircleIcon from '@mui/icons-material/Circle';
-import ThumbDownOffAltIcon from '@mui/icons-material/ThumbDownOffAlt';
-import ThumbUpOffAltIcon from '@mui/icons-material/ThumbUpOffAlt';
+import { CircleOutlined, ThumbDownOffAltOutlined, ThumbUpOffAltOutlined } from '@mui/icons-material';
 import { IconButton, Stack, Typography } from '@mui/material';
-import { useContext, useEffect, useState } from 'react';
+import { /* useContext, */ useEffect, useState } from 'react';
 
-import { Vote as VoteType } from '../../../entities/Vote';
-import { DOWNVOTE_CARD, UPVOTE_CARD } from '../../graph/vote/queries';
-import { AuthContext } from '../../hocs/AuthContext';
-import { ThemeColor } from '../../helpers/theme';
+import { Vote as VoteType } from '../../../entities/Vote.js';
+import { DOWNVOTE_CARD, UPVOTE_CARD } from '../../graph/vote/queries.js';
+// import { AuthContext } from '../../hocs/AuthContext.js';
+import { ThemeColor } from '../../helpers/theme.js';
 
 export interface VoteCounterProps {
     votes: VoteType[];
@@ -54,9 +52,9 @@ const VoteCounter = ({
         },
     };
 
-    const { user } = useContext(AuthContext);
+    // const { user } = useContext(AuthContext);
     // biome-ignore lint/correctness/noUnusedVariables:
-    const userId: number = user?.id || 0;
+    // const userId: number = user?.id || 0;
 
     const [_upvoteCard, { loading: upvoteLoading }] = useMutation(UPVOTE_CARD);
     const [_downvoteCard, { loading: downvoteLoading }] = useMutation(DOWNVOTE_CARD);
@@ -97,7 +95,7 @@ const VoteCounter = ({
                 disabled={!canUpvote || downvoteLoading || upvoteLoading || editingCard}
                 size='small'
             >
-                <ThumbUpOffAltIcon
+                <ThumbUpOffAltOutlined
                     fontSize='small'
                     sx={canUpvote && !upvoteLoading && !downvoteLoading ? styles.enabledButton : styles.disabledButton}
                 />
@@ -108,7 +106,7 @@ const VoteCounter = ({
                 disabled={!canDownvote || downvoteLoading || upvoteLoading || editingCard}
                 size='small'
             >
-                <ThumbDownOffAltIcon
+                <ThumbDownOffAltOutlined
                     fontSize='small'
                     sx={
                         canDownvote && !upvoteLoading && !downvoteLoading ? styles.enabledButton : styles.disabledButton
@@ -119,7 +117,7 @@ const VoteCounter = ({
                 {userVotes
                     .filter((id) => cardId === id)
                     .map((cardId, index) => (
-                        <CircleIcon
+                        <CircleOutlined
                             key={`${boardId}-${cardId}-${index}`}
                             sx={{ fontSize: '0.6em', padding: '0 2px' }}
                         />

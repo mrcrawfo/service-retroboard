@@ -2,10 +2,10 @@ import { useQuery } from '@apollo/client';
 import { Grid } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 
-import { BoardColumn as BoardColumnType } from '../entities/BoardColumn';
-import { Card as CardType } from '../entities/Card';
-import BoardColumn from './components/organisms/BoardColumn';
-import { GET_BOARD, GET_USER_BOARDS } from './graph/board/queries';
+import { BoardColumn as BoardColumnType } from '../entities/BoardColumn.js';
+import { Card as CardType } from '../entities/Card.js';
+import BoardColumn from './components/organisms/BoardColumn.js';
+import { GET_BOARD } from './graph/board/queries.js';
 
 function App() {
     // const { data: boardsData } = useQuery(GET_USER_BOARDS);

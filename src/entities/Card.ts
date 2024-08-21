@@ -6,13 +6,14 @@ import {
     ManyToOne,
     OneToMany,
     PrimaryGeneratedColumn,
+    Relation,
     UpdateDateColumn,
 } from 'typeorm';
 
-import { Board } from './Board';
-import { BoardColumn } from './BoardColumn';
-import { User } from './User';
-import { Vote } from './Vote';
+import { Board } from './Board.js';
+import { BoardColumn } from './BoardColumn.js';
+import { User } from './User.js';
+import { Vote } from './Vote.js';
 
 @Entity()
 export class Card extends BaseEntity {
@@ -25,38 +26,26 @@ export class Card extends BaseEntity {
     @Column()
     columnId!: number;
 
-    @ManyToOne(
-        () => BoardColumn,
-        (column) => column.cards,
-    )
-    column: BoardColumn;
+    @ManyToOne('BoardColumn', 'cards')
+    column: Relation<BoardColumn>;
 
     @Column()
     boardId!: number;
 
-    @ManyToOne(
-        () => Board,
-        (board) => board.cards,
-    )
-    board: Board;
+    @ManyToOne('Board', 'cards')
+    board: Relation<Board>;
 
     @Column('int', { array: true })
     voteIds!: number[];
 
-    @OneToMany(
-        () => Vote,
-        (vote) => vote.card,
-    )
-    votes: Vote[];
+    @OneToMany('Vote', 'card')
+    votes: Relation<Vote>[];
 
     @Column()
     creatorId!: number;
 
-    @ManyToOne(
-        () => User,
-        (user) => user.cards,
-    )
-    creator: User;
+    @ManyToOne('User', 'cards')
+    creator: Relation<User>;
 
     @CreateDateColumn()
     createdAt: Date;

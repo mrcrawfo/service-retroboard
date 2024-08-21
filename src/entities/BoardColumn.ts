@@ -6,12 +6,13 @@ import {
     ManyToOne,
     OneToMany,
     PrimaryGeneratedColumn,
+    Relation,
     UpdateDateColumn,
 } from 'typeorm';
 
-import { Board } from './Board';
-import { Card } from './Card';
-import { User } from './User';
+import { Board } from './Board.js';
+import { Card } from './Card.js';
+import { User } from './User.js';
 
 @Entity()
 export class BoardColumn extends BaseEntity {
@@ -24,26 +25,17 @@ export class BoardColumn extends BaseEntity {
     @Column()
     creatorId!: number;
 
-    @ManyToOne(
-        () => User,
-        (user) => user.boards,
-    )
-    creator: User;
+    @ManyToOne('User', 'boards')
+    creator: Relation<User>;
 
     @Column()
     boardId!: number;
 
-    @ManyToOne(
-        () => Board,
-        (board) => board.columns,
-    )
-    board: Board;
+    @ManyToOne('Board', 'Columns')
+    board: Relation<Board>;
 
-    @OneToMany(
-        () => Card,
-        (card) => card.column,
-    )
-    cards: Card[];
+    @OneToMany('Card', 'column')
+    cards: Relation<Card>[];
 
     @CreateDateColumn()
     createdAt: Date;

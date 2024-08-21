@@ -5,11 +5,12 @@ import {
     Entity,
     OneToMany,
     PrimaryGeneratedColumn,
+    Relation,
     UpdateDateColumn,
 } from 'typeorm';
 
-import { Board } from './Board';
-import { Card } from './Card';
+import { Board } from './Board.js';
+import { Card } from './Card.js';
 
 @Entity()
 export class User extends BaseEntity {
@@ -25,17 +26,11 @@ export class User extends BaseEntity {
     @Column({ unique: true })
     email!: string;
 
-    @OneToMany(
-        () => Board,
-        (board) => board.creator,
-    )
-    boards: Board[];
+    @OneToMany('Board', 'creator')
+    boards: Relation<Board>[];
 
-    @OneToMany(
-        () => Card,
-        (card) => card.creator,
-    )
-    cards: Card[];
+    @OneToMany('Card', 'creator')
+    cards: Relation<Card>[];
 
     @CreateDateColumn()
     createdAt: Date;

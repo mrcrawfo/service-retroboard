@@ -2,16 +2,15 @@ import { useState } from 'react';
 import { createLazyFileRoute } from '@tanstack/react-router';
 
 import { Stack } from '@mui/material';
-import ThemeRow from '../components/molecules/ThemeRow';
-import { ColorSet, ThemeColor } from '../helpers/theme';
-import base from 'node_modules/@emotion/styled/dist/declarations/src/base';
+import ThemeRow from '../components/molecules/ThemeRow.js';
+import { ThemeColor } from '../helpers/theme.js';
 
 export const Route = createLazyFileRoute('/theme')({
     component: Theme,
 });
 
 function Theme() {
-    const [editingCard, setEditingCard] = useState<boolean>(false);
+    const [editingCard, _setEditingCard] = useState<boolean>(false);
     const themes: ThemeColor[] = [
         {
             name: 'Blue',

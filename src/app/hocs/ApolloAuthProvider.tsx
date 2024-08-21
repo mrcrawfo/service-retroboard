@@ -1,8 +1,8 @@
 import { useQuery } from '@apollo/client';
 import { ReactNode } from 'react';
 
-import { GET_USER_DATA } from '../graph/auth/queries';
-import { AuthContext } from './AuthContext';
+import { GET_USER_DATA } from '../graph/auth/queries.js';
+import { AuthContext } from './AuthContext.js';
 
 export interface ApolloAuthProviderProps {
     children: ReactNode;

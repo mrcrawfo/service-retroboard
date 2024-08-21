@@ -1,9 +1,9 @@
 import { extendType, intArg, nonNull, objectType } from 'nexus';
 
-import { Board } from '../entities/Board';
-import { Card } from '../entities/Card';
-import { User } from '../entities/User';
-import { Context } from '../types/Context';
+import { Board } from '../entities/Board.js';
+import { Card } from '../entities/Card.js';
+import { User } from '../entities/User.js';
+import { Context } from '../types/Context.js';
 
 export const UserType = objectType({
     name: 'User',

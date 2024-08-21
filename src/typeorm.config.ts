@@ -1,11 +1,11 @@
 import dotenv from 'dotenv';
 import { DataSource } from 'typeorm';
 
-import { Board } from './entities/Board';
-import { BoardColumn } from './entities/BoardColumn';
-import { Card } from './entities/Card';
-import { User } from './entities/User';
-import { Vote } from './entities/Vote';
+import { Board } from './entities/Board.js';
+import { BoardColumn } from './entities/BoardColumn.js';
+import { Card } from './entities/Card.js';
+import { User } from './entities/User.js';
+import { Vote } from './entities/Vote.js';
 
 dotenv.config();
 

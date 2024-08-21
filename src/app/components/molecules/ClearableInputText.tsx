@@ -1,5 +1,4 @@
-import { CheckOutlined, EditOutlined } from '@mui/icons-material';
-import ClearIcon from '@mui/icons-material/Clear';
+import { CheckOutlined, ClearOutlined, EditOutlined } from '@mui/icons-material';
 import { IconButton, InputAdornment, OutlinedInput, Stack, Typography } from '@mui/material';
 import { ChangeEvent, useRef, useState } from 'react';
 
@@ -93,7 +92,11 @@ const ClearableInputText = ({
                                     edge='end'
                                     disabled={!text || text === ''}
                                 >
-                                    {text && text !== '' ? <ClearIcon /> : <ClearIcon sx={styles.disabledButton} />}
+                                    {text && text !== '' ? (
+                                        <ClearOutlined />
+                                    ) : (
+                                        <ClearOutlined sx={styles.disabledButton} />
+                                    )}
                                 </IconButton>
                             </InputAdornment>
                         }

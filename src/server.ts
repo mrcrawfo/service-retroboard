@@ -1,10 +1,10 @@
 import { ApolloServer } from 'apollo-server';
 import dotenv from 'dotenv';
 
-import { schema } from './schema';
-import typeormConfig from './typeorm.config';
-import { Context } from './types/Context';
-import { auth } from './utils/auth';
+import { schema } from './schema.js';
+import typeormConfig from './typeorm.config.js';
+import { Context } from './types/Context.js';
+import { auth } from './utils/auth.js';
 
 dotenv.config();
 

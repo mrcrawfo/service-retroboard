@@ -2,11 +2,11 @@ import { useMutation } from '@apollo/client';
 import { CircularProgress, Card as MuiCard, CardProps as MuiCardProps, Stack } from '@mui/material';
 import { useState } from 'react';
 
-import { Vote as VoteType } from '../../../entities/Vote';
-import { DELETE_CARD, UPDATE_CARD } from '../../graph/cards/queries';
-import ClearableInputText from '../molecules/ClearableInputText';
-import VoteCounter from '../molecules/VoteCounter';
-import { ThemeColor } from '../../helpers/theme';
+import { Vote as VoteType } from '../../../entities/Vote.js';
+import { DELETE_CARD, UPDATE_CARD } from '../../graph/cards/queries.js';
+import ClearableInputText from '../molecules/ClearableInputText.js';
+import VoteCounter from '../molecules/VoteCounter.js';
+import { ThemeColor } from '../../helpers/theme.js';
 export interface CardProps extends MuiCardProps {
     cardId: number;
     boardId: number;
