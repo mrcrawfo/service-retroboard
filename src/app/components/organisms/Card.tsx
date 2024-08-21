@@ -6,14 +6,14 @@ import { Vote as VoteType } from '../../../entities/Vote';
 import { DELETE_CARD, UPDATE_CARD } from '../../graph/cards/queries';
 import ClearableInputText from '../molecules/ClearableInputText';
 import VoteCounter from '../molecules/VoteCounter';
-import { ThemeColorSet } from '../../helpers/theme';
+import { ThemeColor } from '../../helpers/theme';
 export interface CardProps extends MuiCardProps {
     cardId: number;
     boardId: number;
     boardVotesAllowed: number;
     columnId: number;
     text: string;
-    theme?: ThemeColorSet;
+    themeColor?: ThemeColor;
     userVotes: number[];
     votes: VoteType[];
     setUserVotes: (userVotes: number[]) => void;
@@ -27,7 +27,7 @@ const Card = ({
     boardVotesAllowed,
     columnId,
     text,
-    theme,
+    themeColor,
     userVotes,
     votes,
     setUserVotes,
@@ -38,8 +38,8 @@ const Card = ({
         card: {
             width: 'calc(100% - 16px)',
             borderRadius: '8px',
-            backgroundColor: theme?.colors?.primary || '#0080ff',
-            color: theme?.colors.primaryText || '#fff',
+            backgroundColor: themeColor?.colors?.primary?.base || '#0080ff',
+            color: themeColor?.colors?.primary?.text || '#fff',
             padding: '8px',
         },
     };
@@ -91,7 +91,7 @@ const Card = ({
                         columnId={columnId}
                         boardId={boardId}
                         boardVotesAllowed={boardVotesAllowed}
-                        theme={theme}
+                        themeColor={themeColor}
                         userVotes={userVotes}
                         votes={votes}
                         setUserVotes={setUserVotes}

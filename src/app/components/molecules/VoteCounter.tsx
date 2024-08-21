@@ -8,7 +8,7 @@ import { useContext, useEffect, useState } from 'react';
 import { Vote as VoteType } from '../../../entities/Vote';
 import { DOWNVOTE_CARD, UPVOTE_CARD } from '../../graph/vote/queries';
 import { AuthContext } from '../../hocs/AuthContext';
-import { ThemeColorSet } from '../../helpers/theme';
+import { ThemeColor } from '../../helpers/theme';
 
 export interface VoteCounterProps {
     votes: VoteType[];
@@ -16,7 +16,7 @@ export interface VoteCounterProps {
     boardId: number;
     boardVotesAllowed: number;
     columnId: number;
-    theme?: ThemeColorSet;
+    themeColor?: ThemeColor;
     userVotes: number[];
     setUserVotes: (votes: number[]) => void;
     editingCard: boolean;
@@ -28,7 +28,7 @@ const VoteCounter = ({
     boardId,
     boardVotesAllowed,
     // columnId,
-    theme,
+    themeColor,
     userVotes,
     setUserVotes,
     editingCard,
@@ -49,7 +49,7 @@ const VoteCounter = ({
             pointerEvents: 'auto',
         },
         disabledButton: {
-            color: theme?.colors?.primaryDisabled || '#60a0f0',
+            color: themeColor?.colors?.primary?.disabled || '#60a0f0',
             pointerEvents: 'none',
         },
     };

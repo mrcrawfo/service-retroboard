@@ -2,33 +2,34 @@ import { Stack } from '@mui/material';
 import Card from '../organisms/Card';
 import BoardColumn from '../organisms/BoardColumn';
 import { Card as CardType } from '../../../entities/Card';
-import { ThemeColorSet } from '../../helpers/theme';
+import { ThemeColor } from '../../helpers/theme';
 import AddCardButton from '../atoms/AddCardButton';
 
 export interface ThemeRowProps {
-    theme: ThemeColorSet;
+    themeColor: ThemeColor;
     editingCard: boolean;
 }
 
-const ThemeRow = ({ theme, editingCard }: ThemeRowProps) => {
+const ThemeRow = ({ themeColor, editingCard }: ThemeRowProps) => {
     const styles = {
         row: {
             width: '100%',
-            backgroundColor: '#80a0ff',
+            backgroundColor: themeColor?.colors?.secondary?.base || '#80a0ff',
             margin: '8px 0',
+            padding: '20px 4px',
         },
     };
 
     return (
         <Stack direction='row' spacing={2} sx={styles.row}>
             <AddCardButton
-                theme={theme}
+                themeColor={themeColor}
                 onClick={() => {
                     /* do nothing */
                 }}
             />
             <AddCardButton
-                theme={theme}
+                themeColor={themeColor}
                 onClick={() => {
                     /* do nothing */
                 }}
@@ -40,7 +41,7 @@ const ThemeRow = ({ theme, editingCard }: ThemeRowProps) => {
                 boardVotesAllowed={0}
                 votes={[]}
                 cardId={1}
-                theme={theme}
+                themeColor={themeColor}
                 userVotes={[]}
                 setUserVotes={() => {
                     /* do nothing */

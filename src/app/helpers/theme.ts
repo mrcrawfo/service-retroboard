@@ -1,11 +1,15 @@
-export type ThemeColorSet = {
+export type ColorSet = {
+    base: string;
+    text: string;
+    disabled: string;
+    highlight: string;
+    shadow: string;
+};
+
+export type ThemeColor = {
     name: string;
     colors: {
-        primary: string;
-        secondary: string;
-        primaryText: string;
-        secondaryText: string;
-        primaryDisabled: string;
-        secondaryDisabled: string;
+        primary: ColorSet;
+        secondary: ColorSet;
     };
 };

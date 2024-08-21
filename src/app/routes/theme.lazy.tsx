@@ -3,7 +3,7 @@ import { createLazyFileRoute } from '@tanstack/react-router';
 
 import { Stack } from '@mui/material';
 import ThemeRow from '../components/molecules/ThemeRow';
-import { ThemeColorSet } from '../helpers/theme';
+import { ColorSet, ThemeColor } from '../helpers/theme';
 
 export const Route = createLazyFileRoute('/theme')({
     component: Theme,
@@ -11,71 +11,119 @@ export const Route = createLazyFileRoute('/theme')({
 
 function Theme() {
     const [editingCard, setEditingCard] = useState<boolean>(false);
-    const themes: ThemeColorSet[] = [
+    const themes: ThemeColor[] = [
         {
             name: 'Blue',
             colors: {
-                primary: '#0080ff',
-                secondary: '#80a0ff',
-                primaryText: '#ffffff',
-                secondaryText: '#ffffff',
-                primaryDisabled: '#60a0f0',
-                secondaryDisabled: '#004060',
+                primary: {
+                    base: '#2080f0',
+                    text: '#ffffff',
+                    disabled: '#60a0f0',
+                    highlight: '#2888f8',
+                    shadow: '#1878e8',
+                },
+                secondary: {
+                    base: '#80a0ff',
+                    text: '#ffffff',
+                    disabled: '#004060',
+                    highlight: '#88a8ff',
+                    shadow: '#7898f8',
+                },
             },
         },
         {
             name: 'Orange',
             colors: {
-                primary: '#ff8000',
-                secondary: '#ffa040',
-                primaryText: '#ffffff',
-                secondaryText: '#ffffff',
-                primaryDisabled: '#f0a060',
-                secondaryDisabled: '#604000',
+                primary: {
+                    base: '#ff8000',
+                    text: '#ffffff',
+                    disabled: '#f0a060',
+                    highlight: '#f0a060',
+                    shadow: '#604000',
+                },
+                secondary: {
+                    base: '#ffa040',
+                    text: '#ffffff',
+                    disabled: '#604000',
+                    highlight: '#604000',
+                    shadow: '#604000',
+                },
             },
         },
         {
             name: 'Red',
             colors: {
-                primary: '#ff0000',
-                secondary: '#ff8080',
-                primaryText: '#ffffff',
-                secondaryText: '#ffffff',
-                primaryDisabled: '#f06060',
-                secondaryDisabled: '#600000',
+                primary: {
+                    base: '#ff0000',
+                    text: '#ffffff',
+                    disabled: '#f06060',
+                    highlight: '#f06060',
+                    shadow: '#600000',
+                },
+                secondary: {
+                    base: '#ff8080',
+                    text: '#ffffff',
+                    disabled: '#600000',
+                    highlight: '#600000',
+                    shadow: '#600000',
+                },
             },
         },
         {
             name: 'Green',
             colors: {
-                primary: '#00ff00',
-                secondary: '#80ff80',
-                primaryText: '#ffffff',
-                secondaryText: '#ffffff',
-                primaryDisabled: '#60f060',
-                secondaryDisabled: '#006000',
+                primary: {
+                    base: '#009000',
+                    text: '#ffffff',
+                    disabled: '#60f060',
+                    highlight: '#60f060',
+                    shadow: '#006000',
+                },
+                secondary: {
+                    base: '#80ff80',
+                    text: '#ffffff',
+                    disabled: '#006000',
+                    highlight: '#006000',
+                    shadow: '#006000',
+                },
             },
         },
         {
             name: 'Purple',
             colors: {
-                primary: '#8000ff',
-                secondary: '#a080ff',
-                primaryText: '#ffffff',
-                secondaryText: '#ffffff',
-                primaryDisabled: '#a060f0',
-                secondaryDisabled: '#400060',
+                primary: {
+                    base: '#8000ff',
+                    text: '#ffffff',
+                    disabled: '#a060f0',
+                    highlight: '#a060f0',
+                    shadow: '#400060',
+                },
+                secondary: {
+                    base: '#a080ff',
+                    text: '#ffffff',
+                    disabled: '#400060',
+                    highlight: '#400060',
+                    shadow: '#400060',
+                },
             },
         },
         {
             name: 'Yellow',
             colors: {
-                primary: '#ffff00',
-                secondary: '#ffff80',
-                primaryText: '#ffffff',
-                secondaryText: '#ffffff',
-                primaryDisabled: '#f0f060',
-                secondaryDisabled: '#606000',
+                primary: {
+                    base: '#e0b000',
+                    text: '#ffffff',
+                    disabled: '#f0f060',
+                    highlight: '#f0f060',
+                    shadow: '#605000',
+                },
+                secondary: {
+                    base: '#ffff80',
+                    text: '#ffffff',
+                    disabled: '#606000',
+                    highlight: '#606000',
+                    shadow: '#606000',
+                },
             },
         },
     ];
@@ -83,8 +131,8 @@ function Theme() {
         <>
             <div className='p-2'>Hello from Theme!</div>
             <Stack direction='column' spacing={2}>
-                {themes.map((theme, index) => (
-                    <ThemeRow key={index} theme={theme} editingCard={editingCard} />
+                {themes.map((themeColor, index) => (
+                    <ThemeRow key={index} themeColor={themeColor} editingCard={editingCard} />
                 ))}
             </Stack>
         </>
