@@ -41,6 +41,7 @@ const Card = ({
             backgroundColor: themeColor?.colors?.primary?.base || '#0080ff',
             color: themeColor?.colors?.primary?.text || '#fff',
             padding: '8px',
+            boxShadow: `0px 4px 4px ${themeColor?.colors?.primary?.shadow || '#006090'}`,
         },
     };
 

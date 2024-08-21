@@ -43,6 +43,7 @@ const BoardColumn = ({
         },
         stack: {
             backgroundColor: themeColor?.colors?.secondary?.base || '#8080ff',
+            // backgroundColor: `linear-gradient(45deg, ${themeColor?.colors?.primary?.highlight || '#0080ff'}, ${themeColor?.colors?.primary?.base || '#80a0ff'}), ${themeColor?.colors?.primary?.shadow || '#006090'})`,
             color: '#fff',
             borderRadius: '8px',
             minHeight: '0px',

@@ -12,7 +12,7 @@ const AddCardButton = ({ themeColor, onClick, ...buttonProps }: AddCardButtonPro
     const styles = {
         button: {
             width: '100%',
-            backgroundColor: themeColor?.colors?.secondary?.base || '#004060',
+            backgroundColor: themeColor?.colors?.secondary?.shadow || '#004060',
             margin: '8px 0',
             ':hover': {
                 backgroundColor: themeColor?.colors?.primary?.base || '#88a8ff',
