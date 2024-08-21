@@ -60,3 +60,25 @@ export const GET_BOARD = gql`
         }
     }
 `;
+
+export const CREATE_BOARD = gql`
+    mutation createBoard($name: String!, $columns: [ColumnInput!]!) {
+        createBoard(name: $name, columns: $columns) {
+            id
+            name
+            columns {
+                id
+                name
+            }
+            cards {
+                columnId
+                id
+                text
+                votes {
+                    id
+                    userId
+                }
+            }
+        }
+    }
+`;

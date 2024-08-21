@@ -129,7 +129,6 @@ function Theme() {
     ];
     return (
         <>
-            <div className='p-2'>Hello from Theme!</div>
             <Stack direction='column' spacing={2}>
                 {themes.map((themeColor, index) => (
                     <ThemeRow key={index} themeColor={themeColor} editingCard={editingCard} />

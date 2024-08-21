@@ -11,5 +11,5 @@ export const auth = (header: string): AuthTokenPayload => {
         throw new Error('Invalid token');
     }
 
-    return jwt.verify(token, process.env.TOKEN_SECRET as jwt.Secret) as AuthTokenPayload;
+    return jwt.default.verify(token, process.env.TOKEN_SECRET as jwt.Secret) as AuthTokenPayload;
 };
