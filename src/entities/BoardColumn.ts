@@ -14,6 +14,15 @@ import { Board } from './Board.js';
 import { Card } from './Card.js';
 import { User } from './User.js';
 
+export enum ThemeColorName {
+    Blue = 'Blue',
+    Orange = 'Orange',
+    Red = 'Red',
+    Green = 'Green',
+    Purple = 'Purple',
+    Yellow = 'Yellow',
+}
+
 @Entity()
 export class BoardColumn extends BaseEntity {
     @PrimaryGeneratedColumn()
@@ -36,6 +45,9 @@ export class BoardColumn extends BaseEntity {
 
     @OneToMany('Card', 'column')
     cards: Relation<Card>[];
+
+    @Column()
+    color: ThemeColorName;
 
     @CreateDateColumn()
     createdAt: Date;

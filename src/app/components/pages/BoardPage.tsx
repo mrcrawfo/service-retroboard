@@ -8,6 +8,7 @@ import BoardColumn from '../organisms/BoardColumn.jsx';
 import EditableBoardName from '../molecules/EditableBoardName.jsx';
 import { GET_BOARD } from '../../graph/board/queries.js';
 import { PAGE_HEADER_HEIGHT, SITE_HEADER_HEIGHT } from '../../helpers/constants.js';
+import { getThemeColor } from '../../helpers/theme.js';
 
 export interface BoardPageProps {
     boardId: number;
@@ -64,6 +65,7 @@ const BoardPage = ({ boardId }: BoardPageProps) => {
                         setUserVotes={setUserVotes}
                         editingCard={editingCard}
                         setEditingCard={setEditingCard}
+                        themeColor={getThemeColor(column.color || 'Blue')}
                     />
                 ))}
             </Grid>

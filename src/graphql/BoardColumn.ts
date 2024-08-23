@@ -1,10 +1,15 @@
-import { extendType, intArg, nonNull, objectType, stringArg } from 'nexus';
+import { enumType, extendType, intArg, nonNull, objectType, stringArg } from 'nexus';
 
 import { Board } from '../entities/Board.js';
 import { BoardColumn } from '../entities/BoardColumn.js';
 import { Card } from '../entities/Card.js';
 import { User } from '../entities/User.js';
 import { Context } from '../types/Context.js';
+
+export const ThemeColorName = enumType({
+    name: 'ThemeColorName',
+    members: ['Blue', 'Orange', 'Red', 'Green', 'Purple', 'Yellow'],
+});
 
 export const BoardColumnType = objectType({
     name: 'BoardColumn',
@@ -23,6 +28,9 @@ export const BoardColumnType = objectType({
             resolve(parent, _args, _context, _info): Promise<Board | null> {
                 return Board.findOne({ where: { id: parent.boardId } });
             },
+        });
+        t.nullable.field('color', {
+            type: 'ThemeColorName',
         });
         t.nonNull.int('creatorId');
         t.field('creator', {

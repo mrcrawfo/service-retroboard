@@ -2,9 +2,9 @@ import { Grid, GridProps, Stack } from '@mui/material';
 import { useState } from 'react';
 
 import { Card as CardType } from '../../../entities/Card.js';
-import AddCardButton from '../atoms/AddCardButton.js';
-import Card from './Card.js';
-import NewCard from './NewCard.js';
+import AddCardButton from '../atoms/AddCardButton.jsx';
+import Card from './Card.jsx';
+import NewCard from './NewCard.jsx';
 import { ThemeColor } from '../../helpers/theme.js';
 
 export interface BoardColumnProps extends GridProps {
@@ -43,7 +43,6 @@ const BoardColumn = ({
         },
         stack: {
             backgroundColor: themeColor?.colors?.secondary?.base || '#60a0ff',
-            // backgroundColor: `linear-gradient(45deg, ${themeColor?.colors?.primary?.highlight || '#0080ff'}, ${themeColor?.colors?.primary?.base || '#80a0ff'}), ${themeColor?.colors?.primary?.shadow || '#006090'})`,
             color: '#fff',
             borderRadius: '8px',
             minHeight: '0px',
@@ -70,7 +69,7 @@ const BoardColumn = ({
     return (
         <Grid item xs={Math.floor(12 / columnCount)} id={`column-${columnId}`} sx={styles.grid} {...gridProps}>
             <h2 style={styles.h2}>{columnName}</h2>
-            <AddCardButton onClick={addCardToColumn} disabled={addingCard || editingCard} />
+            <AddCardButton onClick={addCardToColumn} disabled={addingCard || editingCard} themeColor={themeColor} />
             {cards.length || addingCard ? (
                 <Stack direction='column' spacing={1} sx={styles.stack}>
                     {addingCard ? (

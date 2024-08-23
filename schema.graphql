@@ -20,6 +20,7 @@ type BoardColumn {
   board: Board
   boardId: Int!
   cards: [Card]
+  color: ThemeColorName
   creator: User
   creatorId: Int!
   id: Int!
@@ -67,6 +68,15 @@ type Query {
   getUsers: [User]!
   getVotesByCardId(cardId: Int!): [Vote]!
   me: User
+}
+
+enum ThemeColorName {
+  Blue
+  Green
+  Orange
+  Purple
+  Red
+  Yellow
 }
 
 type User {

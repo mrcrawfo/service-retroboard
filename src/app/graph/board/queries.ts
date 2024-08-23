@@ -8,6 +8,7 @@ export const GET_USER_BOARDS = gql`
             columns {
                 id
                 name
+                color
                 cards {
                     id
                     text
@@ -47,6 +48,7 @@ export const GET_BOARD = gql`
             columns {
                 id
                 name
+                color
             }
             cards {
                 columnId
@@ -69,6 +71,7 @@ export const CREATE_BOARD = gql`
             columns {
                 id
                 name
+                color
             }
             cards {
                 columnId
