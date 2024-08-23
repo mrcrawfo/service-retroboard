@@ -2,14 +2,16 @@ import { useQuery } from '@apollo/client';
 import { Grid } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 
-import { BoardColumn as BoardColumnType } from '../entities/BoardColumn.js';
-import { Card as CardType } from '../entities/Card.js';
-import BoardColumn from './components/organisms/BoardColumn.js';
-import { GET_BOARD } from './graph/board/queries.js';
+import { BoardColumn as BoardColumnType } from '../../../entities/BoardColumn.js';
+import { Card as CardType } from '../../../entities/Card.js';
+import BoardColumn from '../organisms/BoardColumn.js';
+import { GET_BOARD } from '../../graph/board/queries.js';
 
-function App() {
-    // const { data: boardsData } = useQuery(GET_USER_BOARDS);
+export interface BoardPageProps {
+    boardId: number;
+}
 
+const BoardPage = ({ boardId }: BoardPageProps) => {
     const [userVotes, setUserVotes] = useState<number[]>([]);
 
     useEffect(() => {
@@ -17,7 +19,6 @@ function App() {
         console.log(userVotes);
     }, [userVotes]);
 
-    const boardId = 1;
     const boardVotesAllowed = 6;
 
     const { data: boardData } = useQuery(GET_BOARD, {
@@ -38,17 +39,6 @@ function App() {
 
     return (
         <>
-            {/* { boardsData &&
-        <ul>
-          { boardsData.getBoardsByUserId.map((board: any) => (
-            <li key={board.id}>
-              <Stack direction='row'>
-                <Typography variant='body1'>{board.id} - {board.name}</Typography>
-              </Stack>
-            </li>
-          ))}
-        </ul>
-      } */}
             <div style={{ height: '80px' }} /> {/* Placeholder for Header/Controls component */}
             <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }} sx={styles.grid}>
                 {columns.map((column: BoardColumnType) => (
@@ -69,6 +59,6 @@ function App() {
             </Grid>
         </>
     );
-}
+};
 
-export default App;
+export default BoardPage;

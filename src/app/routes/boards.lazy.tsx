@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Button, Stack, Typography } from '@mui/material';
-import { createLazyFileRoute } from '@tanstack/react-router';
+import { createLazyFileRoute, Link } from '@tanstack/react-router';
 import { useQuery } from '@apollo/client';
 
 import CreateBoardModal from '../components/organisms/modals/CreateBoardModal.js';
@@ -25,9 +25,11 @@ function Boards() {
                     {boardsData.getBoardsByUserId.map((board: any) => (
                         <li key={board.id}>
                             <Stack direction='row'>
-                                <Typography variant='body1'>
-                                    {board.id} - {board.name}
-                                </Typography>
+                                <Link to={`/board/${board.id}`}>
+                                    <Typography variant='body1'>
+                                        {board.id} - {board.name}
+                                    </Typography>
+                                </Link>
                             </Stack>
                         </li>
                     ))}

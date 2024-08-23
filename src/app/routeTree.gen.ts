@@ -19,6 +19,7 @@ import { Route as rootRoute } from './routes/__root'
 const ThemeLazyImport = createFileRoute('/theme')()
 const BoardsLazyImport = createFileRoute('/boards')()
 const IndexLazyImport = createFileRoute('/')()
+const BoardBoardIdLazyImport = createFileRoute('/board/$boardId')()
 
 // Create/Update Routes
 
@@ -36,6 +37,13 @@ const IndexLazyRoute = IndexLazyImport.update({
   path: '/',
   getParentRoute: () => rootRoute,
 } as any).lazy(() => import('./routes/index.lazy').then((d) => d.Route))
+
+const BoardBoardIdLazyRoute = BoardBoardIdLazyImport.update({
+  path: '/board/$boardId',
+  getParentRoute: () => rootRoute,
+} as any).lazy(() =>
+  import('./routes/board/$boardId.lazy').then((d) => d.Route),
+)
 
 // Populate the FileRoutesByPath interface
 
@@ -62,6 +70,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ThemeLazyImport
       parentRoute: typeof rootRoute
     }
+    '/board/$boardId': {
+      id: '/board/$boardId'
+      path: '/board/$boardId'
+      fullPath: '/board/$boardId'
+      preLoaderRoute: typeof BoardBoardIdLazyImport
+      parentRoute: typeof rootRoute
+    }
   }
 }
 
@@ -71,6 +86,7 @@ export const routeTree = rootRoute.addChildren({
   IndexLazyRoute,
   BoardsLazyRoute,
   ThemeLazyRoute,
+  BoardBoardIdLazyRoute,
 })
 
 /* prettier-ignore-end */
@@ -83,7 +99,8 @@ export const routeTree = rootRoute.addChildren({
       "children": [
         "/",
         "/boards",
-        "/theme"
+        "/theme",
+        "/board/$boardId"
       ]
     },
     "/": {
@@ -94,6 +111,9 @@ export const routeTree = rootRoute.addChildren({
     },
     "/theme": {
       "filePath": "theme.lazy.tsx"
+    },
+    "/board/$boardId": {
+      "filePath": "board/$boardId.lazy.tsx"
     }
   }
 }
