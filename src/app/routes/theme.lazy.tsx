@@ -4,6 +4,7 @@ import { createLazyFileRoute } from '@tanstack/react-router';
 import { Stack } from '@mui/material';
 import ThemeRow from '../components/molecules/ThemeRow.js';
 import { ThemeColor, ThemeColors } from '../helpers/theme.js';
+import ColorSwatchSelector from '../components/molecules/ColorSwatchSelector.jsx';
 
 export const Route = createLazyFileRoute('/theme')({
     component: Theme,
@@ -19,6 +20,14 @@ function Theme() {
                     <ThemeRow key={index} themeColor={themeColor} editingCard={editingCard} />
                 ))}
             </Stack>
+            <ColorSwatchSelector
+                autoWidth={true}
+                multiple={false}
+                native={false}
+                onSelectColor={() => {
+                    /* do nothing */
+                }}
+            />
         </>
     );
 }
