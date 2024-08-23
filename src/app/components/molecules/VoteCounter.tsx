@@ -63,9 +63,11 @@ const VoteCounter = ({
     const [canDownvote, setCanDownvote] = useState<boolean>(false);
 
     useEffect(() => {
-        setCanUpvote(userVotes.length < boardVotesAllowed);
-        setCanDownvote(userVotes.filter((id) => cardId === id).length > 0);
-    }, [userVotes, boardVotesAllowed, setCanUpvote, setCanDownvote, upvoteLoading, downvoteLoading]);
+        setCanUpvote(userVotes.length < boardVotesAllowed && !(downvoteLoading || upvoteLoading || editingCard));
+        setCanDownvote(
+            userVotes.filter((id) => cardId === id).length > 0 && !(downvoteLoading || upvoteLoading || editingCard),
+        );
+    }, [userVotes, boardVotesAllowed, setCanUpvote, setCanDownvote, upvoteLoading, downvoteLoading, editingCard]);
 
     const upvote = () => {
         // add one instance of cardId to userVotes (if userVotes.length < boardVotesAllowed)
@@ -89,23 +91,13 @@ const VoteCounter = ({
             <Typography variant='button' sx={styles.counter}>
                 {votes.length}
             </Typography>
-            <IconButton
-                aria-label={`upvote card ${cardId}`}
-                onClick={upvote}
-                disabled={!canUpvote || downvoteLoading || upvoteLoading || editingCard}
-                size='small'
-            >
+            <IconButton aria-label={`upvote card ${cardId}`} onClick={upvote} disabled={!canUpvote} size='small'>
                 <ThumbUpOffAltOutlined
                     fontSize='small'
                     sx={canUpvote && !upvoteLoading && !downvoteLoading ? styles.enabledButton : styles.disabledButton}
                 />
             </IconButton>
-            <IconButton
-                aria-label={`downvote card ${cardId}`}
-                onClick={downvote}
-                disabled={!canDownvote || downvoteLoading || upvoteLoading || editingCard}
-                size='small'
-            >
+            <IconButton aria-label={`downvote card ${cardId}`} onClick={downvote} disabled={!canDownvote} size='small'>
                 <ThumbDownOffAltOutlined
                     fontSize='small'
                     sx={

@@ -82,3 +82,12 @@ export const CREATE_BOARD = gql`
         }
     }
 `;
+
+export const UPDATE_BOARD_NAME = gql`
+    mutation updateBoardName($id: Int!, $name: String!) {
+        updateBoardName(id: $id, name: $name) {
+            id
+            name
+        }
+    }
+`;

@@ -7,6 +7,7 @@ import { DELETE_CARD, UPDATE_CARD } from '../../graph/cards/queries.js';
 import ClearableInputText from '../molecules/ClearableInputText.js';
 import VoteCounter from '../molecules/VoteCounter.js';
 import { ThemeColor } from '../../helpers/theme.js';
+
 export interface CardProps extends MuiCardProps {
     cardId: number;
     boardId: number;

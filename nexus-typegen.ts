@@ -123,6 +123,7 @@ export interface NexusGenFieldTypes {
     login: NexusGenRootTypes['AuthType']; // AuthType!
     register: NexusGenRootTypes['AuthType']; // AuthType!
     subtractVoteFromCard: NexusGenRootTypes['Vote'] | null; // Vote
+    updateBoardName: NexusGenRootTypes['Board']; // Board!
     updateCard: NexusGenRootTypes['Card']; // Card!
   }
   Query: { // field return type
@@ -199,6 +200,7 @@ export interface NexusGenFieldTypeNames {
     login: 'AuthType'
     register: 'AuthType'
     subtractVoteFromCard: 'Vote'
+    updateBoardName: 'Board'
     updateCard: 'Card'
   }
   Query: { // field return type name
@@ -265,6 +267,10 @@ export interface NexusGenArgTypes {
       boardId: number; // Int!
       cardId: number; // Int!
       userId: number; // Int!
+    }
+    updateBoardName: { // args
+      id: number; // Int!
+      name: string; // String!
     }
     updateCard: { // args
       id: number; // Int!

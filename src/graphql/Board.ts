@@ -100,7 +100,35 @@ export const BoardMutation = extendType({
                 return Board.create({ name, cards: [], columns: [], creatorId: userId }).save();
             },
         });
-        // TODO: updateBoard (?)
+        t.nonNull.field('updateBoardName', {
+            type: 'Board',
+            args: {
+                id: nonNull(intArg()),
+                name: nonNull(stringArg()),
+            },
+            async resolve(_parent, args, context: Context, _info): Promise<Board> {
+                const { id, name } = args;
+                const { userId } = context;
+
+                if (!userId) {
+                    throw new Error("Can't update board name without logging in");
+                }
+
+                const board: Board = await Board.findOne({ where: { id } });
+
+                if (!board) {
+                    throw new Error("Can't update board that doesn't exist");
+                }
+
+                if (board.creatorId !== userId) {
+                    throw new Error("Can't update board that isn't yours");
+                }
+
+                board.name = name;
+
+                return await Board.save(board);
+            },
+        });
         // TODO: deleteBoard (?)
     },
 });
