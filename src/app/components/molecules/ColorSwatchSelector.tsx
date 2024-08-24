@@ -20,8 +20,11 @@ const ColorSwatchSelector = ({
     ...selectProps
 }: ColorSwatchSelectorProps) => {
     const styles = {
-        dropdown: {
-            width: '240px',
+        list: {
+            'ul.MuiMenu-list': {
+                display: 'flex',
+                flexDirection: 'row',
+            },
         },
         menuItem: {
             display: 'flex',
@@ -43,12 +46,17 @@ const ColorSwatchSelector = ({
                 const value = event.target.value as string;
                 setSelectedColor(value);
             }}
-            sx={styles.dropdown}
+            MenuProps={{
+                slotProps: {
+                    root: {
+                        sx: styles.list,
+                    },
+                },
+            }}
             renderValue={(themeColorName) => {
                 return (
                     <Stack direction='row' spacing={2}>
                         <ColorSwatch themeColor={getThemeColor(themeColorName.toString())} />
-                        <Typography variant='body2'>{themeColorName.toString()}</Typography>
                     </Stack>
                 );
             }}
@@ -57,7 +65,6 @@ const ColorSwatchSelector = ({
             {ThemeColors.map((themeColor: ThemeColor, index: number) => (
                 <MenuItem sx={styles.menuItem} key={index} value={themeColor.name}>
                     <ColorSwatch themeColor={themeColor} />
-                    <Typography variant='body2'>{themeColor.name}</Typography>
                 </MenuItem>
             ))}
         </Select>

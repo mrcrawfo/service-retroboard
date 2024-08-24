@@ -10,7 +10,7 @@ const ColorSwatch = ({ themeColor }: ColorSwatchProps) => {
             width: '32px',
             height: '32px',
             backgroundColor: themeColor?.colors?.primary?.base || '#0000e0',
-            margin: '8px',
+            margin: '0',
             ':hover': {
                 backgroundColor: themeColor?.colors?.primary?.highlight || '#0000ff',
             },
