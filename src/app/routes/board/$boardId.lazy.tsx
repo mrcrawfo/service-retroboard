@@ -1,4 +1,5 @@
 import { createLazyFileRoute } from '@tanstack/react-router';
+
 import BoardPage from '../../components/pages/BoardPage.js';
 
 export const Route = createLazyFileRoute('/board/$boardId')({

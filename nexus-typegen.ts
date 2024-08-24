@@ -60,7 +60,10 @@ export interface NexusGenObjects {
   Query: {};
   User: { // root type
     email: string; // String!
+    firstName: string; // String!
     id: number; // Int!
+    lastName: string; // String!
+    password?: string | null; // String
     username: string; // String!
   }
   Vote: { // root type
@@ -145,10 +148,13 @@ export interface NexusGenFieldTypes {
     me: NexusGenRootTypes['User'] | null; // User
   }
   User: { // field return type
-    boards: Array<NexusGenRootTypes['Board'] | null>; // [Board]!
-    cards: Array<NexusGenRootTypes['Card'] | null>; // [Card]!
+    boards: Array<NexusGenRootTypes['Board'] | null> | null; // [Board]
+    cards: Array<NexusGenRootTypes['Card'] | null> | null; // [Card]
     email: string; // String!
+    firstName: string; // String!
     id: number; // Int!
+    lastName: string; // String!
+    password: string | null; // String
     username: string; // String!
   }
   Vote: { // field return type
@@ -227,7 +233,10 @@ export interface NexusGenFieldTypeNames {
     boards: 'Board'
     cards: 'Card'
     email: 'String'
+    firstName: 'String'
     id: 'Int'
+    lastName: 'String'
+    password: 'String'
     username: 'String'
   }
   Vote: { // field return type name
@@ -268,6 +277,8 @@ export interface NexusGenArgTypes {
     }
     register: { // args
       email: string; // String!
+      firstName: string; // String!
+      lastName: string; // String!
       password: string; // String!
       username: string; // String!
     }

@@ -17,6 +17,7 @@ import { Route as rootRoute } from './routes/__root'
 // Create Virtual Routes
 
 const ThemeLazyImport = createFileRoute('/theme')()
+const LoginLazyImport = createFileRoute('/login')()
 const BoardsLazyImport = createFileRoute('/boards')()
 const IndexLazyImport = createFileRoute('/')()
 const BoardBoardIdLazyImport = createFileRoute('/board/$boardId')()
@@ -27,6 +28,11 @@ const ThemeLazyRoute = ThemeLazyImport.update({
   path: '/theme',
   getParentRoute: () => rootRoute,
 } as any).lazy(() => import('./routes/theme.lazy').then((d) => d.Route))
+
+const LoginLazyRoute = LoginLazyImport.update({
+  path: '/login',
+  getParentRoute: () => rootRoute,
+} as any).lazy(() => import('./routes/login.lazy').then((d) => d.Route))
 
 const BoardsLazyRoute = BoardsLazyImport.update({
   path: '/boards',
@@ -63,6 +69,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof BoardsLazyImport
       parentRoute: typeof rootRoute
     }
+    '/login': {
+      id: '/login'
+      path: '/login'
+      fullPath: '/login'
+      preLoaderRoute: typeof LoginLazyImport
+      parentRoute: typeof rootRoute
+    }
     '/theme': {
       id: '/theme'
       path: '/theme'
@@ -85,6 +98,7 @@ declare module '@tanstack/react-router' {
 export const routeTree = rootRoute.addChildren({
   IndexLazyRoute,
   BoardsLazyRoute,
+  LoginLazyRoute,
   ThemeLazyRoute,
   BoardBoardIdLazyRoute,
 })
@@ -99,6 +113,7 @@ export const routeTree = rootRoute.addChildren({
       "children": [
         "/",
         "/boards",
+        "/login",
         "/theme",
         "/board/$boardId"
       ]
@@ -108,6 +123,9 @@ export const routeTree = rootRoute.addChildren({
     },
     "/boards": {
       "filePath": "boards.lazy.tsx"
+    },
+    "/login": {
+      "filePath": "login.lazy.tsx"
     },
     "/theme": {
       "filePath": "theme.lazy.tsx"

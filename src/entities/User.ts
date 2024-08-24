@@ -21,20 +21,26 @@ export class User extends BaseEntity {
     username!: string;
 
     @Column()
+    firstName!: string;
+
+    @Column()
+    lastName!: string;
+
+    @Column()
     password!: string;
 
     @Column({ unique: true })
     email!: string;
 
     @OneToMany('Board', 'creator')
-    boards: Relation<Board>[];
+    boards?: Relation<Board>[];
 
     @OneToMany('Card', 'creator')
-    cards: Relation<Card>[];
+    cards?: Relation<Card>[];
 
     @CreateDateColumn()
-    createdAt: Date;
+    createdAt?: Date;
 
     @UpdateDateColumn()
-    updatedAt: Date;
+    updatedAt?: Date;
 }

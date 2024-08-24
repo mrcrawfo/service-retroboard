@@ -51,7 +51,7 @@ type Mutation {
   createColumn(boardId: Int!, name: String!, slot: Int!): BoardColumn!
   deleteCard(id: Int!): CardDeleteResponse!
   login(password: String!, username: String!): AuthType!
-  register(email: String!, password: String!, username: String!): AuthType!
+  register(email: String!, firstName: String!, lastName: String!, password: String!, username: String!): AuthType!
   subtractVoteFromCard(boardId: Int!, cardId: Int!, userId: Int!): Vote
   updateBoardName(id: Int!, name: String!): Board!
   updateCard(id: Int!, text: String!): Card!
@@ -81,10 +81,13 @@ enum ThemeColorName {
 }
 
 type User {
-  boards: [Board]!
-  cards: [Card]!
+  boards: [Board]
+  cards: [Card]
   email: String!
+  firstName: String!
   id: Int!
+  lastName: String!
+  password: String
   username: String!
 }
 

@@ -1,6 +1,8 @@
 import { createRootRoute, Link, Outlet } from '@tanstack/react-router';
 import { TanStackRouterDevtools } from '@tanstack/router-devtools';
 
+import LoginButton from '../components/atoms/LoginButton.jsx';
+
 export const Route = createRootRoute({
     component: () => (
         <>
@@ -14,6 +16,7 @@ export const Route = createRootRoute({
                 <Link to='/theme' className='[&.active]:font-bold'>
                     Theme
                 </Link>
+                <LoginButton />
             </div>
             <hr />
             <Outlet />

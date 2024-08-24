@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { MenuItem, Select, Stack, Typography } from '@mui/material';
+import { MenuItem, Select, Stack } from '@mui/material';
 import { SelectChangeEvent, SelectInputProps } from '@mui/material/Select/SelectInput.js';
 
 import { getThemeColor, ThemeColor, ThemeColors } from '../../helpers/theme.js';

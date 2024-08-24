@@ -62,7 +62,7 @@ const BoardPage = ({ boardId }: BoardPageProps) => {
                 />
             </div>
             <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }} sx={styles.grid}>
-                {columns?.length &&
+                {columns?.length ? (
                     columns.map((column) => (
                         <BoardColumn
                             boardId={boardId}
@@ -78,7 +78,11 @@ const BoardPage = ({ boardId }: BoardPageProps) => {
                             setEditingCard={setEditingCard}
                             themeColor={getThemeColor(column.color || 'Blue')}
                         />
-                    ))}
+                    ))
+                ) : (
+                    // TODO: Add loading spinner
+                    <div>Loading...</div>
+                )}
             </Grid>
         </>
     );

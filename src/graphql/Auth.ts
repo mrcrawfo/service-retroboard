@@ -58,7 +58,8 @@ export const AuthMutation = extendType({
                     throw new Error('Incorrect password');
                 }
 
-                const token = jwt.sign({ userId: user.id }, process.env.TOKEN_SECRET as jwt.Secret) || null;
+                const token =
+                    jwt.sign({ userId: user.id }, process.env.TOKEN_SECRET as jwt.Secret, { expiresIn: '24h' }) || null;
 
                 if (token) {
                     return {
@@ -74,6 +75,8 @@ export const AuthMutation = extendType({
             type: 'AuthType',
             args: {
                 username: nonNull(stringArg()),
+                firstName: nonNull(stringArg()),
+                lastName: nonNull(stringArg()),
                 email: nonNull(stringArg()),
                 password: nonNull(stringArg()),
             },
@@ -93,7 +96,9 @@ export const AuthMutation = extendType({
                         .execute();
 
                     user = result.raw[0];
-                    token = jwt.sign({ userId: user.id }, process.env.TOKEN_SECRET as jwt.Secret) || '';
+                    token =
+                        jwt.sign({ userId: user.id }, process.env.TOKEN_SECRET as jwt.Secret, { expiresIn: '24h' }) ||
+                        '';
                 } catch (err) {
                     console.log(err);
                 }
@@ -108,6 +113,5 @@ export const AuthMutation = extendType({
                 return null;
             },
         });
-        // TODO: Add logout mutation
     },
 });

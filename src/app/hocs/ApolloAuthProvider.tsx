@@ -2,27 +2,28 @@ import { useQuery } from '@apollo/client';
 import { ReactNode } from 'react';
 
 import { GET_USER_DATA } from '../graph/auth/queries.js';
-import { AuthContext } from './AuthContext.js';
+import { UserContext } from './UserContext.js';
+import { useAuth } from '../hooks/useAuth.js';
 
 export interface ApolloAuthProviderProps {
     children: ReactNode;
 }
 
 const ApolloAuthProvider = ({ children }: ApolloAuthProviderProps) => {
-    const { loading, data, error } = useQuery(GET_USER_DATA);
+    // const { _loading, data, _error } = useQuery(GET_USER_DATA);
+    const { data } = useQuery(GET_USER_DATA);
     const userData = data?.userData || null;
 
-    return (
-        <AuthContext.Provider
-            value={{
-                user: userData,
-                loading,
-                error: error || null,
-            }}
-        >
-            {children}
-        </AuthContext.Provider>
-    );
+    console.log('userData');
+    console.log(userData);
+
+    // const { user, _login, _logout, setUser } = useAuth();
+    const { user, setUser } = useAuth();
+
+    console.log('user');
+    console.log(user);
+
+    return <UserContext.Provider value={{ user, setUser }}>{children}</UserContext.Provider>;
 };
 
 ApolloAuthProvider.propTypes = {};
