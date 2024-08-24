@@ -44,6 +44,7 @@ export interface NexusGenObjects {
     creatorId: number; // Int!
     id: number; // Int!
     name: string; // String!
+    slot: number; // Int!
   }
   Card: { // root type
     boardId: number; // Int!
@@ -102,6 +103,7 @@ export interface NexusGenFieldTypes {
     creatorId: number; // Int!
     id: number; // Int!
     name: string; // String!
+    slot: number; // Int!
   }
   Card: { // field return type
     board: NexusGenRootTypes['Board'] | null; // Board
@@ -180,6 +182,7 @@ export interface NexusGenFieldTypeNames {
     creatorId: 'Int'
     id: 'Int'
     name: 'String'
+    slot: 'Int'
   }
   Card: { // field return type name
     board: 'Board'
@@ -254,6 +257,7 @@ export interface NexusGenArgTypes {
     createColumn: { // args
       boardId: number; // Int!
       name: string; // String!
+      slot: number; // Int!
     }
     deleteCard: { // args
       id: number; // Int!

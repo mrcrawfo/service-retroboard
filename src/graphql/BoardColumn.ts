@@ -16,6 +16,7 @@ export const BoardColumnType = objectType({
     definition(t) {
         t.nonNull.int('id');
         t.nonNull.string('name');
+        t.nonNull.int('slot');
         t.nullable.list.field('cards', {
             type: 'Card',
             resolve(parent, _args, _context, _info): Promise<Card[]> {
@@ -88,6 +89,7 @@ export const BoardColumnMutation = extendType({
             args: {
                 name: nonNull(stringArg()),
                 boardId: nonNull(intArg()),
+                slot: nonNull(intArg()),
             },
             resolve(_parent, args, context: Context, _info): Promise<BoardColumn> {
                 const { name, boardId } = args;

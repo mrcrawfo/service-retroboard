@@ -32,6 +32,9 @@ export class BoardColumn extends BaseEntity {
     name!: string;
 
     @Column()
+    slot!: number;
+
+    @Column()
     creatorId!: number;
 
     @ManyToOne('User', 'boards')

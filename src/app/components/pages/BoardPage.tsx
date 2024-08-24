@@ -1,6 +1,6 @@
 import { useQuery } from '@apollo/client';
 import { Grid } from '@mui/material';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 
 import { BoardColumn as BoardColumnType } from '../../../entities/BoardColumn.js';
 import { Card as CardType } from '../../../entities/Card.js';
@@ -24,12 +24,22 @@ const BoardPage = ({ boardId }: BoardPageProps) => {
 
     const boardVotesAllowed = 6;
 
+    let cards: CardType[];
+    let columns: BoardColumnType[];
+    let boardName: string;
+
     const { data: boardData } = useQuery(GET_BOARD, {
         variables: { id: boardId },
     });
-    const cards = boardData?.getBoard?.cards || [];
-    const columns = boardData?.getBoard?.columns || [];
-    const boardName = boardData?.getBoard?.name || '';
+
+    useMemo(() => {
+        const { getBoard } = boardData || {};
+        if (getBoard) {
+            cards = getBoard.cards || [];
+            columns = ([...getBoard.columns] || []).sort((a: BoardColumnType, b: BoardColumnType) => a.slot - b.slot);
+            boardName = getBoard?.name || '';
+        }
+    }, [boardData]);
 
     const [editingCard, setEditingCard] = useState<boolean>(false);
 
@@ -52,22 +62,23 @@ const BoardPage = ({ boardId }: BoardPageProps) => {
                 />
             </div>
             <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }} sx={styles.grid}>
-                {columns.map((column: BoardColumnType) => (
-                    <BoardColumn
-                        boardId={boardId}
-                        columnCount={columns?.length}
-                        columnId={column.id}
-                        key={column.id}
-                        columnName={column.name}
-                        cards={cards.filter((card: CardType) => card.columnId === column.id)}
-                        boardVotesAllowed={boardVotesAllowed}
-                        userVotes={userVotes}
-                        setUserVotes={setUserVotes}
-                        editingCard={editingCard}
-                        setEditingCard={setEditingCard}
-                        themeColor={getThemeColor(column.color || 'Blue')}
-                    />
-                ))}
+                {columns?.length &&
+                    columns.map((column) => (
+                        <BoardColumn
+                            boardId={boardId}
+                            columnCount={columns.length}
+                            columnId={column.id}
+                            key={column.id}
+                            columnName={column.name}
+                            cards={cards.filter((card: CardType) => card.columnId === column.id)}
+                            boardVotesAllowed={boardVotesAllowed}
+                            userVotes={userVotes}
+                            setUserVotes={setUserVotes}
+                            editingCard={editingCard}
+                            setEditingCard={setEditingCard}
+                            themeColor={getThemeColor(column.color || 'Blue')}
+                        />
+                    ))}
             </Grid>
         </>
     );

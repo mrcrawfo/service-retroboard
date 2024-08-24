@@ -8,6 +8,7 @@ export const GET_USER_BOARDS = gql`
             columns {
                 id
                 name
+                slot
                 color
                 cards {
                     id
@@ -48,6 +49,7 @@ export const GET_BOARD = gql`
             columns {
                 id
                 name
+                slot
                 color
             }
             cards {
@@ -71,6 +73,7 @@ export const CREATE_BOARD = gql`
             columns {
                 id
                 name
+                slot
                 color
             }
             cards {

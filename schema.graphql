@@ -25,6 +25,7 @@ type BoardColumn {
   creatorId: Int!
   id: Int!
   name: String!
+  slot: Int!
 }
 
 type Card {
@@ -47,7 +48,7 @@ type Mutation {
   addVoteToCard(boardId: Int!, cardId: Int!, userId: Int!): Vote!
   createBoard(name: String!): Board!
   createCard(boardId: Int!, columnId: Int!, text: String!): Card!
-  createColumn(boardId: Int!, name: String!): BoardColumn!
+  createColumn(boardId: Int!, name: String!, slot: Int!): BoardColumn!
   deleteCard(id: Int!): CardDeleteResponse!
   login(password: String!, username: String!): AuthType!
   register(email: String!, password: String!, username: String!): AuthType!
