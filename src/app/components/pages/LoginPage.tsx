@@ -6,8 +6,7 @@ import { LoadingButton } from '@mui/lab';
 
 import { LOGIN } from '../../graph/auth/queries.js';
 import { useAuth } from '../../hooks/useAuth.js';
-import { User } from 'src/entities/User.js';
-import { SaveOptions, RemoveOptions } from 'typeorm';
+// import { User as UserType } from '../../../entities/User.js';
 
 export interface LoginPageProps {}
 
@@ -38,48 +37,35 @@ const LoginPage = ({}: LoginPageProps) => {
         event.preventDefault();
         const data = new FormData(event.currentTarget);
 
-        console.log({
-            username: data.get('username'),
-            password: data.get('password'),
-        });
-
         setUsername((data.get('username') as string) || '');
         setPassword((data.get('password') as string) || '');
 
-        loginUser().then((res) => {
-            console.log(res);
+        loginUser({
+            variables: {
+                username: (data.get('username') as string) || '',
+                password: (data.get('password') as string) || '',
+            },
+        })
+            .then((res) => {
+                console.log('res');
+                console.log(res);
 
-            login({
-                id: res.data.login.id,
-                username: res.data.login.username,
-                firstName: res.data.login.firstName,
-                lastName: res.data.login.lastName,
-                email: res.data.login.email,
-                password: '',
-                hasId: function (): boolean {
-                    throw new Error('Function not implemented.');
-                },
-                save: function (_options?: SaveOptions): Promise<User> {
-                    throw new Error('Function not implemented.');
-                },
-                remove: function (_options?: RemoveOptions): Promise<User> {
-                    throw new Error('Function not implemented.');
-                },
-                softRemove: function (_options?: SaveOptions): Promise<User> {
-                    throw new Error('Function not implemented.');
-                },
-                recover: function (_options?: SaveOptions): Promise<User> {
-                    throw new Error('Function not implemented.');
-                },
-                reload: function (): Promise<void> {
-                    throw new Error('Function not implemented.');
-                },
+                const user = {
+                    id: res.data.login.user.id,
+                    username: res.data.login.user.username,
+                    firstName: res.data.login.user.firstName,
+                    lastName: res.data.login.user.lastName,
+                    email: res.data.login.user.email,
+                };
+                const token = res.data.login.token;
+
+                login(user, token);
+
+                navigate({ to: '/boards' });
+            })
+            .catch((e) => {
+                console.error(e.message);
             });
-
-            // TODO: Handle login error
-
-            navigate({ to: '/boards' });
-        });
     };
 
     return (

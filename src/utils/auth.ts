@@ -1,4 +1,4 @@
-import * as jwt from 'jsonwebtoken';
+import jsonwebtoken from 'jsonwebtoken';
 
 export interface AuthTokenPayload {
     userId: number;
@@ -11,5 +11,5 @@ export const auth = (header: string): AuthTokenPayload => {
         throw new Error('Invalid token');
     }
 
-    return jwt.default.verify(token, process.env.TOKEN_SECRET as jwt.Secret) as AuthTokenPayload;
+    return jsonwebtoken.verify(token, process.env.TOKEN_SECRET as jsonwebtoken.Secret) as AuthTokenPayload;
 };

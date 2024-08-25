@@ -1,7 +1,7 @@
 import { AddOutlined } from '@mui/icons-material';
 import { Button, ButtonProps } from '@mui/material';
 
-import { ThemeColor } from 'src/app/helpers/theme.js';
+import { ThemeColor } from '../../helpers/theme.js';
 
 export interface AddCardButtonProps extends ButtonProps {
     themeColor?: ThemeColor;

@@ -1,5 +1,5 @@
 import argon2 from 'argon2';
-import * as jwt from 'jsonwebtoken';
+import jsonwebtoken from 'jsonwebtoken';
 import { extendType, nonNull, objectType, stringArg } from 'nexus';
 
 import { User } from '../entities/User.js';
@@ -59,7 +59,9 @@ export const AuthMutation = extendType({
                 }
 
                 const token =
-                    jwt.sign({ userId: user.id }, process.env.TOKEN_SECRET as jwt.Secret, { expiresIn: '24h' }) || null;
+                    jsonwebtoken.sign({ userId: user.id }, process.env.TOKEN_SECRET as jsonwebtoken.Secret, {
+                        expiresIn: '24h',
+                    }) || null;
 
                 if (token) {
                     return {
@@ -97,8 +99,9 @@ export const AuthMutation = extendType({
 
                     user = result.raw[0];
                     token =
-                        jwt.sign({ userId: user.id }, process.env.TOKEN_SECRET as jwt.Secret, { expiresIn: '24h' }) ||
-                        '';
+                        jsonwebtoken.sign({ userId: user.id }, process.env.TOKEN_SECRET as jsonwebtoken.Secret, {
+                            expiresIn: '24h',
+                        }) || '';
                 } catch (err) {
                     console.log(err);
                 }

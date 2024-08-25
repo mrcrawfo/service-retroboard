@@ -1,4 +1,4 @@
-import { ThemeColor } from 'src/app/helpers/theme.js';
+import { ThemeColor } from '../../helpers/theme.js';
 
 export interface ColorSwatchProps {
     themeColor?: ThemeColor;

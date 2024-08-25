@@ -1,27 +1,57 @@
-import { useEffect } from 'react';
-import { useUser } from './useUser.js';
-import { useLocalStorage } from './useLocalStorage.js';
+// import { useEffect } from 'react';
+import { create } from 'zustand';
+
 import { User as UserType } from '../../entities/User.js';
+import { LOGGED_IN_USER, USER_AUTH } from '../helpers/constants.js';
 
 export const useAuth = () => {
-    // we can re export the user methods or object from this hook
-    const { user, addUser, removeUser, setUser } = useUser();
-    const { getItem } = useLocalStorage();
+    interface AuthStore {
+        user: UserType | null;
+        setUser: (inputUser: UserType) => void;
+        token: string | null;
+        setToken: (inputToken: string) => void;
+    }
 
-    useEffect(() => {
-        const user = getItem('user');
-        if (user) {
-            addUser(JSON.parse(user));
-        }
-    }, [addUser, getItem]);
+    const useAuthStore = create<AuthStore>((set) => ({
+        user: JSON.parse(localStorage.getItem(LOGGED_IN_USER)),
+        setUser: (inputUser: UserType) => {
+            set((_state: AuthStore) => ({ user: inputUser }));
+            localStorage.setItem(LOGGED_IN_USER, JSON.stringify(inputUser));
+        },
+        token: localStorage.getItem(USER_AUTH),
+        setToken: (inputToken: string) => {
+            set((_state: AuthStore) => ({ token: inputToken }));
+            localStorage.setItem(USER_AUTH, inputToken);
+        },
+    }));
 
-    const login = (user: UserType) => {
-        addUser(user);
+    const user = useAuthStore((state: AuthStore) => state.user);
+    const setUser = useAuthStore((state: AuthStore) => state.setUser);
+    const token = useAuthStore((state: AuthStore) => state.token);
+    const setToken = useAuthStore((state: AuthStore) => state.setToken);
+
+    console.log('useAuth :: user');
+    console.log(user);
+    console.log('useAuth :: token');
+    console.log(token);
+
+    const login = (loginUser: any, loginToken: string) => {
+        console.log('login :: loginUser');
+        console.log(loginUser);
+        console.log(token);
+
+        setUser(loginUser);
+        localStorage.setItem(LOGGED_IN_USER, JSON.stringify(loginUser));
+        setToken(loginToken);
+        localStorage.setItem(USER_AUTH, loginToken);
     };
 
     const logout = () => {
-        removeUser();
+        setUser(null);
+        localStorage.setItem(LOGGED_IN_USER, null);
+        setToken(null);
+        localStorage.setItem(USER_AUTH, null);
     };
 
-    return { user, login, logout, setUser };
+    return { user, login, logout, setUser, token, setToken };
 };

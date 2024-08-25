@@ -1,8 +1,8 @@
-import { useContext } from 'react';
+// import { useContext } from 'react';
 import { Button, ButtonProps } from '@mui/material';
 import { Link, useNavigate } from '@tanstack/react-router';
 
-import { UserContext } from '../../hocs/UserContext.js';
+// import { AuthContext } from '../../hocs/AuthContext.jsx';
 // import { USER_AUTH } from '../../helpers/constants.js';
 import { useAuth } from '../../hooks/useAuth.js';
 
@@ -17,9 +17,12 @@ const LoginButton = ({ ...buttonProps }: LoginButtonProps) => {
         },
     };
 
-    const { logout } = useAuth();
+    const { user, logout } = useAuth();
 
-    const { user } = useContext(UserContext);
+    // const { user } = useContext(AuthContext);
+
+    console.log('LoginButton :: user');
+    console.log(user);
 
     const navigate = useNavigate();
 
