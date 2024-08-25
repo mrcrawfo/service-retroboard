@@ -5,8 +5,7 @@ import { Alert, Box, Container, TextField, Typography } from '@mui/material';
 import { LoadingButton } from '@mui/lab';
 
 import { LOGIN } from '../../graph/auth/queries.js';
-import { useAuth } from '../../hooks/useAuth.js';
-// import { User as UserType } from '../../../entities/User.js';
+import { useAuthStore } from '../../store/AuthStore.js';
 
 export interface LoginPageProps {}
 
@@ -21,10 +20,16 @@ const LoginPage = ({}: LoginPageProps) => {
 
     const navigate = useNavigate();
 
-    const { login } = useAuth();
+    const setUser = useAuthStore((state) => state.setUser);
+    const setToken = useAuthStore((state) => state.setToken);
 
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
+
+    const login = (loginUser: any, loginToken: string) => {
+        setUser(loginUser);
+        setToken(loginToken);
+    };
 
     const [loginUser, { loading: loginLoading, error: loginError }] = useMutation(LOGIN, {
         variables: {
@@ -47,9 +52,6 @@ const LoginPage = ({}: LoginPageProps) => {
             },
         })
             .then((res) => {
-                console.log('res');
-                console.log(res);
-
                 const user = {
                     id: res.data.login.user.id,
                     username: res.data.login.user.username,

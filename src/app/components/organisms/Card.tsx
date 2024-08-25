@@ -7,6 +7,7 @@ import { DELETE_CARD, UPDATE_CARD } from '../../graph/cards/queries.js';
 import ClearableInputText from '../molecules/ClearableInputText.js';
 import VoteCounter from '../molecules/VoteCounter.js';
 import { ThemeColor } from '../../helpers/theme.js';
+import { useAuthStore } from '../../store/AuthStore.js';
 
 export interface CardProps extends MuiCardProps {
     cardId: number;
@@ -46,6 +47,8 @@ const Card = ({
         },
     };
 
+    const token = useAuthStore((state) => state.token);
+
     const [cardText, setCardText] = useState<string>(text);
 
     const [updateCard, { loading: updateCardLoading }] = useMutation(UPDATE_CARD, {
@@ -54,6 +57,13 @@ const Card = ({
             text: cardText,
         },
         refetchQueries: ['getBoard'],
+        context: {
+            headers: token
+                ? {
+                      authorization: `Bearer ${token}`,
+                  }
+                : {},
+        },
     });
 
     const [deleteCard, { loading: deleteCardLoading }] = useMutation(DELETE_CARD, {
@@ -61,6 +71,13 @@ const Card = ({
             id: cardId,
         },
         refetchQueries: ['getBoard'],
+        context: {
+            headers: token
+                ? {
+                      authorization: `Bearer ${token}`,
+                  }
+                : {},
+        },
     });
 
     const onSave = () => {

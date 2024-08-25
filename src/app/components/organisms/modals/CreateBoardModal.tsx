@@ -12,6 +12,7 @@ import {
 import { useMutation } from '@apollo/client';
 
 import { CREATE_BOARD } from '../../../graph/board/queries.js';
+import { useAuthStore } from '../../../store/AuthStore.js';
 
 export interface CreateBoardModalProps extends DialogProps {
     open: boolean;
@@ -33,6 +34,8 @@ const CreateBoardModal = ({ open, handleCloseModal, ...dialogProps }: CreateBoar
         },
     };
 
+    const token = useAuthStore((state) => state.token);
+
     const [selectedBoardPreset, setSelectedBoardPreset] = useState<string>('');
     const [boardName, setBoardName] = useState<string>('');
 
@@ -42,6 +45,13 @@ const CreateBoardModal = ({ open, handleCloseModal, ...dialogProps }: CreateBoar
         variables: {
             // columns: selectedBoardPreset.columns,
             // name: boardNameInputRef.current?.value,
+        },
+        context: {
+            headers: token
+                ? {
+                      authorization: `Bearer ${token}`,
+                  }
+                : {},
         },
     });
 

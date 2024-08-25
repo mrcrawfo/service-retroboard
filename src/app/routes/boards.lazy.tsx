@@ -5,6 +5,7 @@ import { useQuery } from '@apollo/client';
 
 import CreateBoardModal from '../components/organisms/modals/CreateBoardModal.js';
 import { GET_USER_BOARDS } from '../graph/board/queries.js';
+import { useAuthStore } from '../store/AuthStore.js';
 
 export const Route = createLazyFileRoute('/boards')({
     component: Boards,
@@ -13,7 +14,17 @@ export const Route = createLazyFileRoute('/boards')({
 function Boards() {
     const [createBoardOpenModal, setCreateBoardOpenModal] = useState<boolean>(false);
 
-    const { data: boardsData } = useQuery(GET_USER_BOARDS);
+    const token = useAuthStore((state) => state.token);
+
+    const { data: boardsData } = useQuery(GET_USER_BOARDS, {
+        context: {
+            headers: token
+                ? {
+                      authorization: `Bearer ${token}`,
+                  }
+                : {},
+        },
+    });
 
     return (
         <>

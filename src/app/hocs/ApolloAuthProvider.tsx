@@ -3,13 +3,28 @@ import { ReactNode } from 'react';
 
 import { GET_USER_DATA } from '../graph/auth/queries.js';
 import { AuthContext } from './AuthContext.js';
+import { useAuthStore } from '../store/AuthStore.js';
 
 export interface ApolloAuthProviderProps {
     children: ReactNode;
 }
 
 const ApolloAuthProvider = ({ children }: ApolloAuthProviderProps) => {
-    const { loading, data, error } = useQuery(GET_USER_DATA);
+    const token = useAuthStore((state) => state.token);
+
+    const { loading, data, error } = useQuery(GET_USER_DATA, {
+        context: token
+            ? {
+                  headers: {
+                      authorization: `Bearer ${token}`,
+                  },
+              }
+            : {},
+        onError: (error) => {
+            console.log('error');
+            console.log(error);
+        },
+    });
     const userData = data?.userData || null;
 
     console.log('userData');

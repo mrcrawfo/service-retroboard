@@ -4,6 +4,7 @@ import { Button, IconButton, InputAdornment, InputProps, OutlinedInput, Stack, T
 import { useMutation } from '@apollo/client';
 
 import { UPDATE_BOARD_NAME } from '../../graph/board/queries.js';
+import { useAuthStore } from '../../store/AuthStore.js';
 
 export interface EditableBoardNameProps extends InputProps {
     boardId: number;
@@ -37,6 +38,8 @@ const EditableBoardName = ({
         },
     };
 
+    const token = useAuthStore((state) => state.token);
+
     const [editMode, setEditMode] = useState<boolean>(false);
     const [editText, setEditText] = useState<string>(boardName);
     useEffect(() => {
@@ -49,6 +52,13 @@ const EditableBoardName = ({
         variables: {
             id: boardId,
             name: editText,
+        },
+        context: {
+            headers: token
+                ? {
+                      authorization: `Bearer ${token}`,
+                  }
+                : {},
         },
         refetchQueries: ['getBoard'],
     });

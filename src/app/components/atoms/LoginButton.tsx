@@ -1,10 +1,7 @@
-// import { useContext } from 'react';
 import { Button, ButtonProps } from '@mui/material';
 import { Link, useNavigate } from '@tanstack/react-router';
 
-// import { AuthContext } from '../../hocs/AuthContext.jsx';
-// import { USER_AUTH } from '../../helpers/constants.js';
-import { useAuth } from '../../hooks/useAuth.js';
+import { useAuthStore } from '../../store/AuthStore.js';
 
 export interface LoginButtonProps extends ButtonProps {}
 
@@ -17,22 +14,21 @@ const LoginButton = ({ ...buttonProps }: LoginButtonProps) => {
         },
     };
 
-    const { user, logout } = useAuth();
+    const setUser = useAuthStore((state) => state.setUser);
+    const setToken = useAuthStore((state) => state.setToken);
+    const user = useAuthStore((state) => state.user);
 
-    // const { user } = useContext(AuthContext);
-
-    console.log('LoginButton :: user');
-    console.log(user);
+    const logout = () => {
+        setUser(null);
+        setToken(null);
+    };
 
     const navigate = useNavigate();
 
     const onLogoutClick = () => {
-        // localStorage.removeItem(USER_AUTH);
         logout();
         navigate({ to: '/' });
     };
-
-    console.log('user:', user);
 
     return (
         <>

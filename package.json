@@ -40,7 +40,8 @@
         "tsconfig.json": "^1.0.11",
         "typeorm": "^0.3.20",
         "typescript": "^5.5.3",
-        "vite": "^5.3.5"
+        "vite": "^5.3.5",
+        "zustand": "^4.5.5"
     },
     "devDependencies": {
         "@biomejs/biome": "1.8.3",
@@ -52,12 +53,9 @@
         "@types/react-dom": "^18.3.0",
         "@vitejs/plugin-react": "^4.3.1",
         "husky": "9.1.4",
-        "lint-staged": "15.2.9",
-        "zustand": "^4.5.5"
+        "lint-staged": "15.2.9"
     },
     "lint-staged": {
-        "*.{js,jsx,ts,tsx,json,md}": [
-            "biome format . --write"
-        ]
+        "*.{js,jsx,ts,tsx,json,md}": ["biome format . --write"]
     }
 }

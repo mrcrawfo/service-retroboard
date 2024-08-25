@@ -7,6 +7,7 @@ import { Vote as VoteType } from '../../../entities/Vote.js';
 import { DOWNVOTE_CARD, UPVOTE_CARD } from '../../graph/vote/queries.js';
 // import { AuthContext } from '../../hocs/AuthContext.js';
 import { ThemeColor } from '../../helpers/theme.js';
+import { useAuthStore } from '../../store/AuthStore.js';
 
 export interface VoteCounterProps {
     votes: VoteType[];
@@ -52,12 +53,30 @@ const VoteCounter = ({
         },
     };
 
+    const token = useAuthStore((state) => state.token);
+
     // const { user } = useContext(AuthContext);
     // biome-ignore lint/correctness/noUnusedVariables:
     // const userId: number = user?.id || 0;
 
-    const [_upvoteCard, { loading: upvoteLoading }] = useMutation(UPVOTE_CARD);
-    const [_downvoteCard, { loading: downvoteLoading }] = useMutation(DOWNVOTE_CARD);
+    const [_upvoteCard, { loading: upvoteLoading }] = useMutation(UPVOTE_CARD, {
+        context: {
+            headers: token
+                ? {
+                      authorization: `Bearer ${token}`,
+                  }
+                : {},
+        },
+    });
+    const [_downvoteCard, { loading: downvoteLoading }] = useMutation(DOWNVOTE_CARD, {
+        context: {
+            headers: token
+                ? {
+                      authorization: `Bearer ${token}`,
+                  }
+                : {},
+        },
+    });
 
     const [canUpvote, setCanUpvote] = useState<boolean>(false);
     const [canDownvote, setCanDownvote] = useState<boolean>(false);

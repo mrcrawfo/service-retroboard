@@ -4,6 +4,7 @@ import { useState } from 'react';
 
 import { CREATE_CARD } from '../../graph/cards/queries.js';
 import ClearableInputText from '../molecules/ClearableInputText.js';
+import { useAuthStore } from '../../store/AuthStore.js';
 
 export interface NewCardProps extends MuiCardProps {
     boardId: number;
@@ -23,6 +24,8 @@ const NewCard = ({ boardId, columnId, setAddingCard, setEditingCard }: NewCardPr
         },
     };
 
+    const token = useAuthStore((state) => state.token);
+
     const [cardText, setCardText] = useState<string>('');
 
     const [createCard, { loading: createCardLoading }] = useMutation(CREATE_CARD, {
@@ -32,6 +35,13 @@ const NewCard = ({ boardId, columnId, setAddingCard, setEditingCard }: NewCardPr
             text: cardText,
         },
         refetchQueries: ['getBoard'],
+        context: {
+            headers: token
+                ? {
+                      authorization: `Bearer ${token}`,
+                  }
+                : {},
+        },
     });
 
     const onSave = () => {
