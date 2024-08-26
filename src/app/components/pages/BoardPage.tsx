@@ -9,7 +9,7 @@ import EditableBoardName from '../molecules/EditableBoardName.jsx';
 import { GET_BOARD } from '../../graph/board/queries.js';
 import { PAGE_HEADER_HEIGHT, SITE_HEADER_HEIGHT } from '../../helpers/constants.js';
 import { getThemeColor } from '../../helpers/theme.js';
-import { useAuthStore } from '../../store/AuthStore.js';
+import { useAuthStoreToken } from '../../store/AuthStore.js';
 
 export interface BoardPageProps {
     boardId: number;
@@ -29,7 +29,7 @@ const BoardPage = ({ boardId }: BoardPageProps) => {
     let columns: BoardColumnType[];
     let boardName: string;
 
-    const token = useAuthStore((state) => state.token);
+    const token = useAuthStoreToken();
 
     const { data: boardData } = useQuery(GET_BOARD, {
         variables: { id: boardId },

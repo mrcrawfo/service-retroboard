@@ -5,7 +5,7 @@ import { Alert, Box, Container, TextField, Typography } from '@mui/material';
 import { LoadingButton } from '@mui/lab';
 
 import { LOGIN } from '../../graph/auth/queries.js';
-import { useAuthStore } from '../../store/AuthStore.js';
+import { useAuthStoreActions } from '../../store/AuthStore.js';
 
 export interface LoginPageProps {}
 
@@ -20,8 +20,7 @@ const LoginPage = ({}: LoginPageProps) => {
 
     const navigate = useNavigate();
 
-    const setUser = useAuthStore((state) => state.setUser);
-    const setToken = useAuthStore((state) => state.setToken);
+    const { setUser, setToken } = useAuthStoreActions();
 
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');

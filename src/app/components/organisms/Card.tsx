@@ -7,7 +7,7 @@ import { DELETE_CARD, UPDATE_CARD } from '../../graph/cards/queries.js';
 import ClearableInputText from '../molecules/ClearableInputText.js';
 import VoteCounter from '../molecules/VoteCounter.js';
 import { ThemeColor } from '../../helpers/theme.js';
-import { useAuthStore } from '../../store/AuthStore.js';
+import { useAuthStoreToken } from '../../store/AuthStore.js';
 
 export interface CardProps extends MuiCardProps {
     cardId: number;
@@ -47,7 +47,7 @@ const Card = ({
         },
     };
 
-    const token = useAuthStore((state) => state.token);
+    const token = useAuthStoreToken();
 
     const [cardText, setCardText] = useState<string>(text);
 

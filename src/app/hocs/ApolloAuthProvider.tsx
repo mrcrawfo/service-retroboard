@@ -3,14 +3,14 @@ import { ReactNode } from 'react';
 
 import { GET_USER_DATA } from '../graph/auth/queries.js';
 import { AuthContext } from './AuthContext.js';
-import { useAuthStore } from '../store/AuthStore.js';
+import { useAuthStoreToken } from '../store/AuthStore.js';
 
 export interface ApolloAuthProviderProps {
     children: ReactNode;
 }
 
 const ApolloAuthProvider = ({ children }: ApolloAuthProviderProps) => {
-    const token = useAuthStore((state) => state.token);
+    const token = useAuthStoreToken();
 
     const { loading, data, error } = useQuery(GET_USER_DATA, {
         context: token

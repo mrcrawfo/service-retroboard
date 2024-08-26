@@ -1,13 +1,12 @@
 import { useMutation } from '@apollo/client';
 import { CircleOutlined, ThumbDownOffAltOutlined, ThumbUpOffAltOutlined } from '@mui/icons-material';
 import { IconButton, Stack, Typography } from '@mui/material';
-import { /* useContext, */ useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import { Vote as VoteType } from '../../../entities/Vote.js';
 import { DOWNVOTE_CARD, UPVOTE_CARD } from '../../graph/vote/queries.js';
-// import { AuthContext } from '../../hocs/AuthContext.js';
 import { ThemeColor } from '../../helpers/theme.js';
-import { useAuthStore } from '../../store/AuthStore.js';
+import { useAuthStoreToken } from '../../store/AuthStore.js';
 
 export interface VoteCounterProps {
     votes: VoteType[];
@@ -53,7 +52,7 @@ const VoteCounter = ({
         },
     };
 
-    const token = useAuthStore((state) => state.token);
+    const token = useAuthStoreToken();
 
     // const { user } = useContext(AuthContext);
     // biome-ignore lint/correctness/noUnusedVariables:

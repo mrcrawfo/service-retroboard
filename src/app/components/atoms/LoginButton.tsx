@@ -1,7 +1,7 @@
 import { Button, ButtonProps } from '@mui/material';
 import { Link, useNavigate } from '@tanstack/react-router';
 
-import { useAuthStore } from '../../store/AuthStore.js';
+import { useAuthStoreUser, useAuthStoreActions } from '../../store/AuthStore.js';
 
 export interface LoginButtonProps extends ButtonProps {}
 
@@ -14,9 +14,8 @@ const LoginButton = ({ ...buttonProps }: LoginButtonProps) => {
         },
     };
 
-    const setUser = useAuthStore((state) => state.setUser);
-    const setToken = useAuthStore((state) => state.setToken);
-    const user = useAuthStore((state) => state.user);
+    const { setUser, setToken } = useAuthStoreActions();
+    const user = useAuthStoreUser();
 
     const logout = () => {
         setUser(null);

@@ -4,7 +4,7 @@ import { useState } from 'react';
 
 import { CREATE_CARD } from '../../graph/cards/queries.js';
 import ClearableInputText from '../molecules/ClearableInputText.js';
-import { useAuthStore } from '../../store/AuthStore.js';
+import { useAuthStoreToken } from '../../store/AuthStore.js';
 
 export interface NewCardProps extends MuiCardProps {
     boardId: number;
@@ -24,7 +24,7 @@ const NewCard = ({ boardId, columnId, setAddingCard, setEditingCard }: NewCardPr
         },
     };
 
-    const token = useAuthStore((state) => state.token);
+    const token = useAuthStoreToken();
 
     const [cardText, setCardText] = useState<string>('');
 
