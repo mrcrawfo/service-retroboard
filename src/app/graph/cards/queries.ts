@@ -42,3 +42,11 @@ export const DELETE_CARD = gql`
         }
     }
 `;
+
+export const MOVE_CARD = gql`
+    mutation MoveCard($cardId: Int!, $fromColumnId: Int!, $toColumnId: Int!) {
+        moveCard(cardId: $cardId, fromColumnId: $fromColumnId, toColumnId: $toColumnId) {
+            success
+        }
+    }
+`;

@@ -1,6 +1,7 @@
 import { useMutation } from '@apollo/client';
 import { CircularProgress, Card as MuiCard, CardProps as MuiCardProps, Stack } from '@mui/material';
 import { useState } from 'react';
+import { useDraggable } from '@dnd-kit/core';
 
 import { Vote as VoteType } from '../../../entities/Vote.js';
 import { DELETE_CARD, UPDATE_CARD } from '../../graph/cards/queries.js';
@@ -46,6 +47,16 @@ const Card = ({
             boxShadow: `0px 4px 4px ${themeColor?.colors?.primary?.shadow || '#006090'}`,
         },
     };
+
+    const { attributes, listeners, setNodeRef, transform } = useDraggable({
+        id: `card-${boardId}-${columnId}-${cardId}`,
+    });
+
+    const transformStyle = transform
+        ? {
+              transform: `translate3d(${transform.x}px, ${transform.y}px, 0)`,
+          }
+        : null;
 
     const token = useAuthStoreToken();
 
@@ -93,7 +104,14 @@ const Card = ({
     };
 
     return (
-        <MuiCard id={`card-${cardId}`} sx={styles.card}>
+        <MuiCard
+            id={`card-${boardId}-${columnId}-${cardId}`}
+            sx={styles.card}
+            ref={setNodeRef}
+            style={transformStyle}
+            {...listeners}
+            {...attributes}
+        >
             {updateCardLoading || deleteCardLoading ? (
                 <CircularProgress />
             ) : (

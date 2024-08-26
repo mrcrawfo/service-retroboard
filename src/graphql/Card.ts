@@ -49,6 +49,13 @@ export const CardDeleteResponse = objectType({
     },
 });
 
+export const MoveCardResponse = objectType({
+    name: 'MoveCardResponse',
+    definition(t) {
+        t.nonNull.boolean('success');
+    },
+});
+
 export const CardQuery = extendType({
     type: 'Query',
     definition(t) {
@@ -169,6 +176,50 @@ export const CardMutation = extendType({
                 // TODO: Delete votes or cascade (?)
 
                 await Card.remove(card);
+
+                return { success: true };
+            },
+        });
+        t.nonNull.field('moveCard', {
+            type: 'MoveCardResponse',
+            args: {
+                cardId: nonNull(intArg()),
+                fromColumnId: nonNull(intArg()),
+                toColumnId: nonNull(intArg()),
+            },
+            async resolve(_parent, args, context: Context, _info) {
+                const { cardId, fromColumnId, toColumnId } = args;
+                const { userId } = context;
+
+                if (!userId) {
+                    throw new Error("Can't move card without logging in");
+                }
+
+                const card: Card = await Card.findOne({ where: { id: cardId } });
+
+                if (!card) {
+                    throw new Error("Can't move card that doesn't exist");
+                }
+
+                if (card.creatorId !== userId) {
+                    throw new Error("Can't move card that isn't yours");
+                }
+
+                const fromColumn: BoardColumn = await BoardColumn.findOne({ where: { id: fromColumnId } });
+                const toColumn: BoardColumn = await BoardColumn.findOne({ where: { id: toColumnId } });
+
+                console.log('fromColumn');
+                console.log(fromColumn);
+                console.log('toColumn');
+                console.log(toColumn);
+
+                // fromColumn.cards = fromColumn.cards.filter((c) => c.id !== cardId);
+                // await BoardColumn.save(fromColumn);
+                // toColumn.cards = [...toColumn.cards, card];
+                // await BoardColumn.save(toColumn);
+
+                card.columnId = toColumnId;
+                await Card.save(card);
 
                 return { success: true };
             },

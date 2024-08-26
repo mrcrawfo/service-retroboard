@@ -1,6 +1,7 @@
-import { useQuery } from '@apollo/client';
+import { useMutation, useQuery } from '@apollo/client';
 import { Grid } from '@mui/material';
 import React, { useEffect, useMemo, useState } from 'react';
+import { DndContext } from '@dnd-kit/core';
 
 import { BoardColumn as BoardColumnType } from '../../../entities/BoardColumn.js';
 import { Card as CardType } from '../../../entities/Card.js';
@@ -10,6 +11,7 @@ import { GET_BOARD } from '../../graph/board/queries.js';
 import { PAGE_HEADER_HEIGHT, SITE_HEADER_HEIGHT } from '../../helpers/constants.js';
 import { getThemeColor } from '../../helpers/theme.js';
 import { useAuthStoreToken } from '../../store/AuthStore.js';
+import { MOVE_CARD } from '../../graph/cards/queries.js';
 
 export interface BoardPageProps {
     boardId: number;
@@ -42,6 +44,17 @@ const BoardPage = ({ boardId }: BoardPageProps) => {
         },
     });
 
+    const [moveCard, { loading: moveCardLoading }] = useMutation(MOVE_CARD, {
+        context: {
+            headers: token
+                ? {
+                      authorization: `Bearer ${token}`,
+                  }
+                : {},
+        },
+        refetchQueries: ['getBoard'],
+    });
+
     useMemo(() => {
         const { getBoard } = boardData || {};
         if (getBoard) {
@@ -61,8 +74,28 @@ const BoardPage = ({ boardId }: BoardPageProps) => {
         },
     };
 
+    function handleDragEnd(event: any) {
+        const { active, over } = event;
+
+        if (active && active.id && over && over.id) {
+            const [dragType, _dragBoardId, dragColumnId, dragCardId] = active.id.split('-');
+            const [dropType, _dropBoardId, dropColumnId] = over.id.split('-');
+            if (dragColumnId !== dropColumnId) {
+                if (dragType === 'card' && dropType === 'column') {
+                    moveCard({
+                        variables: {
+                            cardId: parseInt(dragCardId),
+                            fromColumnId: parseInt(dragColumnId),
+                            toColumnId: parseInt(dropColumnId),
+                        },
+                    });
+                }
+            }
+        }
+    }
+
     return (
-        <>
+        <DndContext onDragEnd={handleDragEnd}>
             <div style={{ backgroundColor: '#eaeaea', height: `{$PAGE_HEADER_HEIGHT}px` }}>
                 <EditableBoardName
                     boardId={boardId}
@@ -87,6 +120,7 @@ const BoardPage = ({ boardId }: BoardPageProps) => {
                             editingCard={editingCard}
                             setEditingCard={setEditingCard}
                             themeColor={getThemeColor(column.color || 'Blue')}
+                            loading={moveCardLoading}
                         />
                     ))
                 ) : (
@@ -94,7 +128,7 @@ const BoardPage = ({ boardId }: BoardPageProps) => {
                     <div>Loading...</div>
                 )}
             </Grid>
-        </>
+        </DndContext>
     );
 };
 

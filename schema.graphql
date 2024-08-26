@@ -19,6 +19,7 @@ type Board {
 type BoardColumn {
   board: Board
   boardId: Int!
+  cardIds: [Int]!
   cards: [Card]
   color: ThemeColorName
   creator: User
@@ -44,6 +45,10 @@ type CardDeleteResponse {
   success: Boolean!
 }
 
+type MoveCardResponse {
+  success: Boolean!
+}
+
 type Mutation {
   addVoteToCard(boardId: Int!, cardId: Int!, userId: Int!): Vote!
   createBoard(name: String!): Board!
@@ -51,6 +56,7 @@ type Mutation {
   createColumn(boardId: Int!, name: String!, slot: Int!): BoardColumn!
   deleteCard(id: Int!): CardDeleteResponse!
   login(password: String!, username: String!): AuthType!
+  moveCard(cardId: Int!, fromColumnId: Int!, toColumnId: Int!): MoveCardResponse!
   register(email: String!, firstName: String!, lastName: String!, password: String!, username: String!): AuthType!
   subtractVoteFromCard(boardId: Int!, cardId: Int!, userId: Int!): Vote
   updateBoardName(id: Int!, name: String!): Board!

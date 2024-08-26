@@ -1,5 +1,6 @@
 import { Grid, GridProps, Stack } from '@mui/material';
 import { useState } from 'react';
+import { useDroppable } from '@dnd-kit/core';
 
 import { Card as CardType } from '../../../entities/Card.js';
 import AddCardButton from '../atoms/AddCardButton.jsx';
@@ -19,6 +20,7 @@ export interface BoardColumnProps extends GridProps {
     setUserVotes: (userVotes: number[]) => void;
     editingCard: boolean;
     setEditingCard: (editing: boolean) => void;
+    loading: boolean;
 }
 
 const BoardColumn = ({
@@ -33,6 +35,7 @@ const BoardColumn = ({
     setUserVotes,
     editingCard,
     setEditingCard,
+    loading,
     ...gridProps
 }: BoardColumnProps) => {
     const styles: any = {
@@ -59,6 +62,10 @@ const BoardColumn = ({
         },
     };
 
+    const { setNodeRef } = useDroppable({
+        id: `column-${boardId}-${columnId}`,
+    });
+
     const [addingCard, setAddingCard] = useState<boolean>(false);
 
     const addCardToColumn = () => {
@@ -67,7 +74,14 @@ const BoardColumn = ({
     };
 
     return (
-        <Grid item xs={Math.floor(12 / columnCount)} id={`column-${columnId}`} sx={styles.grid} {...gridProps}>
+        <Grid
+            item
+            xs={Math.floor(12 / columnCount)}
+            id={`column-${boardId}-${columnId}`}
+            ref={setNodeRef}
+            sx={styles.grid}
+            {...gridProps}
+        >
             <h2 style={styles.h2}>{columnName}</h2>
             <AddCardButton onClick={addCardToColumn} disabled={addingCard || editingCard} themeColor={themeColor} />
             {cards.length || addingCard ? (
@@ -84,7 +98,7 @@ const BoardColumn = ({
                         <Card
                             cardId={card.id}
                             key={card.id}
-                            columnId={1}
+                            columnId={card.columnId}
                             boardId={boardId}
                             text={card.text}
                             themeColor={themeColor}
