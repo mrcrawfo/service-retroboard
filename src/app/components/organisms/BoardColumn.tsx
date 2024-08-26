@@ -38,6 +38,10 @@ const BoardColumn = ({
     loading,
     ...gridProps
 }: BoardColumnProps) => {
+    const { isOver, setNodeRef } = useDroppable({
+        id: `column-${boardId}-${columnId}`,
+    });
+
     const styles: any = {
         grid: {
             width: '100%',
@@ -45,11 +49,14 @@ const BoardColumn = ({
             maxHeight: '100vh',
         },
         stack: {
-            backgroundColor: themeColor?.colors?.secondary?.base || '#60a0ff',
+            backgroundColor:
+                (isOver ? themeColor?.colors?.primary?.base : themeColor?.colors?.secondary?.base) || '#60a0ff',
             color: '#fff',
             borderRadius: '8px',
             minHeight: '0px',
             padding: '8px 8px 12px 8px',
+            margin: '0px',
+            height: 'calc(100vh - 144px)',
         },
         h2: {
             height: '2.25em',
@@ -61,10 +68,6 @@ const BoardColumn = ({
             WebkitBoxOrient: 'vertical',
         },
     };
-
-    const { setNodeRef } = useDroppable({
-        id: `column-${boardId}-${columnId}`,
-    });
 
     const [addingCard, setAddingCard] = useState<boolean>(false);
 
