@@ -12,9 +12,10 @@ const init = async () => {
     const conn = await typeormConfig.initialize();
     const server = new ApolloServer({
         schema,
-        context: ({ req }): Context => {
+        context: async ({ req }): Promise<Context> => {
+            // TODO: Validate authorization header (confirm actual token, not 'Authorization null')
             const token = req?.headers?.authorization ? auth(req.headers.authorization) : null;
-            return { conn, userId: token?.userId };
+            return { conn, userId: token?.userId, tokenExpired: token?.message === 'jwt expired' };
         },
     });
 

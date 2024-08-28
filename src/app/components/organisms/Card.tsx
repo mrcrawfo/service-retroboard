@@ -1,7 +1,7 @@
 import { useMutation } from '@apollo/client';
-import { CircularProgress, Card as MuiCard, CardProps as MuiCardProps, Stack } from '@mui/material';
+import { CircularProgress, Icon, Card as MuiCard, CardProps as MuiCardProps, Stack } from '@mui/material';
 import { useState } from 'react';
-import { useDraggable } from '@dnd-kit/core';
+import { useDraggable, useDroppable } from '@dnd-kit/core';
 
 import { Vote as VoteType } from '../../../entities/Vote.js';
 import { DELETE_CARD, UPDATE_CARD } from '../../graph/cards/queries.js';
@@ -9,6 +9,7 @@ import ClearableInputText from '../molecules/ClearableInputText.js';
 import VoteCounter from '../molecules/VoteCounter.js';
 import { ThemeColor } from '../../helpers/theme.js';
 import { useAuthStoreToken } from '../../store/AuthStore.js';
+import { AddOutlined } from '@mui/icons-material';
 
 export interface CardProps extends MuiCardProps {
     cardId: number;
@@ -116,26 +117,54 @@ const Card = ({
             {updateCardLoading || deleteCardLoading ? (
                 <CircularProgress />
             ) : (
-                <Stack direction='column' spacing={0}>
-                    <ClearableInputText
-                        text={cardText}
-                        onSave={onSave}
-                        setText={setCardText}
-                        editingCard={editingCard}
-                        setEditingCard={setEditingCard}
-                    />
-                    <VoteCounter
-                        cardId={cardId}
-                        columnId={columnId}
-                        boardId={boardId}
-                        boardVotesAllowed={boardVotesAllowed}
-                        themeColor={themeColor}
-                        userVotes={userVotes}
-                        votes={votes}
-                        setUserVotes={setUserVotes}
-                        editingCard={editingCard}
-                    />
-                </Stack>
+                <>
+                    <Stack direction='column' spacing={0}>
+                        <ClearableInputText
+                            text={cardText}
+                            onSave={onSave}
+                            setText={setCardText}
+                            editingCard={editingCard}
+                            setEditingCard={setEditingCard}
+                        />
+                        <VoteCounter
+                            cardId={cardId}
+                            columnId={columnId}
+                            boardId={boardId}
+                            boardVotesAllowed={boardVotesAllowed}
+                            themeColor={themeColor}
+                            userVotes={userVotes}
+                            votes={votes}
+                            setUserVotes={setUserVotes}
+                            editingCard={editingCard}
+                        />
+                    </Stack>
+                    <div
+                        style={{
+                            backgroundColor: '#fff',
+                            width: '100%',
+                            height: '100%',
+                            borderRadius: '8px',
+                            top: '-100%',
+                            left: '0px',
+                            position: 'relative',
+                            // display: 'none',
+                        }}
+                    >
+                        <div
+                            style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%' }}
+                        >
+                            <Icon
+                                style={{
+                                    color: themeColor?.colors?.secondary?.base || '#80a0ff',
+                                    width: '48px',
+                                    height: '48px',
+                                }}
+                            >
+                                <AddOutlined />
+                            </Icon>
+                        </div>
+                    </div>
+                </>
             )}
         </MuiCard>
     );

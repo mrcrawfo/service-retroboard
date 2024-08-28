@@ -96,7 +96,7 @@ const BoardPage = ({ boardId }: BoardPageProps) => {
 
     return (
         <DndContext onDragEnd={handleDragEnd}>
-            <div style={{ backgroundColor: '#eaeaea', height: `{$PAGE_HEADER_HEIGHT}px` }}>
+            <div style={{ backgroundColor: '#f0f0f0', height: `{$PAGE_HEADER_HEIGHT}px` }}>
                 <EditableBoardName
                     boardId={boardId}
                     boardName={boardName}

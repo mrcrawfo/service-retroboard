@@ -3,8 +3,10 @@
 
 
 type AuthType {
-  token: String!
-  user: User!
+  message: String
+  success: Boolean
+  token: String
+  user: User
 }
 
 type Board {
@@ -74,7 +76,7 @@ type Query {
   getUser(id: Int!): User
   getUsers: [User]!
   getVotesByCardId(cardId: Int!): [Vote]!
-  me: User
+  me: AuthType
 }
 
 enum ThemeColorName {

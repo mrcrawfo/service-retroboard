@@ -1,9 +1,9 @@
 import { useQuery } from '@apollo/client';
 import { ReactNode } from 'react';
 
+import { useAuthStoreToken, useAuthStoreActions } from '../store/AuthStore.js';
 import { GET_USER_DATA } from '../graph/auth/queries.js';
 import { AuthContext } from './AuthContext.js';
-import { useAuthStoreToken } from '../store/AuthStore.js';
 
 export interface ApolloAuthProviderProps {
     children: ReactNode;
@@ -11,6 +11,7 @@ export interface ApolloAuthProviderProps {
 
 const ApolloAuthProvider = ({ children }: ApolloAuthProviderProps) => {
     const token = useAuthStoreToken();
+    const { setUser, setToken } = useAuthStoreActions();
 
     const { loading, data, error } = useQuery(GET_USER_DATA, {
         context: token
@@ -20,17 +21,27 @@ const ApolloAuthProvider = ({ children }: ApolloAuthProviderProps) => {
                   },
               }
             : {},
-        onError: (error) => {
-            console.log('error');
-            console.log(error);
+        onCompleted: (data) => {
+            if (data?.me) {
+                // If no userData (token is expired) then override locally stored values and redirect to login page
+                // (do not redirect from public pages)
+                if (
+                    !data?.me?.success &&
+                    data?.me?.message === 'Token expired' &&
+                    !['/', '/login'].includes(window.location.pathname) // TODO: Refactor this
+                ) {
+                    setUser(null);
+                    setToken(null);
+                    window.location.assign('/login');
+                }
+            }
         },
     });
-    const userData = data?.userData || null;
+
+    const userData = data?.me || null;
 
     console.log('userData');
     console.log(userData);
-
-    // TODO: If no userData (token is expired) then override locally stored values and redirect to login page (?)
 
     return (
         <AuthContext.Provider
@@ -44,7 +55,5 @@ const ApolloAuthProvider = ({ children }: ApolloAuthProviderProps) => {
         </AuthContext.Provider>
     );
 };
-
-ApolloAuthProvider.propTypes = {};
 
 export default ApolloAuthProvider;

@@ -30,8 +30,10 @@ export interface NexusGenScalars {
 
 export interface NexusGenObjects {
   AuthType: { // root type
-    token: string; // String!
-    user: NexusGenRootTypes['User']; // User!
+    message?: string | null; // String
+    success?: boolean | null; // Boolean
+    token?: string | null; // String
+    user?: NexusGenRootTypes['User'] | null; // User
   }
   Board: { // root type
     creatorId: number; // Int!
@@ -89,8 +91,10 @@ export type NexusGenAllTypes = NexusGenRootTypes & NexusGenScalars & NexusGenEnu
 
 export interface NexusGenFieldTypes {
   AuthType: { // field return type
-    token: string; // String!
-    user: NexusGenRootTypes['User']; // User!
+    message: string | null; // String
+    success: boolean | null; // Boolean
+    token: string | null; // String
+    user: NexusGenRootTypes['User'] | null; // User
   }
   Board: { // field return type
     cards: Array<NexusGenRootTypes['Card'] | null> | null; // [Card]
@@ -153,7 +157,7 @@ export interface NexusGenFieldTypes {
     getUser: NexusGenRootTypes['User'] | null; // User
     getUsers: Array<NexusGenRootTypes['User'] | null>; // [User]!
     getVotesByCardId: Array<NexusGenRootTypes['Vote'] | null>; // [Vote]!
-    me: NexusGenRootTypes['User'] | null; // User
+    me: NexusGenRootTypes['AuthType'] | null; // AuthType
   }
   User: { // field return type
     boards: Array<NexusGenRootTypes['Board'] | null> | null; // [Board]
@@ -176,6 +180,8 @@ export interface NexusGenFieldTypes {
 
 export interface NexusGenFieldTypeNames {
   AuthType: { // field return type name
+    message: 'String'
+    success: 'Boolean'
     token: 'String'
     user: 'User'
   }
@@ -240,7 +246,7 @@ export interface NexusGenFieldTypeNames {
     getUser: 'User'
     getUsers: 'User'
     getVotesByCardId: 'Vote'
-    me: 'User'
+    me: 'AuthType'
   }
   User: { // field return type name
     boards: 'Board'
