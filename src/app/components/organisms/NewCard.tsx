@@ -59,7 +59,7 @@ const NewCard = ({ boardId, columnId, setAddingCard, setEditingCard }: NewCardPr
     };
 
     return (
-        <MuiCard id={`card-new`} sx={styles.card}>
+        <MuiCard id={`cardBase-new`} sx={styles.card}>
             {createCardLoading ? (
                 <CircularProgress />
             ) : (

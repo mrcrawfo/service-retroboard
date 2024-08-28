@@ -50,13 +50,13 @@ const BoardColumn = ({
         },
         stack: {
             backgroundColor:
-                (isOver ? themeColor?.colors?.primary?.base : themeColor?.colors?.secondary?.base) || '#60a0ff',
+                (isOver ? themeColor?.colors?.primary?.shadow : themeColor?.colors?.secondary?.base) || '#60a0ff',
             color: '#fff',
             borderRadius: '8px',
             minHeight: '0px',
             padding: '8px 8px 12px 8px',
             margin: '0px',
-            height: 'calc(100vh - 144px)',
+            height: 'calc(100vh - 300px)', // TODO: Calculate this better (app header + page header + column header + AddCard)
         },
         h2: {
             height: '2.25em',

@@ -1,7 +1,9 @@
 import { useMutation } from '@apollo/client';
-import { CircularProgress, Icon, Card as MuiCard, CardProps as MuiCardProps, Stack } from '@mui/material';
+import { Card as MuiCard, CardCover } from '@mui/joy';
+import { CircularProgress, Icon, CardProps as MuiCardProps, Stack } from '@mui/material';
 import { useState } from 'react';
 import { useDraggable, useDroppable } from '@dnd-kit/core';
+import { FilterNoneOutlined } from '@mui/icons-material';
 
 import { Vote as VoteType } from '../../../entities/Vote.js';
 import { DELETE_CARD, UPDATE_CARD } from '../../graph/cards/queries.js';
@@ -9,7 +11,6 @@ import ClearableInputText from '../molecules/ClearableInputText.js';
 import VoteCounter from '../molecules/VoteCounter.js';
 import { ThemeColor } from '../../helpers/theme.js';
 import { useAuthStoreToken } from '../../store/AuthStore.js';
-import { AddOutlined } from '@mui/icons-material';
 
 export interface CardProps extends MuiCardProps {
     cardId: number;
@@ -38,25 +39,52 @@ const Card = ({
     editingCard,
     setEditingCard,
 }: CardProps) => {
+    const {
+        attributes,
+        isDragging,
+        listeners,
+        setNodeRef: setDragNodeRef,
+        transform,
+    } = useDraggable({
+        id: `cardBase-${boardId}-${columnId}-${cardId}`,
+    });
+
+    const { isOver, setNodeRef: setDropNodeRef } = useDroppable({
+        id: `cardOverlay-${boardId}-${columnId}-${cardId}`,
+    });
+
     const styles = {
-        card: {
+        cardBase: {
             width: 'calc(100% - 16px)',
             borderRadius: '8px',
             backgroundColor: themeColor?.colors?.primary?.base || '#0080ff',
             color: themeColor?.colors?.primary?.text || '#fff',
             padding: '8px',
-            boxShadow: `0px 4px 4px ${themeColor?.colors?.primary?.shadow || '#006090'}`,
+            border: 'none',
+            opacity: isDragging ? 0.5 : 1,
+        },
+        cardOverlay: {
+            backgroundColor: isOver && !isDragging ? themeColor?.colors?.secondary?.highlight || '#fff' : 'transparent',
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+            height: '100%',
+            verticalAlign: 'middle',
+            border: isOver && !isDragging ? `4px solid ${themeColor?.colors?.primary?.base || '#fff'}` : 'none',
+            boxShadow:
+                isOver && !isDragging ? `0px 0px 20px ${themeColor?.colors.primary?.shadow || '#fff'} inset` : 'none',
+        },
+        mergeIcon: {
+            '&.MuiIcon-root': {
+                display: isOver && !isDragging ? 'initial' : 'none',
+                color: `${themeColor?.colors.primary?.shadow || '#fff'}`,
+            },
         },
     };
-
-    const { attributes, listeners, setNodeRef, transform } = useDraggable({
-        id: `card-${boardId}-${columnId}-${cardId}`,
-    });
 
     const transformStyle = transform
         ? {
               transform: `translate3d(${transform.x}px, ${transform.y}px, 0)`,
-              zIndex: 1000,
           }
         : null;
 
@@ -106,18 +134,12 @@ const Card = ({
     };
 
     return (
-        <MuiCard
-            id={`card-${boardId}-${columnId}-${cardId}`}
-            sx={styles.card}
-            ref={setNodeRef}
-            style={transformStyle}
-            {...listeners}
-            {...attributes}
-        >
+        <MuiCard sx={styles.cardBase} style={transformStyle} {...listeners} {...attributes}>
             {updateCardLoading || deleteCardLoading ? (
                 <CircularProgress />
             ) : (
                 <>
+                    <CardCover id={`cardBase-${boardId}-${columnId}-${cardId}`} ref={setDragNodeRef} />
                     <Stack direction='column' spacing={0}>
                         <ClearableInputText
                             text={cardText}
@@ -138,32 +160,21 @@ const Card = ({
                             editingCard={editingCard}
                         />
                     </Stack>
-                    <div
-                        style={{
-                            backgroundColor: '#fff',
-                            width: '100%',
-                            height: '100%',
-                            borderRadius: '8px',
-                            top: '-100%',
-                            left: '0px',
-                            position: 'relative',
-                            // display: 'none',
-                        }}
+                    <CardCover
+                        id={`cardOverlay-${boardId}-${columnId}-${cardId}`}
+                        ref={setDropNodeRef}
+                        sx={styles.cardOverlay}
                     >
-                        <div
-                            style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%' }}
+                        <Icon
+                            sx={styles.mergeIcon}
+                            style={{
+                                width: '48px',
+                                height: '48px',
+                            }}
                         >
-                            <Icon
-                                style={{
-                                    color: themeColor?.colors?.secondary?.base || '#80a0ff',
-                                    width: '48px',
-                                    height: '48px',
-                                }}
-                            >
-                                <AddOutlined />
-                            </Icon>
-                        </div>
-                    </div>
+                            <FilterNoneOutlined />
+                        </Icon>
+                    </CardCover>
                 </>
             )}
         </MuiCard>

@@ -69,7 +69,7 @@ const BoardPage = ({ boardId }: BoardPageProps) => {
     const styles = {
         grid: {
             width: '100vw',
-            height: `calc(100vh - ${PAGE_HEADER_HEIGHT}px - ${SITE_HEADER_HEIGHT}px)`,
+            height: `calc(100vh - ${PAGE_HEADER_HEIGHT}px - ${SITE_HEADER_HEIGHT}px + 24px)`,
             overflow: 'hidden',
         },
     };
@@ -79,9 +79,11 @@ const BoardPage = ({ boardId }: BoardPageProps) => {
 
         if (active && active.id && over && over.id) {
             const [dragType, _dragBoardId, dragColumnId, dragCardId] = active.id.split('-');
-            const [dropType, _dropBoardId, dropColumnId] = over.id.split('-');
+            const [dropType, _dropBoardId, dropColumnId, dropCardId] = over.id.split('-');
+            console.log('dragType', dragType);
+            console.log('dropType', dropType);
             if (dragColumnId !== dropColumnId) {
-                if (dragType === 'card' && dropType === 'column') {
+                if (dragType === 'cardBase' && dropType === 'column') {
                     moveCard({
                         variables: {
                             cardId: parseInt(dragCardId),
@@ -90,6 +92,12 @@ const BoardPage = ({ boardId }: BoardPageProps) => {
                         },
                     });
                 }
+                if (dragType === 'cardBase' && dropType === 'cardOverlay') {
+                    console.log(`move dragCard to dropColumn, then combine cards ${dragCardId} and ${dropCardId}`);
+                }
+            }
+            if (dragType === 'cardBase' && dropType === 'cardOverlay') {
+                console.log(`combine cards ${dragCardId} and ${dropCardId}`);
             }
         }
     }
