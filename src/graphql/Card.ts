@@ -233,7 +233,20 @@ export const CardMutation = extendType({
                     return { success: false, message: "Can't move card to column that doesn't exist" };
                 }
 
+                // remove cardId from all groupedCardIds in fromColumn
+                const boardCards = await Card.find({ where: { boardId: card.boardId } });
+                for (const groupedCard of boardCards) {
+                    if (groupedCard.groupedCardIds.includes(card.id)) {
+                        groupedCard.groupedCardIds = groupedCard.groupedCardIds.filter((id) => id !== card.id);
+                        if (groupedCard.groupedCardIds.length === 1) {
+                            groupedCard.groupedCardIds = [];
+                        }
+                        await Card.save(groupedCard);
+                    }
+                }
+
                 card.columnId = toColumnId;
+                card.groupedCardIds = [];
                 await Card.save(card);
 
                 return { success: true };
@@ -283,7 +296,10 @@ export const CardMutation = extendType({
                     for (const groupedCard of boardCards) {
                         if (groupedCard.groupedCardIds.includes(card.id)) {
                             groupedCard.groupedCardIds = groupedCard.groupedCardIds.filter((id) => id !== card.id);
-                            await Card.save(card);
+                            if (groupedCard.groupedCardIds.length === 1) {
+                                groupedCard.groupedCardIds = [];
+                            }
+                            await Card.save(groupedCard);
                         }
                     }
 

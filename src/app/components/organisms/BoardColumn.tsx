@@ -93,9 +93,6 @@ const BoardColumn = ({
         return renderCardIds;
     }, [cards]);
 
-    console.log('cardIds');
-    console.log(cardIds);
-
     return (
         <Grid
             item

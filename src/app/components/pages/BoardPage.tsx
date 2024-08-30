@@ -1,5 +1,5 @@
 import { useMutation, useQuery } from '@apollo/client';
-import { Grid } from '@mui/material';
+import { CircularProgress, Grid } from '@mui/material';
 import React, { useEffect, useMemo, useState } from 'react';
 import { DndContext } from '@dnd-kit/core';
 
@@ -93,16 +93,15 @@ const BoardPage = ({ boardId }: BoardPageProps) => {
             const [dropType, _dropBoardId, dropColumnId, dropCardId] = over.id.split('-');
             console.log('dragType', dragType);
             console.log('dropType', dropType);
-            if (dragColumnId !== dropColumnId) {
-                if (dragType === 'cardBase' && dropType === 'column') {
-                    moveCard({
-                        variables: {
-                            cardId: parseInt(dragCardId),
-                            fromColumnId: parseInt(dragColumnId),
-                            toColumnId: parseInt(dropColumnId),
-                        },
-                    });
-                }
+            if (dragType === 'cardBase' && dropType === 'column') {
+                // if (dragColumnId !== dropColumnId) {
+                moveCard({
+                    variables: {
+                        cardId: parseInt(dragCardId),
+                        fromColumnId: parseInt(dragColumnId),
+                        toColumnId: parseInt(dropColumnId),
+                    },
+                });
             }
             if (dragType === 'cardBase' && dropType === 'cardOverlay') {
                 console.log(`combine cards ${dragCardId} and ${dropCardId}`);
@@ -154,8 +153,18 @@ const BoardPage = ({ boardId }: BoardPageProps) => {
                         />
                     ))
                 ) : (
-                    // TODO: Add loading spinner
-                    <div>Loading...</div>
+                    <div
+                        style={{
+                            width: '100vw',
+                            height: '100vh',
+                            display: 'fixed',
+                            backgroundColor: 'argb(220, 220, 220, 0.5)',
+                        }}
+                    >
+                        <div style={{ position: 'fixed', top: '50%', left: '50%', transform: 'translate(-50%, -50%)' }}>
+                            <CircularProgress />
+                        </div>
+                    </div>
                 )}
             </Grid>
         </DndContext>
