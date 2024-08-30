@@ -38,6 +38,7 @@ type Card {
   columnId: Int!
   creator: User
   creatorId: Int!
+  groupedCardIds: [Int]!
   id: Int!
   text: String!
   votes: [Vote]!
@@ -57,6 +58,7 @@ type Mutation {
   createCard(boardId: Int!, columnId: Int!, text: String!): Card!
   createColumn(boardId: Int!, name: String!, slot: Int!): BoardColumn!
   deleteCard(id: Int!): CardDeleteResponse!
+  groupCard(cardId: Int!, fromColumnId: Int!, groupedCardIds: Int!, toColumnId: Int!): MoveCardResponse!
   login(password: String!, username: String!): AuthType!
   moveCard(cardId: Int!, fromColumnId: Int!, toColumnId: Int!): MoveCardResponse!
   register(email: String!, firstName: String!, lastName: String!, password: String!, username: String!): AuthType!

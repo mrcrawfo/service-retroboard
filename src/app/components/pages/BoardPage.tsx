@@ -11,7 +11,7 @@ import { GET_BOARD } from '../../graph/board/queries.js';
 import { PAGE_HEADER_HEIGHT, SITE_HEADER_HEIGHT } from '../../helpers/constants.js';
 import { getThemeColor } from '../../helpers/theme.js';
 import { useAuthStoreToken } from '../../store/AuthStore.js';
-import { MOVE_CARD } from '../../graph/cards/queries.js';
+import { MOVE_CARD, GROUP_CARD } from '../../graph/cards/queries.js';
 
 export interface BoardPageProps {
     boardId: number;
@@ -45,6 +45,17 @@ const BoardPage = ({ boardId }: BoardPageProps) => {
     });
 
     const [moveCard, { loading: moveCardLoading }] = useMutation(MOVE_CARD, {
+        context: {
+            headers: token
+                ? {
+                      authorization: `Bearer ${token}`,
+                  }
+                : {},
+        },
+        refetchQueries: ['getBoard'],
+    });
+
+    const [groupCard, { loading: groupCardLoading }] = useMutation(GROUP_CARD, {
         context: {
             headers: token
                 ? {
@@ -92,12 +103,18 @@ const BoardPage = ({ boardId }: BoardPageProps) => {
                         },
                     });
                 }
-                if (dragType === 'cardBase' && dropType === 'cardOverlay') {
-                    console.log(`move dragCard to dropColumn, then combine cards ${dragCardId} and ${dropCardId}`);
-                }
             }
             if (dragType === 'cardBase' && dropType === 'cardOverlay') {
                 console.log(`combine cards ${dragCardId} and ${dropCardId}`);
+                const groupedCardIds = cards.find((c: CardType) => c.id === parseInt(dropCardId)).groupedCardIds;
+                groupCard({
+                    variables: {
+                        cardId: parseInt(dragCardId),
+                        fromColumnId: parseInt(dragColumnId),
+                        toColumnId: parseInt(dropColumnId),
+                        groupedCardIds: groupedCardIds,
+                    },
+                });
             }
         }
     }
@@ -128,7 +145,7 @@ const BoardPage = ({ boardId }: BoardPageProps) => {
                             editingCard={editingCard}
                             setEditingCard={setEditingCard}
                             themeColor={getThemeColor(column.color || 'Blue')}
-                            loading={moveCardLoading}
+                            loading={moveCardLoading || groupCardLoading}
                         />
                     ))
                 ) : (

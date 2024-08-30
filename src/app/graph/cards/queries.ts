@@ -11,6 +11,7 @@ export const GET_CARDS_BY_BOARD_ID = gql`
                 id
                 userId
             }
+            groupedCardIds
         }
     }
 `;
@@ -46,6 +47,14 @@ export const DELETE_CARD = gql`
 export const MOVE_CARD = gql`
     mutation MoveCard($cardId: Int!, $fromColumnId: Int!, $toColumnId: Int!) {
         moveCard(cardId: $cardId, fromColumnId: $fromColumnId, toColumnId: $toColumnId) {
+            success
+        }
+    }
+`;
+
+export const GROUP_CARD = gql`
+    mutation GroupCard($cardId: Int!, $fromColumnId: Int!, $toColumnId: Int!, $groupedCardIds: [Int!]!) {
+        groupCard(cardId: $cardId, fromColumnId: $fromColumnId, toColumnId: $toColumnId, groupedCardIds: $groupedCardIds) {
             success
         }
     }
