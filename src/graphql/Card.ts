@@ -288,9 +288,11 @@ export const CardMutation = extendType({
                     }
 
                     card.columnId = toColumnId;
+                    await Card.save(card);
                 }
 
-                for (const newGroupCard of boardCards) {
+                for (const newGroupCardId of groupedCardIds) {
+                    const newGroupCard = await Card.findOne({ where: { id: newGroupCardId } });
                     if (groupedCardIds.includes(newGroupCard.id)) {
                         newGroupCard.groupedCardIds = groupedCardIds;
                         await Card.save(newGroupCard);

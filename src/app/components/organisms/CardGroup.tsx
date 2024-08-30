@@ -35,11 +35,11 @@ const CardGroup = ({
 }: CardProps) => {
     const styles = {
         cardGroup: {
-            backgroundColor: themeColor?.colors?.secondary?.shadow || '#60a0ff',
+            backgroundColor: themeColor?.colors?.primary?.base || '#60a0ff',
             margin: '8px',
             padding: '8px',
             borderRadius: '8px',
-            borderBox: 'box-sizing',
+            boxShadow: '0px 0px 2px 2px #fff',
             border: `12px solid ${themeColor?.colors?.primary?.highlight || '#60a0ff'}`,
         },
         singleCard: {
@@ -47,7 +47,7 @@ const CardGroup = ({
             padding: '0px',
         },
         divider: {
-            border: '1.5px solid white',
+            border: '1px solid white',
         },
     };
 

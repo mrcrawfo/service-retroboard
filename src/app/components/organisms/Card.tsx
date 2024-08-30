@@ -64,6 +64,7 @@ const Card = ({
             padding: '8px',
             border: 'none',
             opacity: isDragging ? 0.5 : 1,
+            zIndex: isDragging ? 2000 : 1,
         },
         cardOverlay: {
             backgroundColor: isOver && !isDragging ? themeColor?.colors?.secondary?.highlight || '#fff' : 'transparent',
@@ -134,6 +135,8 @@ const Card = ({
             setEditingCard(false);
         }
     };
+
+    // const cardType = grouped ? 'cardGroup' : 'cardBase';
 
     return (
         <MuiCard sx={styles.cardBase} style={transformStyle} {...listeners} {...attributes}>
