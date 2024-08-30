@@ -45,10 +45,17 @@ type Card {
 }
 
 type CardDeleteResponse {
+  message: String
+  success: Boolean!
+}
+
+type GroupCardResponse {
+  message: String
   success: Boolean!
 }
 
 type MoveCardResponse {
+  message: String
   success: Boolean!
 }
 
@@ -58,7 +65,7 @@ type Mutation {
   createCard(boardId: Int!, columnId: Int!, text: String!): Card!
   createColumn(boardId: Int!, name: String!, slot: Int!): BoardColumn!
   deleteCard(id: Int!): CardDeleteResponse!
-  groupCard(cardId: Int!, fromColumnId: Int!, groupedCardIds: Int!, toColumnId: Int!): MoveCardResponse!
+  groupCard(cardId: Int!, fromColumnId: Int!, groupedCardIds: [Int!]!, toColumnId: Int!): GroupCardResponse!
   login(password: String!, username: String!): AuthType!
   moveCard(cardId: Int!, fromColumnId: Int!, toColumnId: Int!): MoveCardResponse!
   register(email: String!, firstName: String!, lastName: String!, password: String!, username: String!): AuthType!

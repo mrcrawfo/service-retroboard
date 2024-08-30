@@ -106,7 +106,12 @@ const BoardPage = ({ boardId }: BoardPageProps) => {
             }
             if (dragType === 'cardBase' && dropType === 'cardOverlay') {
                 console.log(`combine cards ${dragCardId} and ${dropCardId}`);
-                const groupedCardIds = cards.find((c: CardType) => c.id === parseInt(dropCardId)).groupedCardIds;
+                const groupedCardIds =
+                    [...cards.find((c: CardType) => c.id === parseInt(dropCardId)).groupedCardIds] || [];
+                if (!groupedCardIds.includes(parseInt(dropCardId))) {
+                    groupedCardIds.push(parseInt(dropCardId));
+                }
+                groupedCardIds.push(parseInt(dragCardId));
                 groupCard({
                     variables: {
                         cardId: parseInt(dragCardId),

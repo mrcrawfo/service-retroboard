@@ -1,4 +1,4 @@
-import { extendType, intArg, nonNull, objectType, stringArg } from 'nexus';
+import { extendType, intArg, list, nonNull, objectType, stringArg } from 'nexus';
 
 import { Board } from '../entities/Board.js';
 import { BoardColumn } from '../entities/BoardColumn.js';
@@ -65,7 +65,7 @@ export const MoveCardResponse = objectType({
 });
 
 export const GroupCardResponse = objectType({
-    name: 'MoveCardResponse',
+    name: 'GroupCardResponse',
     definition(t) {
         t.nonNull.boolean('success');
         t.nullable.string('message');
@@ -245,7 +245,7 @@ export const CardMutation = extendType({
                 cardId: nonNull(intArg()),
                 fromColumnId: nonNull(intArg()),
                 toColumnId: nonNull(intArg()),
-                groupedCardIds: nonNull(intArg()),
+                groupedCardIds: nonNull(list(nonNull(intArg()))),
             },
             async resolve(_parent, args, context: Context, _info) {
                 const { cardId, fromColumnId, toColumnId, groupedCardIds } = args;

@@ -24,6 +24,7 @@ export interface CardProps extends MuiCardProps {
     setUserVotes: (userVotes: number[]) => void;
     editingCard: boolean;
     setEditingCard: (editing: boolean) => void;
+    grouped: boolean;
 }
 
 const Card = ({
@@ -38,6 +39,7 @@ const Card = ({
     setUserVotes,
     editingCard,
     setEditingCard,
+    grouped,
 }: CardProps) => {
     const {
         attributes,

@@ -1,10 +1,10 @@
 import { Grid, GridProps, Stack } from '@mui/material';
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import { useDroppable } from '@dnd-kit/core';
 
 import { Card as CardType } from '../../../entities/Card.js';
 import AddCardButton from '../atoms/AddCardButton.jsx';
-import Card from './Card.jsx';
+import CardGroup from './CardGroup.jsx';
 import NewCard from './NewCard.jsx';
 import { ThemeColor } from '../../helpers/theme.js';
 
@@ -76,6 +76,26 @@ const BoardColumn = ({
         setAddingCard(true);
     };
 
+    const cardIds: number[] = useMemo(() => {
+        let groupedCardIds: number[] = [];
+        const renderCardIds: number[] = [];
+        for (const card of cards) {
+            if (card.groupedCardIds.length) {
+                if (!groupedCardIds.includes(card.id)) {
+                    groupedCardIds = groupedCardIds.concat(card.groupedCardIds);
+                    renderCardIds.push(card.id);
+                }
+            } else {
+                renderCardIds.push(card.id);
+            }
+        }
+
+        return renderCardIds;
+    }, [cards]);
+
+    console.log('cardIds');
+    console.log(cardIds);
+
     return (
         <Grid
             item
@@ -89,30 +109,37 @@ const BoardColumn = ({
             <AddCardButton onClick={addCardToColumn} disabled={addingCard || editingCard} themeColor={themeColor} />
             {cards.length || addingCard ? (
                 <Stack direction='column' spacing={1} sx={styles.stack}>
-                    {addingCard ? (
-                        <NewCard
-                            boardId={boardId}
-                            columnId={columnId}
-                            setAddingCard={setAddingCard}
-                            setEditingCard={setEditingCard}
-                        />
-                    ) : null}
-                    {cards.map((card: CardType) => (
-                        <Card
-                            cardId={card.id}
-                            key={card.id}
-                            columnId={card.columnId}
-                            boardId={boardId}
-                            text={card.text}
-                            themeColor={themeColor}
-                            votes={card.votes}
-                            boardVotesAllowed={boardVotesAllowed}
-                            userVotes={userVotes}
-                            setUserVotes={setUserVotes}
-                            editingCard={editingCard}
-                            setEditingCard={setEditingCard}
-                        />
-                    ))}
+                    <>
+                        {addingCard ? (
+                            <NewCard
+                                key={0}
+                                boardId={boardId}
+                                columnId={columnId}
+                                setAddingCard={setAddingCard}
+                                setEditingCard={setEditingCard}
+                            />
+                        ) : null}
+                    </>
+                    {cardIds.map((cardId: number) => {
+                        const card: CardType = cards.find((card: CardType) => card.id === cardId);
+                        const groupedCards: CardType[] = cards.filter(
+                            (c: CardType) => card.groupedCardIds.includes(c.id) && c.id !== card.id,
+                        );
+                        return (
+                            <CardGroup
+                                key={card.id}
+                                columnId={columnId}
+                                boardId={boardId}
+                                themeColor={themeColor}
+                                boardVotesAllowed={boardVotesAllowed}
+                                userVotes={userVotes}
+                                setUserVotes={setUserVotes}
+                                editingCard={editingCard}
+                                setEditingCard={setEditingCard}
+                                groupedCards={[{ id: card.id, text: card.text, votes: card.votes }, ...groupedCards]}
+                            />
+                        );
+                    })}
                 </Stack>
             ) : null}
         </Grid>

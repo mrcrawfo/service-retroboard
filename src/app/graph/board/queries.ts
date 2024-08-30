@@ -22,6 +22,7 @@ export const GET_USER_BOARDS = gql`
                         }
                     }
                 }
+                groupedCardIds
             }
             cards {
                 columnId
@@ -36,6 +37,7 @@ export const GET_USER_BOARDS = gql`
                         email
                     }
                 }
+                groupedCardIds
             }
         }
     }
@@ -60,6 +62,7 @@ export const GET_BOARD = gql`
                     id
                     userId
                 }
+                groupedCardIds
             }
         }
     }
@@ -84,6 +87,7 @@ export const CREATE_BOARD = gql`
                     id
                     userId
                 }
+                groupedCardIds
             }
         }
     }

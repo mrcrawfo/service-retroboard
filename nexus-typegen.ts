@@ -56,9 +56,15 @@ export interface NexusGenObjects {
     text: string; // String!
   }
   CardDeleteResponse: { // root type
+    message?: string | null; // String
+    success: boolean; // Boolean!
+  }
+  GroupCardResponse: { // root type
+    message?: string | null; // String
     success: boolean; // Boolean!
   }
   MoveCardResponse: { // root type
+    message?: string | null; // String
     success: boolean; // Boolean!
   }
   Mutation: {};
@@ -129,9 +135,15 @@ export interface NexusGenFieldTypes {
     votes: Array<NexusGenRootTypes['Vote'] | null>; // [Vote]!
   }
   CardDeleteResponse: { // field return type
+    message: string | null; // String
+    success: boolean; // Boolean!
+  }
+  GroupCardResponse: { // field return type
+    message: string | null; // String
     success: boolean; // Boolean!
   }
   MoveCardResponse: { // field return type
+    message: string | null; // String
     success: boolean; // Boolean!
   }
   Mutation: { // field return type
@@ -140,7 +152,7 @@ export interface NexusGenFieldTypes {
     createCard: NexusGenRootTypes['Card']; // Card!
     createColumn: NexusGenRootTypes['BoardColumn']; // BoardColumn!
     deleteCard: NexusGenRootTypes['CardDeleteResponse']; // CardDeleteResponse!
-    groupCard: NexusGenRootTypes['MoveCardResponse']; // MoveCardResponse!
+    groupCard: NexusGenRootTypes['GroupCardResponse']; // GroupCardResponse!
     login: NexusGenRootTypes['AuthType']; // AuthType!
     moveCard: NexusGenRootTypes['MoveCardResponse']; // MoveCardResponse!
     register: NexusGenRootTypes['AuthType']; // AuthType!
@@ -220,9 +232,15 @@ export interface NexusGenFieldTypeNames {
     votes: 'Vote'
   }
   CardDeleteResponse: { // field return type name
+    message: 'String'
+    success: 'Boolean'
+  }
+  GroupCardResponse: { // field return type name
+    message: 'String'
     success: 'Boolean'
   }
   MoveCardResponse: { // field return type name
+    message: 'String'
     success: 'Boolean'
   }
   Mutation: { // field return type name
@@ -231,7 +249,7 @@ export interface NexusGenFieldTypeNames {
     createCard: 'Card'
     createColumn: 'BoardColumn'
     deleteCard: 'CardDeleteResponse'
-    groupCard: 'MoveCardResponse'
+    groupCard: 'GroupCardResponse'
     login: 'AuthType'
     moveCard: 'MoveCardResponse'
     register: 'AuthType'
@@ -297,7 +315,7 @@ export interface NexusGenArgTypes {
     groupCard: { // args
       cardId: number; // Int!
       fromColumnId: number; // Int!
-      groupedCardIds: number; // Int!
+      groupedCardIds: number[]; // [Int!]!
       toColumnId: number; // Int!
     }
     login: { // args
