@@ -17,6 +17,11 @@ export const BoardColumnType = objectType({
         t.nonNull.int('id');
         t.nonNull.string('name');
         t.nonNull.int('slot');
+        t.nonNull.list.int('cardIds', {
+            resolve(parent, _args, _context, _info): Promise<number[]> {
+                return Card.find({ where: { columnId: parent.id } }).then((cards) => cards.map((card) => card.id));
+            },
+        });
         t.nullable.list.field('cards', {
             type: 'Card',
             resolve(parent, _args, _context, _info): Promise<Card[]> {

@@ -1,4 +1,4 @@
-import { extendType, intArg, nonNull, objectType, stringArg } from 'nexus';
+import { extendType, intArg, list, nonNull, objectType, stringArg } from 'nexus';
 
 import { Board } from '../entities/Board.js';
 import { BoardColumn } from '../entities/BoardColumn.js';
@@ -32,6 +32,12 @@ export const CardType = objectType({
                 return Vote.find({ where: { cardId: parent.id } });
             },
         });
+        t.nonNull.list.field('groupedCardIds', {
+            type: 'Int',
+            resolve(parent, _args, _context, _info): number[] {
+                return parent.groupedCardIds;
+            },
+        });
         t.nonNull.int('creatorId');
         t.field('creator', {
             type: 'User',
@@ -46,6 +52,23 @@ export const CardDeleteResponse = objectType({
     name: 'CardDeleteResponse',
     definition(t) {
         t.nonNull.boolean('success');
+        t.nullable.string('message');
+    },
+});
+
+export const MoveCardResponse = objectType({
+    name: 'MoveCardResponse',
+    definition(t) {
+        t.nonNull.boolean('success');
+        t.nullable.string('message');
+    },
+});
+
+export const GroupCardResponse = objectType({
+    name: 'GroupCardResponse',
+    definition(t) {
+        t.nonNull.boolean('success');
+        t.nullable.string('message');
     },
 });
 
@@ -111,6 +134,7 @@ export const CardMutation = extendType({
                     columnId,
                     creatorId: userId,
                     voteIds: [],
+                    groupedCardIds: [],
                 }).save();
             },
         });
@@ -153,22 +177,143 @@ export const CardMutation = extendType({
                 const { userId } = context;
 
                 if (!userId) {
-                    throw new Error("Can't create card without logging in");
+                    return { success: false, message: "Can't create card without logging in" };
                 }
 
                 const card: Card = await Card.findOne({ where: { id } });
 
                 if (!card) {
-                    throw new Error("Can't update card that doesn't exist");
+                    return { success: false, message: "Can't update card that doesn't exist" };
                 }
 
                 if (card.creatorId !== userId) {
-                    throw new Error("Can't update card that isn't yours");
+                    return { success: false, message: "Can't update card that isn't yours" };
                 }
 
                 // TODO: Delete votes or cascade (?)
 
                 await Card.remove(card);
+
+                return { success: true };
+            },
+        });
+        t.nonNull.field('moveCard', {
+            type: 'MoveCardResponse',
+            args: {
+                cardId: nonNull(intArg()),
+                fromColumnId: nonNull(intArg()),
+                toColumnId: nonNull(intArg()),
+            },
+            async resolve(_parent, args, context: Context, _info) {
+                const { cardId, fromColumnId, toColumnId } = args;
+                const { userId } = context;
+
+                if (!userId) {
+                    return { success: false, message: "Can't move card without logging in" };
+                }
+
+                const card: Card = await Card.findOne({ where: { id: cardId } });
+
+                if (!card) {
+                    return { success: false, message: "Can't move card that doesn't exist" };
+                }
+
+                if (card.creatorId !== userId) {
+                    return { success: false, message: "Can't move card that isn't yours" };
+                }
+
+                const fromColumn: BoardColumn = await BoardColumn.findOne({ where: { id: fromColumnId } });
+                const toColumn: BoardColumn = await BoardColumn.findOne({ where: { id: toColumnId } });
+
+                if (!fromColumn) {
+                    return { success: false, message: "Can't move card from column that doesn't exist" };
+                }
+
+                if (!toColumn) {
+                    return { success: false, message: "Can't move card to column that doesn't exist" };
+                }
+
+                // remove cardId from all groupedCardIds in fromColumn
+                const boardCards = await Card.find({ where: { boardId: card.boardId } });
+                for (const groupedCard of boardCards) {
+                    if (groupedCard.groupedCardIds.includes(card.id)) {
+                        groupedCard.groupedCardIds = groupedCard.groupedCardIds.filter((id) => id !== card.id);
+                        if (groupedCard.groupedCardIds.length === 1) {
+                            groupedCard.groupedCardIds = [];
+                        }
+                        await Card.save(groupedCard);
+                    }
+                }
+
+                card.columnId = toColumnId;
+                card.groupedCardIds = [];
+                await Card.save(card);
+
+                return { success: true };
+            },
+        });
+        t.nonNull.field('groupCard', {
+            type: 'GroupCardResponse',
+            args: {
+                cardId: nonNull(intArg()),
+                fromColumnId: nonNull(intArg()),
+                toColumnId: nonNull(intArg()),
+                groupedCardIds: nonNull(list(nonNull(intArg()))),
+            },
+            async resolve(_parent, args, context: Context, _info) {
+                const { cardId, fromColumnId, toColumnId, groupedCardIds } = args;
+                const { userId } = context;
+
+                if (!userId) {
+                    return { success: false, message: "Can't move card without logging in" };
+                }
+
+                const card: Card = await Card.findOne({ where: { id: cardId } });
+
+                if (!card) {
+                    return { success: false, message: "Can't move card that doesn't exist" };
+                }
+
+                if (card.creatorId !== userId) {
+                    return { success: false, message: "Can't move card that isn't yours" };
+                }
+
+                const fromColumn: BoardColumn = await BoardColumn.findOne({ where: { id: fromColumnId } });
+                const toColumn: BoardColumn = await BoardColumn.findOne({ where: { id: toColumnId } });
+
+                if (!fromColumn) {
+                    return { success: false, message: "Can't move card from column that doesn't exist" };
+                }
+
+                if (!toColumn) {
+                    return { success: false, message: "Can't move card to column that doesn't exist" };
+                }
+
+                const boardCards = await Card.find({ where: { boardId: card.boardId } });
+
+                if (fromColumnId !== toColumnId && toColumnId !== card.columnId) {
+                    // remove cardId from all groupedCardIds in fromColumn
+                    for (const groupedCard of boardCards) {
+                        if (groupedCard.groupedCardIds.includes(card.id)) {
+                            groupedCard.groupedCardIds = groupedCard.groupedCardIds.filter((id) => id !== card.id);
+                            if (groupedCard.groupedCardIds.length === 1) {
+                                groupedCard.groupedCardIds = [];
+                            }
+                            await Card.save(groupedCard);
+                        }
+                    }
+
+                    card.columnId = toColumnId;
+                    await Card.save(card);
+                }
+
+                for (const newGroupCardId of groupedCardIds) {
+                    const newGroupCard = await Card.findOne({ where: { id: newGroupCardId } });
+                    if (groupedCardIds.includes(newGroupCard.id)) {
+                        newGroupCard.groupedCardIds = groupedCardIds;
+                        await Card.save(newGroupCard);
+                    }
+                }
 
                 return { success: true };
             },

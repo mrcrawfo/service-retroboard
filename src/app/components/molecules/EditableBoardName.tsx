@@ -75,20 +75,32 @@ const EditableBoardName = ({
         }
     };
 
+    const onCancel = () => {
+        setEditMode(false);
+        setEditingCard(false);
+        setEditText(boardName);
+    };
+
     return (
         <>
-            {editMode ? (
+            {editMode && editText ? (
                 <OutlinedInput
                     sx={styles.input}
                     value={editText}
                     ref={boardNameInputElement}
-                    onBlur={() => {
+                    onBlur={(e) => {
                         // needs timeout to allow the Save button to be clicked
-                        setTimeout(() => {
-                            setEditMode(false);
-                            setEditingCard(false);
-                            setEditText(boardName);
-                        }, 100);
+                        // setTimeout(() => {
+                        //     setEditMode(false);
+                        //     setEditingCard(false);
+                        //     setEditText(boardName);
+                        // }, 100);
+                        if (e.relatedTarget?.id !== 'save-board-input-text') {
+                            // needs timeout to allow the Save button to be clicked
+                            setTimeout(() => {
+                                onCancel();
+                            }, 100);
+                        }
                     }}
                     onSubmit={onSave}
                     onChange={(e) => setEditText(e.target.value)}
@@ -99,11 +111,24 @@ const EditableBoardName = ({
                         if (e.key === 'Enter') {
                             onSave();
                         }
+                        if (e.key === 'Tab') {
+                            e.preventDefault();
+                            onSave();
+                        }
+                        if (e.key === 'Escape') {
+                            e.preventDefault();
+                            onCancel();
+                        }
                     }}
                     autoFocus
                     endAdornment={
                         <InputAdornment position='end'>
-                            <Button variant='contained' onClick={onSave} disabled={updateBoardNameLoading}>
+                            <Button
+                                id='save-board-input-text'
+                                variant='contained'
+                                onClick={onSave}
+                                disabled={updateBoardNameLoading}
+                            >
                                 Save
                             </Button>
                         </InputAdornment>

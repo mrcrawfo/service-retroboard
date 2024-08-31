@@ -66,11 +66,11 @@ export const ThemeColors: ThemeColor[] = [
         name: 'Red',
         colors: {
             primary: {
-                base: '#ff0000',
+                base: '#e00000',
                 text: '#ffffff',
                 disabled: '#f06060',
                 highlight: '#ff0808',
-                shadow: '#e80000',
+                shadow: '#b00000',
             },
             secondary: {
                 base: '#ff8080',

@@ -38,6 +38,9 @@ export class Card extends BaseEntity {
     @Column('int', { array: true })
     voteIds!: number[];
 
+    @Column('int', { array: true })
+    groupedCardIds!: number[];
+
     @OneToMany('Vote', 'card')
     votes: Relation<Vote>[];
 

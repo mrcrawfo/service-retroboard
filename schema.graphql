@@ -3,8 +3,10 @@
 
 
 type AuthType {
-  token: String!
-  user: User!
+  message: String
+  success: Boolean
+  token: String
+  user: User
 }
 
 type Board {
@@ -19,6 +21,7 @@ type Board {
 type BoardColumn {
   board: Board
   boardId: Int!
+  cardIds: [Int]!
   cards: [Card]
   color: ThemeColorName
   creator: User
@@ -35,12 +38,24 @@ type Card {
   columnId: Int!
   creator: User
   creatorId: Int!
+  groupedCardIds: [Int]!
   id: Int!
   text: String!
   votes: [Vote]!
 }
 
 type CardDeleteResponse {
+  message: String
+  success: Boolean!
+}
+
+type GroupCardResponse {
+  message: String
+  success: Boolean!
+}
+
+type MoveCardResponse {
+  message: String
   success: Boolean!
 }
 
@@ -50,7 +65,9 @@ type Mutation {
   createCard(boardId: Int!, columnId: Int!, text: String!): Card!
   createColumn(boardId: Int!, name: String!, slot: Int!): BoardColumn!
   deleteCard(id: Int!): CardDeleteResponse!
+  groupCard(cardId: Int!, fromColumnId: Int!, groupedCardIds: [Int!]!, toColumnId: Int!): GroupCardResponse!
   login(password: String!, username: String!): AuthType!
+  moveCard(cardId: Int!, fromColumnId: Int!, toColumnId: Int!): MoveCardResponse!
   register(email: String!, firstName: String!, lastName: String!, password: String!, username: String!): AuthType!
   subtractVoteFromCard(boardId: Int!, cardId: Int!, userId: Int!): Vote
   updateBoardName(id: Int!, name: String!): Board!
@@ -68,7 +85,7 @@ type Query {
   getUser(id: Int!): User
   getUsers: [User]!
   getVotesByCardId(cardId: Int!): [Vote]!
-  me: User
+  me: AuthType
 }
 
 enum ThemeColorName {

@@ -1,6 +1,7 @@
-import { useQuery } from '@apollo/client';
-import { Grid } from '@mui/material';
+import { useMutation, useQuery } from '@apollo/client';
+import { CircularProgress, Grid } from '@mui/material';
 import React, { useEffect, useMemo, useState } from 'react';
+import { DndContext, useSensor, useSensors } from '@dnd-kit/core';
 
 import { BoardColumn as BoardColumnType } from '../../../entities/BoardColumn.js';
 import { Card as CardType } from '../../../entities/Card.js';
@@ -8,8 +9,10 @@ import BoardColumn from '../organisms/BoardColumn.jsx';
 import EditableBoardName from '../molecules/EditableBoardName.jsx';
 import { GET_BOARD } from '../../graph/board/queries.js';
 import { PAGE_HEADER_HEIGHT, SITE_HEADER_HEIGHT } from '../../helpers/constants.js';
+import { InteractivePointer } from '../../helpers/sensors/InteractivePointer.js';
 import { getThemeColor } from '../../helpers/theme.js';
 import { useAuthStoreToken } from '../../store/AuthStore.js';
+import { MOVE_CARD, GROUP_CARD } from '../../graph/cards/queries.js';
 
 export interface BoardPageProps {
     boardId: number;
@@ -25,11 +28,19 @@ const BoardPage = ({ boardId }: BoardPageProps) => {
 
     const boardVotesAllowed = 6;
 
-    let cards: CardType[];
-    let columns: BoardColumnType[];
-    let boardName: string;
+    const [cards, setCards] = useState<CardType[]>([]);
+    const [columns, setColumns] = useState<BoardColumnType[]>([]);
+    const [boardName, setBoardName] = useState<string>('');
 
     const token = useAuthStoreToken();
+
+    const sensors = useSensors(
+        useSensor(InteractivePointer, {
+            activationConstraint: {
+                distance: 8,
+            },
+        }),
+    );
 
     const { data: boardData } = useQuery(GET_BOARD, {
         variables: { id: boardId },
@@ -42,12 +53,34 @@ const BoardPage = ({ boardId }: BoardPageProps) => {
         },
     });
 
+    const [moveCard, { loading: moveCardLoading }] = useMutation(MOVE_CARD, {
+        context: {
+            headers: token
+                ? {
+                      authorization: `Bearer ${token}`,
+                  }
+                : {},
+        },
+        refetchQueries: ['getBoard'],
+    });
+
+    const [groupCard, { loading: groupCardLoading }] = useMutation(GROUP_CARD, {
+        context: {
+            headers: token
+                ? {
+                      authorization: `Bearer ${token}`,
+                  }
+                : {},
+        },
+        refetchQueries: ['getBoard'],
+    });
+
     useMemo(() => {
         const { getBoard } = boardData || {};
         if (getBoard) {
-            cards = getBoard.cards || [];
-            columns = ([...getBoard.columns] || []).sort((a: BoardColumnType, b: BoardColumnType) => a.slot - b.slot);
-            boardName = getBoard?.name || '';
+            setCards(getBoard.cards || []);
+            setColumns(([...getBoard.columns] || []).sort((a: BoardColumnType, b: BoardColumnType) => a.slot - b.slot));
+            setBoardName(getBoard?.name || '');
         }
     }, [boardData]);
 
@@ -55,15 +88,60 @@ const BoardPage = ({ boardId }: BoardPageProps) => {
 
     const styles = {
         grid: {
+            margin: '16px 0',
             width: '100vw',
-            height: `calc(100vh - ${PAGE_HEADER_HEIGHT}px - ${SITE_HEADER_HEIGHT}px)`,
+            // height: `calc(100vh - ${PAGE_HEADER_HEIGHT}px - ${SITE_HEADER_HEIGHT}px + 24px)`,
+            height: 'calc(100vh - 150px)',
             overflow: 'hidden',
         },
     };
 
+    function handleDragEnd(event: any) {
+        const { active, over } = event;
+
+        if (active && active.id && over && over.id) {
+            const [dragType, _dragBoardId, dragColumnId, dragCardId] = active.id.split('-');
+            const [dropType, _dropBoardId, dropColumnId, dropCardId] = over.id.split('-');
+            console.log('dragType', dragType);
+            console.log('dropType', dropType);
+            if (dragType === 'cardBase' && dropType === 'column') {
+                // if (dragColumnId !== dropColumnId) {
+                moveCard({
+                    variables: {
+                        cardId: parseInt(dragCardId),
+                        fromColumnId: parseInt(dragColumnId),
+                        toColumnId: parseInt(dropColumnId),
+                    },
+                });
+            }
+            if (dragType === 'cardBase' && dropType === 'cardOverlay') {
+                console.log(`combine cards ${dragCardId} and ${dropCardId}`);
+                const groupedCardIds =
+                    [...cards.find((c: CardType) => c.id === parseInt(dropCardId)).groupedCardIds] || [];
+                if (!groupedCardIds.includes(parseInt(dropCardId))) {
+                    groupedCardIds.push(parseInt(dropCardId));
+                }
+                groupedCardIds.push(parseInt(dragCardId));
+                groupCard({
+                    variables: {
+                        cardId: parseInt(dragCardId),
+                        fromColumnId: parseInt(dragColumnId),
+                        toColumnId: parseInt(dropColumnId),
+                        groupedCardIds: groupedCardIds,
+                    },
+                });
+            }
+        }
+    }
+
     return (
-        <>
-            <div style={{ backgroundColor: '#eaeaea', height: `{$PAGE_HEADER_HEIGHT}px` }}>
+        <DndContext onDragEnd={handleDragEnd} sensors={sensors}>
+            <div
+                style={{
+                    backgroundColor: '#f0f0f0',
+                    height: `{$PAGE_HEADER_HEIGHT}px`,
+                }}
+            >
                 <EditableBoardName
                     boardId={boardId}
                     boardName={boardName}
@@ -71,7 +149,7 @@ const BoardPage = ({ boardId }: BoardPageProps) => {
                     setEditingCard={setEditingCard}
                 />
             </div>
-            <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }} sx={styles.grid}>
+            <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 2 }} sx={styles.grid}>
                 {columns?.length ? (
                     columns.map((column) => (
                         <BoardColumn
@@ -87,14 +165,36 @@ const BoardPage = ({ boardId }: BoardPageProps) => {
                             editingCard={editingCard}
                             setEditingCard={setEditingCard}
                             themeColor={getThemeColor(column.color || 'Blue')}
+                            loading={moveCardLoading || groupCardLoading}
                         />
                     ))
                 ) : (
-                    // TODO: Add loading spinner
-                    <div>Loading...</div>
+                    <div
+                        style={{
+                            width: '100vw',
+                            height: '100vh',
+                            display: 'fixed',
+                            backgroundColor: 'argb(220, 220, 220, 0.5)',
+                        }}
+                    >
+                        <div style={{ position: 'fixed', top: '50%', left: '50%', transform: 'translate(-50%, -50%)' }}>
+                            <CircularProgress />
+                        </div>
+                    </div>
                 )}
             </Grid>
-        </>
+            <div
+                style={{
+                    position: 'absolute',
+                    width: 'calc(100% - 16px)',
+                    height: '96px',
+                    boxShadow: 'white 0px -48px 24px -12px inset',
+                    bottom: '0px',
+                    zIndex: 100,
+                    pointerEvents: 'none',
+                }}
+            />
+        </DndContext>
     );
 };
 

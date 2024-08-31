@@ -8,28 +8,60 @@ import { Context } from '../types/Context.js';
 export const AuthType = objectType({
     name: 'AuthType',
     definition(t) {
-        t.nonNull.string('token');
-        t.nonNull.field('user', {
+        t.nullable.string('token');
+        t.nullable.field('user', {
             type: 'User',
         });
+        t.nullable.string('message');
+        t.nullable.boolean('success');
     },
 });
 
-export type Auth = { user: Promise<User> } & { token: string | undefined | null };
+export type Auth = { user: Promise<User> } & { token: string | undefined | null } & {
+    success?: boolean;
+    message?: string;
+};
 
 export const AuthQuery = extendType({
     type: 'Query',
     definition(t) {
         t.field('me', {
-            type: 'User',
-            async resolve(_parent, _args, context: Context, _info): Promise<User | null> {
-                const { userId } = context;
+            type: 'AuthType',
+            async resolve(
+                _parent,
+                _args,
+                context: Context,
+                _info,
+            ): Promise<{ token?: string; user?: User; message?: string; success?: boolean } | null> {
+                const { userId, tokenExpired } = context;
 
-                if (!userId) {
-                    throw new Error("Can't query without logging in");
+                if (tokenExpired) {
+                    return {
+                        success: false,
+                        message: 'Token expired',
+                    };
                 }
 
-                return User.findOne({ where: { id: userId } });
+                if (!userId) {
+                    return {
+                        success: false,
+                        message: 'Incorrect username or password',
+                    };
+                }
+
+                const user = await User.findOne({ where: { id: userId } });
+
+                if (!user) {
+                    return {
+                        success: false,
+                        message: 'Incorrect username or password',
+                    };
+                }
+
+                return {
+                    success: true,
+                    user,
+                };
             },
         });
     },
@@ -44,18 +76,29 @@ export const AuthMutation = extendType({
                 username: nonNull(stringArg()),
                 password: nonNull(stringArg()),
             },
-            async resolve(_parent, args, _context: Context, _info): Promise<{ token: string; user: User } | null> {
+            async resolve(
+                _parent,
+                args,
+                _context: Context,
+                _info,
+            ): Promise<{ token?: string; user?: User; message?: string; success?: boolean } | null> {
                 const { username, password } = args;
                 const user = await User.findOne({ where: { username } });
 
                 if (!user) {
-                    throw new Error('User not found');
+                    return {
+                        success: false,
+                        message: 'Incorrect username or password',
+                    };
                 }
 
                 const isValid = await argon2.verify(user.password, password);
 
                 if (!isValid) {
-                    throw new Error('Incorrect password');
+                    return {
+                        success: false,
+                        message: 'Incorrect username or password',
+                    };
                 }
 
                 const token =
@@ -65,6 +108,7 @@ export const AuthMutation = extendType({
 
                 if (token) {
                     return {
+                        success: true,
                         user,
                         token,
                     };
@@ -82,7 +126,12 @@ export const AuthMutation = extendType({
                 email: nonNull(stringArg()),
                 password: nonNull(stringArg()),
             },
-            async resolve(_parent, args, context: Context, _info): Promise<{ token: string; user: User } | null> {
+            async resolve(
+                _parent,
+                args,
+                context: Context,
+                _info,
+            ): Promise<{ token?: string; user?: User; message?: string; success?: boolean } | null> {
                 const { username, password, email } = args;
                 const hashedPassword = await argon2.hash(password);
                 let user: User;
@@ -103,11 +152,15 @@ export const AuthMutation = extendType({
                             expiresIn: '24h',
                         }) || '';
                 } catch (err) {
-                    console.log(err);
+                    return {
+                        success: false,
+                        message: err,
+                    };
                 }
 
                 if (user && token) {
                     return {
+                        success: true,
                         user,
                         token,
                     };

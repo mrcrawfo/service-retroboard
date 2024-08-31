@@ -1,6 +1,6 @@
 import { CheckOutlined, ClearOutlined, EditOutlined } from '@mui/icons-material';
 import { IconButton, InputAdornment, OutlinedInput, Stack, Typography } from '@mui/material';
-import { ChangeEvent, useRef, useState } from 'react';
+import { ChangeEvent, KeyboardEvent, useEffect, useRef, useState } from 'react';
 
 const styles = {
     inputText: {
@@ -27,39 +27,49 @@ const styles = {
 export interface ClearableInputTextProps {
     text: string;
     edit?: boolean;
-    onSave: () => void;
+    newCard?: boolean;
+    onSave: (inputText: string) => void;
+    onCancel: () => void;
     setText: (text: string) => void;
-    editingCard?: boolean;
-    setEditingCard?: (editing: boolean) => void;
+    editingCard: boolean;
+    setEditingCard: (editing: boolean) => void;
 }
 
 const ClearableInputText = ({
     text,
     edit = false,
+    newCard = false,
     onSave,
+    onCancel,
     setText,
-    editingCard = false,
-    setEditingCard = null,
+    editingCard,
+    setEditingCard,
 }: ClearableInputTextProps) => {
     const inputElement = useRef<HTMLInputElement>(null);
 
     const [editMode, setEditMode] = useState<boolean>(edit);
+    const [editText, setEditText] = useState<string>(text);
+    useEffect(() => {
+        setEditText(text);
+    }, [text]);
 
     const clearInput = () => {
-        // Clear input text after adding it to terms array/chips - Use setTimeout because
-        // calling this synchronously interferes with event bubbling and performs unreliably
-        // setTimeout(() => {
-        //     if (inputElement && inputElement.current) {
-        //         inputElement.current.value = '';
-        //     }
-        // }, 0);
-        // inputElement?.current?.value = '';
-        setText('');
+        setEditText('');
+        inputElement?.current?.focus();
     };
 
     const onSaveClick = () => {
-        onSave();
+        setText(editText);
+        onSave(editText);
         setEditMode(false);
+        setEditingCard(false);
+    };
+
+    const onCancelClick = () => {
+        setEditText(text);
+        setEditMode(false);
+        setEditingCard(false);
+        onCancel();
     };
 
     const onEditClick = () => {
@@ -73,8 +83,8 @@ const ClearableInputText = ({
                 <Stack direction='row' spacing={1}>
                     <OutlinedInput
                         sx={styles.inputText}
-                        value={text}
-                        ref={inputElement}
+                        value={editText}
+                        inputRef={inputElement}
                         onFocus={(e) =>
                             e.currentTarget.setSelectionRange(
                                 e.currentTarget.value.length,
@@ -83,16 +93,17 @@ const ClearableInputText = ({
                         }
                         multiline
                         autoFocus
-                        onChange={(event: ChangeEvent<HTMLInputElement>) => setText(event.target.value)}
+                        onChange={(event: ChangeEvent<HTMLInputElement>) => setEditText(event.target.value)}
                         endAdornment={
                             <InputAdornment position='end'>
                                 <IconButton
                                     aria-label='clear card input text'
+                                    id='clear-card-input-text'
                                     onClick={clearInput}
                                     edge='end'
-                                    disabled={!text || text === ''}
+                                    disabled={!editText || editText === '' || (!newCard && (!text || text === ''))}
                                 >
-                                    {text && text !== '' ? (
+                                    {editText && editText !== '' ? (
                                         <ClearOutlined />
                                     ) : (
                                         <ClearOutlined sx={styles.disabledButton} />
@@ -100,8 +111,30 @@ const ClearableInputText = ({
                                 </IconButton>
                             </InputAdornment>
                         }
+                        onBlur={(e) => {
+                            if (
+                                e.relatedTarget?.id !== 'clear-card-input-text' &&
+                                e.relatedTarget?.id !== 'save-card-input-text'
+                            ) {
+                                // needs timeout to allow the Save button to be clicked
+                                setTimeout(() => {
+                                    onCancelClick();
+                                }, 100);
+                            }
+                        }}
+                        onSubmit={() => onSave(editText)}
+                        onKeyDown={(e: KeyboardEvent<HTMLInputElement>) => {
+                            if (e.key === 'Tab') {
+                                e.preventDefault();
+                                onSaveClick();
+                            }
+                            if (e.key === 'Escape') {
+                                e.preventDefault();
+                                onCancelClick();
+                            }
+                        }}
                     />
-                    <IconButton onClick={onSaveClick}>
+                    <IconButton id='save-card-input-text' onClick={onSaveClick}>
                         <CheckOutlined />
                     </IconButton>
                 </Stack>
