@@ -11,6 +11,7 @@ import ClearableInputText from '../molecules/ClearableInputText.js';
 import VoteCounter from '../molecules/VoteCounter.js';
 import { ThemeColor } from '../../helpers/theme.js';
 import { useAuthStoreToken } from '../../store/AuthStore.js';
+import zIndex from '@mui/material/styles/zIndex.js';
 
 export interface CardProps extends MuiCardProps {
     cardId: number;
@@ -66,6 +67,10 @@ const Card = ({
             opacity: isDragging ? 0.5 : 1,
             zIndex: isDragging ? 2000 : 1,
         },
+        cardStack: {
+            opacity: isOver && !isDragging ? 0 : 1,
+            zIndex: 5,
+        },
         cardOverlay: {
             backgroundColor: isOver && !isDragging ? themeColor?.colors?.secondary?.highlight || '#fff' : 'transparent',
             display: 'flex',
@@ -74,6 +79,7 @@ const Card = ({
             height: '100%',
             verticalAlign: 'middle',
             border: isOver && !isDragging ? `4px solid ${themeColor?.colors?.primary?.base || '#fff'}` : 'none',
+            zIndex: 2,
             boxShadow:
                 isOver && !isDragging ? `0px 0px 20px ${themeColor?.colors.primary?.shadow || '#fff'} inset` : 'none',
         },
@@ -145,7 +151,7 @@ const Card = ({
             ) : (
                 <>
                     <CardCover id={`cardBase-${boardId}-${columnId}-${cardId}`} ref={setDragNodeRef} />
-                    <Stack direction='column' spacing={0}>
+                    <Stack direction='column' spacing={0} sx={styles.cardStack}>
                         <ClearableInputText
                             text={cardText}
                             onSave={onSave}

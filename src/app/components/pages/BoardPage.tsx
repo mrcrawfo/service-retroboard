@@ -1,7 +1,7 @@
 import { useMutation, useQuery } from '@apollo/client';
 import { CircularProgress, Grid } from '@mui/material';
 import React, { useEffect, useMemo, useState } from 'react';
-import { DndContext } from '@dnd-kit/core';
+import { DndContext, PointerSensor, useSensor, useSensors } from '@dnd-kit/core';
 
 import { BoardColumn as BoardColumnType } from '../../../entities/BoardColumn.js';
 import { Card as CardType } from '../../../entities/Card.js';
@@ -9,6 +9,7 @@ import BoardColumn from '../organisms/BoardColumn.jsx';
 import EditableBoardName from '../molecules/EditableBoardName.jsx';
 import { GET_BOARD } from '../../graph/board/queries.js';
 import { PAGE_HEADER_HEIGHT, SITE_HEADER_HEIGHT } from '../../helpers/constants.js';
+import { InteractivePointer } from '../../helpers/sensors/InteractivePointer.js';
 import { getThemeColor } from '../../helpers/theme.js';
 import { useAuthStoreToken } from '../../store/AuthStore.js';
 import { MOVE_CARD, GROUP_CARD } from '../../graph/cards/queries.js';
@@ -32,6 +33,14 @@ const BoardPage = ({ boardId }: BoardPageProps) => {
     const [boardName, setBoardName] = useState<string>('');
 
     const token = useAuthStoreToken();
+
+    const sensors = useSensors(
+        useSensor(InteractivePointer, {
+            activationConstraint: {
+                distance: 8,
+            },
+        }),
+    );
 
     const { data: boardData } = useQuery(GET_BOARD, {
         variables: { id: boardId },
@@ -124,7 +133,7 @@ const BoardPage = ({ boardId }: BoardPageProps) => {
     }
 
     return (
-        <DndContext onDragEnd={handleDragEnd}>
+        <DndContext onDragEnd={handleDragEnd} sensors={sensors}>
             <div style={{ backgroundColor: '#f0f0f0', height: `{$PAGE_HEADER_HEIGHT}px` }}>
                 <EditableBoardName
                     boardId={boardId}

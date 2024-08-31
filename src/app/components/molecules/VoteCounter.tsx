@@ -1,5 +1,5 @@
 import { useMutation } from '@apollo/client';
-import { CircleOutlined, ThumbDownOffAltOutlined, ThumbUpOffAltOutlined } from '@mui/icons-material';
+import { CircleRounded, ThumbDownOffAltOutlined, ThumbUpOffAltOutlined } from '@mui/icons-material';
 import { IconButton, Stack, Typography } from '@mui/material';
 import { useEffect, useState } from 'react';
 
@@ -127,7 +127,7 @@ const VoteCounter = ({
                 {userVotes
                     .filter((id) => cardId === id)
                     .map((cardId, index) => (
-                        <CircleOutlined
+                        <CircleRounded
                             key={`${boardId}-${cardId}-${index}`}
                             sx={{ fontSize: '0.6em', padding: '0 2px' }}
                         />
