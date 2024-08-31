@@ -1,6 +1,6 @@
 import { Divider, CardProps as MuiCardProps, Stack } from '@mui/material';
 
-import Card from './Card.jsx';
+import Card from '../organisms/Card.js';
 import { ThemeColor } from '../../helpers/theme.js';
 import { Vote as VoteType } from '../../../entities/Vote.js';
 

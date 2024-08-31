@@ -27,9 +27,9 @@ const BoardPage = ({ boardId }: BoardPageProps) => {
 
     const boardVotesAllowed = 6;
 
-    let cards: CardType[];
-    let columns: BoardColumnType[];
-    let boardName: string;
+    const [cards, setCards] = useState<CardType[]>([]);
+    const [columns, setColumns] = useState<BoardColumnType[]>([]);
+    const [boardName, setBoardName] = useState<string>('');
 
     const token = useAuthStoreToken();
 
@@ -69,9 +69,9 @@ const BoardPage = ({ boardId }: BoardPageProps) => {
     useMemo(() => {
         const { getBoard } = boardData || {};
         if (getBoard) {
-            cards = getBoard.cards || [];
-            columns = ([...getBoard.columns] || []).sort((a: BoardColumnType, b: BoardColumnType) => a.slot - b.slot);
-            boardName = getBoard?.name || '';
+            setCards(getBoard.cards || []);
+            setColumns(([...getBoard.columns] || []).sort((a: BoardColumnType, b: BoardColumnType) => a.slot - b.slot));
+            setBoardName(getBoard?.name || '');
         }
     }, [boardData]);
 

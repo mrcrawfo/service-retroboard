@@ -77,7 +77,7 @@ const EditableBoardName = ({
 
     return (
         <>
-            {editMode ? (
+            {editMode && editText ? (
                 <OutlinedInput
                     sx={styles.input}
                     value={editText}

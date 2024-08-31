@@ -21,8 +21,9 @@ export const GET_USER_BOARDS = gql`
                             id
                         }
                     }
+                    groupedCardIds
                 }
-                groupedCardIds
+                
             }
             cards {
                 columnId

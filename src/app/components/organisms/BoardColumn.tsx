@@ -4,7 +4,7 @@ import { useDroppable } from '@dnd-kit/core';
 
 import { Card as CardType } from '../../../entities/Card.js';
 import AddCardButton from '../atoms/AddCardButton.jsx';
-import CardGroup from './CardGroup.jsx';
+import CardGroup from '../molecules/CardGroup.jsx';
 import NewCard from './NewCard.jsx';
 import { ThemeColor } from '../../helpers/theme.js';
 
