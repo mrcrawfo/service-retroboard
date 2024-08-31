@@ -56,7 +56,9 @@ const BoardColumn = ({
             minHeight: '0px',
             padding: '8px 8px 12px 8px',
             margin: '0px',
+            overflowY: 'scroll',
             height: 'calc(100vh - 300px)', // TODO: Calculate this better (app header + page header + column header + AddCard)
+            display: 'block',
         },
         h2: {
             height: '2.25em',
@@ -113,7 +115,9 @@ const BoardColumn = ({
                                 boardId={boardId}
                                 columnId={columnId}
                                 setAddingCard={setAddingCard}
+                                editingCard={editingCard}
                                 setEditingCard={setEditingCard}
+                                themeColor={themeColor}
                             />
                         ) : null}
                     </>
@@ -137,6 +141,7 @@ const BoardColumn = ({
                             />
                         );
                     })}
+                    <div style={{ height: '128px' }} />
                 </Stack>
             ) : null}
         </Grid>

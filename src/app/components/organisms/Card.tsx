@@ -11,7 +11,6 @@ import ClearableInputText from '../molecules/ClearableInputText.js';
 import VoteCounter from '../molecules/VoteCounter.js';
 import { ThemeColor } from '../../helpers/theme.js';
 import { useAuthStoreToken } from '../../store/AuthStore.js';
-import zIndex from '@mui/material/styles/zIndex.js';
 
 export interface CardProps extends MuiCardProps {
     cardId: number;
@@ -102,10 +101,6 @@ const Card = ({
     const [cardText, setCardText] = useState<string>(text);
 
     const [updateCard, { loading: updateCardLoading }] = useMutation(UPDATE_CARD, {
-        variables: {
-            id: cardId,
-            text: cardText,
-        },
         refetchQueries: ['getBoard'],
         context: {
             headers: token
@@ -130,16 +125,20 @@ const Card = ({
         },
     });
 
-    const onSave = () => {
-        if (cardText !== '') {
-            if (cardText !== text) {
-                updateCard();
+    const onSave = (inputText: string) => {
+        if (inputText !== '') {
+            if (inputText !== text) {
+                updateCard({ variables: { id: cardId, text: inputText } });
             }
             setEditingCard(false);
         } else {
             deleteCard();
             setEditingCard(false);
         }
+    };
+
+    const onCancel = () => {
+        setEditingCard(false);
     };
 
     // const cardType = grouped ? 'cardGroup' : 'cardBase';
@@ -155,6 +154,7 @@ const Card = ({
                         <ClearableInputText
                             text={cardText}
                             onSave={onSave}
+                            onCancel={onCancel}
                             setText={setCardText}
                             editingCard={editingCard}
                             setEditingCard={setEditingCard}

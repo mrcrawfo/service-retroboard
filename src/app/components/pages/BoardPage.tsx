@@ -1,7 +1,7 @@
 import { useMutation, useQuery } from '@apollo/client';
 import { CircularProgress, Grid } from '@mui/material';
 import React, { useEffect, useMemo, useState } from 'react';
-import { DndContext, PointerSensor, useSensor, useSensors } from '@dnd-kit/core';
+import { DndContext, useSensor, useSensors } from '@dnd-kit/core';
 
 import { BoardColumn as BoardColumnType } from '../../../entities/BoardColumn.js';
 import { Card as CardType } from '../../../entities/Card.js';
@@ -88,8 +88,10 @@ const BoardPage = ({ boardId }: BoardPageProps) => {
 
     const styles = {
         grid: {
+            margin: '16px 0',
             width: '100vw',
-            height: `calc(100vh - ${PAGE_HEADER_HEIGHT}px - ${SITE_HEADER_HEIGHT}px + 24px)`,
+            // height: `calc(100vh - ${PAGE_HEADER_HEIGHT}px - ${SITE_HEADER_HEIGHT}px + 24px)`,
+            height: 'calc(100vh - 150px)',
             overflow: 'hidden',
         },
     };
@@ -134,7 +136,12 @@ const BoardPage = ({ boardId }: BoardPageProps) => {
 
     return (
         <DndContext onDragEnd={handleDragEnd} sensors={sensors}>
-            <div style={{ backgroundColor: '#f0f0f0', height: `{$PAGE_HEADER_HEIGHT}px` }}>
+            <div
+                style={{
+                    backgroundColor: '#f0f0f0',
+                    height: `{$PAGE_HEADER_HEIGHT}px`,
+                }}
+            >
                 <EditableBoardName
                     boardId={boardId}
                     boardName={boardName}
@@ -142,7 +149,7 @@ const BoardPage = ({ boardId }: BoardPageProps) => {
                     setEditingCard={setEditingCard}
                 />
             </div>
-            <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }} sx={styles.grid}>
+            <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 2 }} sx={styles.grid}>
                 {columns?.length ? (
                     columns.map((column) => (
                         <BoardColumn
@@ -176,6 +183,17 @@ const BoardPage = ({ boardId }: BoardPageProps) => {
                     </div>
                 )}
             </Grid>
+            <div
+                style={{
+                    position: 'absolute',
+                    width: 'calc(100% - 16px)',
+                    height: '96px',
+                    boxShadow: 'white 0px -48px 24px -12px inset',
+                    bottom: '0px',
+                    zIndex: 100,
+                    pointerEvents: 'none',
+                }}
+            />
         </DndContext>
     );
 };
