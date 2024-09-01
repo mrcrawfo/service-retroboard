@@ -1,4 +1,4 @@
-import { ChangeEvent, useRef, useState } from 'react';
+import { ChangeEvent, useMemo, useRef, useState } from 'react';
 import {
     Button,
     Dialog,
@@ -6,13 +6,16 @@ import {
     DialogContent,
     DialogProps,
     DialogTitle,
+    Grid,
     OutlinedInput,
-    Stack,
 } from '@mui/material';
-import { useMutation } from '@apollo/client';
+import { useMutation, useQuery } from '@apollo/client';
 
 import { CREATE_BOARD } from '../../../graph/board/queries.js';
 import { useAuthStoreToken } from '../../../store/AuthStore.js';
+import BoardThumbnnail from '../../molecules/BoardThumbnail.js';
+import { BoardPreset as BoardPresetType } from '../../../../entities/BoardPreset.js';
+import { GET_BOARD_PRESETS } from '../../../graph/boardPresets/queries.js';
 
 export interface CreateBoardModalProps extends DialogProps {
     open: boolean;
@@ -35,6 +38,21 @@ const CreateBoardModal = ({ open, handleCloseModal, ...dialogProps }: CreateBoar
     };
 
     const token = useAuthStoreToken();
+
+    const { data: boardPresetsData } = useQuery(GET_BOARD_PRESETS, {
+        context: {
+            headers: token
+                ? {
+                      authorization: `Bearer ${token}`,
+                  }
+                : {},
+        },
+    });
+
+    const boardPresets = useMemo(() => boardPresetsData?.getBoardPresets || [], [boardPresetsData]);
+
+    console.log('boardPresets');
+    console.log(boardPresets);
 
     const [selectedBoardPreset, setSelectedBoardPreset] = useState<string>('');
     const [boardName, setBoardName] = useState<string>('');
@@ -75,20 +93,19 @@ const CreateBoardModal = ({ open, handleCloseModal, ...dialogProps }: CreateBoar
                     autoFocus
                     onChange={(event: ChangeEvent<HTMLInputElement>) => setBoardName(event.target.value)}
                 />
-                <Stack direction='column' spacing={2} sx={styles.modalStack}>
-                    <Button variant='contained' onClick={() => setSelectedBoardPreset('A')}>
-                        A
-                    </Button>
-                    <Button variant='contained' onClick={() => setSelectedBoardPreset('B')}>
-                        B
-                    </Button>
-                    <Button variant='contained' onClick={() => setSelectedBoardPreset('C')}>
-                        C
-                    </Button>
-                    <Button variant='contained' onClick={() => setSelectedBoardPreset('D')}>
-                        D
-                    </Button>
-                </Stack>
+                {boardPresets?.length > 0 && (
+                    <Grid container spacing={2}>
+                        {boardPresets?.map((boardPreset: BoardPresetType) => (
+                            <Grid key={boardPreset.id} item xs={3}>
+                                <BoardThumbnnail
+                                    boardPreset={boardPreset}
+                                    // selectedBoardPreset={selectedBoardPreset}
+                                    // setSelectedBoardPreset={setSelectedBoardPreset}
+                                />
+                            </Grid>
+                        ))}
+                    </Grid>  
+                )}
             </DialogContent>
             <DialogActions>
                 <Button variant='outlined' onClick={handleCloseModal}>

@@ -12,13 +12,13 @@ export const BoardPresetType = objectType({
         t.nonNull.string('description');
         t.nonNull.list.int('columnIds', {
             resolve(parent, _args, _context, _info): Promise<number[]> {
-                return ColumnPreset.find({ where: { board: parent.id } }).then((cards) => cards.map((card) => card.id));
-            }
+                return ColumnPreset.find({ where: { boardId: parent.id } }).then((cards) => cards.map((card) => card.id));
+            },
         });
         t.nonNull.list.field('columns', {
             type: 'ColumnPreset',
             resolve(parent, _args, _context, _info): Promise<ColumnPreset[]> {
-                return ColumnPreset.find({ where: { board: parent.id } });
+                return ColumnPreset.find({ where: { boardId: parent.id } });
             },
         });
     },

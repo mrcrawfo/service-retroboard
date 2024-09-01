@@ -111,6 +111,9 @@ const Card = ({
         },
     });
 
+    console.log('grouped');
+    console.log(grouped);
+
     const [deleteCard, { loading: deleteCardLoading }] = useMutation(DELETE_CARD, {
         variables: {
             id: cardId,
@@ -140,8 +143,6 @@ const Card = ({
     const onCancel = () => {
         setEditingCard(false);
     };
-
-    // const cardType = grouped ? 'cardGroup' : 'cardBase';
 
     return (
         <MuiCard sx={styles.cardBase} style={transformStyle} {...listeners} {...attributes}>

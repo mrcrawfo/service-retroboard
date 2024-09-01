@@ -50,6 +50,7 @@ const ThemeRow = ({ themeColor, editingCard }: ThemeRowProps) => {
                     /* do nothing */
                 }}
                 text='Card 1'
+                grouped={false}
             />
         </Stack>
     );

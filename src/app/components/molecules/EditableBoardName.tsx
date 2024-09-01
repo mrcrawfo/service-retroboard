@@ -89,12 +89,6 @@ const EditableBoardName = ({
                     value={editText}
                     ref={boardNameInputElement}
                     onBlur={(e) => {
-                        // needs timeout to allow the Save button to be clicked
-                        // setTimeout(() => {
-                        //     setEditMode(false);
-                        //     setEditingCard(false);
-                        //     setEditText(boardName);
-                        // }, 100);
                         if (e.relatedTarget?.id !== 'save-board-input-text') {
                             // needs timeout to allow the Save button to be clicked
                             setTimeout(() => {
