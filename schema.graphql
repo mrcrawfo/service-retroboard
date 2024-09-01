@@ -31,6 +31,14 @@ type BoardColumn {
   slot: Int!
 }
 
+type BoardPreset {
+  columnIds: [Int]!
+  columns: [ColumnPreset]!
+  description: String!
+  id: Int!
+  name: String!
+}
+
 type Card {
   board: Board
   boardId: Int!
@@ -49,6 +57,14 @@ type CardDeleteResponse {
   success: Boolean!
 }
 
+type ColumnPreset {
+  board: BoardPreset!
+  boardId: Int!
+  color: String!
+  id: Int!
+  name: String!
+}
+
 type GroupCardResponse {
   message: String
   success: Boolean!
@@ -62,8 +78,10 @@ type MoveCardResponse {
 type Mutation {
   addVoteToCard(boardId: Int!, cardId: Int!, userId: Int!): Vote!
   createBoard(name: String!): Board!
+  createBoardPreset(description: String!, name: String!): BoardPreset!
   createCard(boardId: Int!, columnId: Int!, text: String!): Card!
   createColumn(boardId: Int!, name: String!, slot: Int!): BoardColumn!
+  createColumnPreset(color: String!, name: String!): ColumnPreset!
   deleteCard(id: Int!): CardDeleteResponse!
   groupCard(cardId: Int!, fromColumnId: Int!, groupedCardIds: [Int!]!, toColumnId: Int!): GroupCardResponse!
   login(password: String!, username: String!): AuthType!
@@ -76,11 +94,13 @@ type Mutation {
 
 type Query {
   getBoard(id: Int!): Board
+  getBoardPresets: [BoardPreset]!
   getBoards: [Board]!
   getBoardsByUserId: [Board]!
   getCard(id: Int!): Card
   getCardsByBoardId(boardId: Int!): [Card!]!
   getColumn(id: Int!): BoardColumn
+  getColumnPresets: [ColumnPreset]!
   getColumnsByBoardId(boardId: Int!): [BoardColumn!]!
   getUser(id: Int!): User
   getUsers: [User]!
