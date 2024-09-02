@@ -1,5 +1,6 @@
-import { ChangeEvent, useMemo, useRef, useState } from 'react';
+import { ChangeEvent, SyntheticEvent, useEffect, useMemo, useRef, useState } from 'react';
 import {
+    Box,
     Button,
     Dialog,
     DialogActions,
@@ -8,6 +9,8 @@ import {
     DialogTitle,
     Grid,
     OutlinedInput,
+    Tab,
+    Tabs,
 } from '@mui/material';
 import { useMutation, useQuery } from '@apollo/client';
 
@@ -21,6 +24,11 @@ export interface CreateBoardModalProps extends DialogProps {
     open: boolean;
     handleCloseModal: () => void;
 }
+
+type GroupedBoardType = {
+    boardType: string;
+    boardPresets: BoardPresetType[];
+};
 
 const CreateBoardModal = ({ open, handleCloseModal, ...dialogProps }: CreateBoardModalProps) => {
     const styles = {
@@ -49,12 +57,36 @@ const CreateBoardModal = ({ open, handleCloseModal, ...dialogProps }: CreateBoar
         },
     });
 
-    const boardPresets = useMemo(() => boardPresetsData?.getBoardPresets || [], [boardPresetsData]);
+    const groupedBoardPresets = useMemo(() => {
+        const data: GroupedBoardType[] = [];
+        const allBoardPresets = boardPresetsData?.getBoardPresets || [];
+        const allBoardTypes: string[] = allBoardPresets.map((boardPreset: BoardPresetType) => boardPreset.type);
+        const uniqueBoardTypes: string[] = [...new Set(allBoardTypes)];
+        for (const boardType of uniqueBoardTypes) {
+            console.log('boardType');
+            console.log(boardType);
+            data.push({
+                boardType,
+                boardPresets: allBoardPresets.filter((boardPreset: BoardPresetType) => boardPreset.type === boardType),
+            });
+        }
+        return data;
+    }, [boardPresetsData]);
 
-    console.log('boardPresets');
-    console.log(boardPresets);
+    useEffect(() => {
+        if (groupedBoardPresets.length > 0) {
+            setSelectedBoardType(groupedBoardPresets[0].boardType);
+            setSelectedBoardPreset(groupedBoardPresets[0].boardPresets[0]);
+            setSelectedGroupedBoardPresets(groupedBoardPresets[0].boardPresets);
+        }
+    }, [groupedBoardPresets]);
 
-    const [selectedBoardPreset, setSelectedBoardPreset] = useState<string>('');
+    console.log('groupedBoardPresets');
+    console.log(groupedBoardPresets);
+
+    const [selectedBoardType, setSelectedBoardType] = useState<string>();
+    const [selectedBoardPreset, setSelectedBoardPreset] = useState<BoardPresetType>();
+    const [selectedGroupedBoardPresets, setSelectedGroupedBoardPresets] = useState<BoardPresetType[]>();
     const [boardName, setBoardName] = useState<string>('');
 
     const boardNameInputRef = useRef<HTMLInputElement>(null);
@@ -72,6 +104,13 @@ const CreateBoardModal = ({ open, handleCloseModal, ...dialogProps }: CreateBoar
                 : {},
         },
     });
+
+    const handleGroupedBoardChange = (_event: SyntheticEvent, newValue: string) => {
+        const groupedBoardType = groupedBoardPresets.find((groupedBoard) => groupedBoard.boardType === newValue);
+        setSelectedBoardType(newValue);
+        setSelectedBoardPreset(groupedBoardType.boardPresets[0]);
+        setSelectedGroupedBoardPresets(groupedBoardType.boardPresets);
+    };
 
     const onCreateBoard = () => {
         createBoard().then(() => {
@@ -93,18 +132,31 @@ const CreateBoardModal = ({ open, handleCloseModal, ...dialogProps }: CreateBoar
                     autoFocus
                     onChange={(event: ChangeEvent<HTMLInputElement>) => setBoardName(event.target.value)}
                 />
-                {boardPresets?.length > 0 && (
-                    <Grid container spacing={2}>
-                        {boardPresets?.map((boardPreset: BoardPresetType) => (
-                            <Grid key={boardPreset.id} item xs={3}>
-                                <BoardThumbnnail
-                                    boardPreset={boardPreset}
-                                    // selectedBoardPreset={selectedBoardPreset}
-                                    // setSelectedBoardPreset={setSelectedBoardPreset}
-                                />
-                            </Grid>
-                        ))}
-                    </Grid>  
+                {groupedBoardPresets?.length > 0 && selectedBoardType && selectedBoardPreset && (
+                    <>
+                        <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
+                            <Tabs value={selectedBoardType} onChange={handleGroupedBoardChange}>
+                                {groupedBoardPresets.map((groupedBoard: GroupedBoardType) => (
+                                    <Tab
+                                        key={groupedBoard.boardType}
+                                        label={groupedBoard.boardType}
+                                        value={groupedBoard.boardType}
+                                    />
+                                ))}
+                            </Tabs>
+                        </Box>
+                        <Grid container spacing={2}>
+                            {selectedGroupedBoardPresets.map((boardPreset: BoardPresetType) => (
+                                <Grid key={boardPreset.id} item xs={3}>
+                                    <BoardThumbnnail
+                                        boardPreset={boardPreset}
+                                        selected={boardPreset.id === selectedBoardPreset.id}
+                                        setSelectedBoardPreset={setSelectedBoardPreset}
+                                    />
+                                </Grid>
+                            ))}
+                        </Grid>
+                    </>
                 )}
             </DialogContent>
             <DialogActions>
@@ -114,7 +166,7 @@ const CreateBoardModal = ({ open, handleCloseModal, ...dialogProps }: CreateBoar
                 <Button
                     variant='contained'
                     onClick={onCreateBoard}
-                    disabled={!selectedBoardPreset || selectedBoardPreset === '' || createBoardLoading}
+                    disabled={!selectedBoardPreset || createBoardLoading}
                 >
                     Create Board
                 </Button>

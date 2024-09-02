@@ -12,5 +12,6 @@ query GetBoardPresets {
         description
         id
         name
+        type
     }
 }`;

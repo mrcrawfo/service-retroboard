@@ -37,6 +37,7 @@ type BoardPreset {
   description: String!
   id: Int!
   name: String!
+  type: String!
 }
 
 type Card {

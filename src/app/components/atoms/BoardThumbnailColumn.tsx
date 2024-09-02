@@ -10,6 +10,7 @@ const BoardThumbnailColumn = ({ themeColor }: BoardThumbnailColumnProps) => {
             width: '100%',
             height: '80px',
             backgroundColor: themeColor?.colors?.primary?.base || '#0000e0',
+            border: '1px solid #000',
             margin: '2px',
         },
     };
