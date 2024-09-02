@@ -34,7 +34,7 @@ const NewCard = ({ boardId, columnId, themeColor, setAddingCard, editingCard, se
     const [cardText, setCardText] = useState<string>('');
 
     const [createCard, { loading: createCardLoading }] = useMutation(CREATE_CARD, {
-        refetchQueries: ['getBoard'],
+        refetchQueries: ['GetBoard'],
         context: {
             headers: token
                 ? {

@@ -101,7 +101,7 @@ const Card = ({
     const [cardText, setCardText] = useState<string>(text);
 
     const [updateCard, { loading: updateCardLoading }] = useMutation(UPDATE_CARD, {
-        refetchQueries: ['getBoard'],
+        refetchQueries: ['GetBoard'],
         context: {
             headers: token
                 ? {
@@ -111,11 +111,14 @@ const Card = ({
         },
     });
 
+    console.log('grouped');
+    console.log(grouped);
+
     const [deleteCard, { loading: deleteCardLoading }] = useMutation(DELETE_CARD, {
         variables: {
             id: cardId,
         },
-        refetchQueries: ['getBoard'],
+        refetchQueries: ['GetBoard'],
         context: {
             headers: token
                 ? {
@@ -140,8 +143,6 @@ const Card = ({
     const onCancel = () => {
         setEditingCard(false);
     };
-
-    // const cardType = grouped ? 'cardGroup' : 'cardBase';
 
     return (
         <MuiCard sx={styles.cardBase} style={transformStyle} {...listeners} {...attributes}>

@@ -45,7 +45,7 @@ export const GET_USER_BOARDS = gql`
 `;
 
 export const GET_BOARD = gql`
-    query getBoard($id: Int!) {
+    query GetBoard($id: Int!) {
         getBoard(id: $id) {
             id
             name
@@ -70,7 +70,7 @@ export const GET_BOARD = gql`
 `;
 
 export const CREATE_BOARD = gql`
-    mutation createBoard($name: String!, $columns: [ColumnInput!]!) {
+    mutation createBoard($name: String!, $columns: [ColumnPresetTypeInput!]!) {
         createBoard(name: $name, columns: $columns) {
             id
             name

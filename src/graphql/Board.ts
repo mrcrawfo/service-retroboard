@@ -1,10 +1,11 @@
-import { extendType, intArg, nonNull, objectType, stringArg } from 'nexus';
+import { arg, extendType, intArg, list, nonNull, objectType, stringArg } from 'nexus';
 
 import { Board } from '../entities/Board.js';
 import { BoardColumn } from '../entities/BoardColumn.js';
 import { Card } from '../entities/Card.js';
 import { User } from '../entities/User.js';
 import { Context } from '../types/Context.js';
+import { ColumnPresetTypeInput } from './ColumnPreset.js';
 
 export const BoardType = objectType({
     name: 'Board',
@@ -88,8 +89,9 @@ export const BoardMutation = extendType({
             type: 'Board',
             args: {
                 name: nonNull(stringArg()),
+                columns: nonNull(list(arg({ type: ColumnPresetTypeInput }))),
             },
-            resolve(_parent, args, context: Context, _info): Promise<Board> {
+            async resolve(_parent, args, context: Context, _info): Promise<Board> {
                 const { name } = args;
                 const { userId } = context;
 
@@ -97,7 +99,24 @@ export const BoardMutation = extendType({
                     throw new Error("Can't create board without logging in");
                 }
 
-                return Board.create({ name, cards: [], columns: [], creatorId: userId }).save();
+                const board: Board = await Board.create({ name, cards: [], columns: [], creatorId: userId }).save();
+
+                const columns: BoardColumn[] = [];
+                for (let i = 0; i < args.columns.length; i++) {
+                    const column: BoardColumn = args.columns[i];
+                    const newColumn = await BoardColumn.create({
+                        name: column.name,
+                        boardId: board.id,
+                        creatorId: userId,
+                        color: column.color,
+                        slot: i + 1,
+                    }).save();
+                    columns.push(newColumn);
+                }
+
+                board.columns = columns;
+
+                return Board.save(board);
             },
         });
         t.nonNull.field('updateBoardName', {

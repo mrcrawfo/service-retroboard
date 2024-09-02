@@ -8,7 +8,7 @@ import { Card as CardType } from '../../../entities/Card.js';
 import BoardColumn from '../organisms/BoardColumn.jsx';
 import EditableBoardName from '../molecules/EditableBoardName.jsx';
 import { GET_BOARD } from '../../graph/board/queries.js';
-import { PAGE_HEADER_HEIGHT, SITE_HEADER_HEIGHT } from '../../helpers/constants.js';
+// import { PAGE_HEADER_HEIGHT, SITE_HEADER_HEIGHT } from '../../helpers/constants.js';
 import { InteractivePointer } from '../../helpers/sensors/InteractivePointer.js';
 import { getThemeColor } from '../../helpers/theme.js';
 import { useAuthStoreToken } from '../../store/AuthStore.js';
@@ -61,7 +61,7 @@ const BoardPage = ({ boardId }: BoardPageProps) => {
                   }
                 : {},
         },
-        refetchQueries: ['getBoard'],
+        refetchQueries: ['GetBoard'],
     });
 
     const [groupCard, { loading: groupCardLoading }] = useMutation(GROUP_CARD, {
@@ -72,7 +72,7 @@ const BoardPage = ({ boardId }: BoardPageProps) => {
                   }
                 : {},
         },
-        refetchQueries: ['getBoard'],
+        refetchQueries: ['GetBoard'],
     });
 
     useMemo(() => {

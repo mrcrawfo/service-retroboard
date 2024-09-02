@@ -14,6 +14,10 @@ declare global {
 }
 
 export interface NexusGenInputs {
+  ColumnPresetTypeInput: { // input type
+    color: string; // String!
+    name: string; // String!
+  }
 }
 
 export interface NexusGenEnums {
@@ -48,6 +52,13 @@ export interface NexusGenObjects {
     name: string; // String!
     slot: number; // Int!
   }
+  BoardPreset: { // root type
+    description: string; // String!
+    id: number; // Int!
+    name: string; // String!
+    type: string; // String!
+    votes: number; // Int!
+  }
   Card: { // root type
     boardId: number; // Int!
     columnId: number; // Int!
@@ -58,6 +69,12 @@ export interface NexusGenObjects {
   CardDeleteResponse: { // root type
     message?: string | null; // String
     success: boolean; // Boolean!
+  }
+  ColumnPreset: { // root type
+    boardId: number; // Int!
+    color: string; // String!
+    id: number; // Int!
+    name: string; // String!
   }
   GroupCardResponse: { // root type
     message?: string | null; // String
@@ -122,6 +139,15 @@ export interface NexusGenFieldTypes {
     name: string; // String!
     slot: number; // Int!
   }
+  BoardPreset: { // field return type
+    columnIds: Array<number | null>; // [Int]!
+    columns: Array<NexusGenRootTypes['ColumnPreset'] | null>; // [ColumnPreset]!
+    description: string; // String!
+    id: number; // Int!
+    name: string; // String!
+    type: string; // String!
+    votes: number; // Int!
+  }
   Card: { // field return type
     board: NexusGenRootTypes['Board'] | null; // Board
     boardId: number; // Int!
@@ -138,6 +164,13 @@ export interface NexusGenFieldTypes {
     message: string | null; // String
     success: boolean; // Boolean!
   }
+  ColumnPreset: { // field return type
+    board: NexusGenRootTypes['BoardPreset']; // BoardPreset!
+    boardId: number; // Int!
+    color: string; // String!
+    id: number; // Int!
+    name: string; // String!
+  }
   GroupCardResponse: { // field return type
     message: string | null; // String
     success: boolean; // Boolean!
@@ -149,8 +182,10 @@ export interface NexusGenFieldTypes {
   Mutation: { // field return type
     addVoteToCard: NexusGenRootTypes['Vote']; // Vote!
     createBoard: NexusGenRootTypes['Board']; // Board!
+    createBoardPreset: NexusGenRootTypes['BoardPreset']; // BoardPreset!
     createCard: NexusGenRootTypes['Card']; // Card!
     createColumn: NexusGenRootTypes['BoardColumn']; // BoardColumn!
+    createColumnPreset: NexusGenRootTypes['ColumnPreset']; // ColumnPreset!
     deleteCard: NexusGenRootTypes['CardDeleteResponse']; // CardDeleteResponse!
     groupCard: NexusGenRootTypes['GroupCardResponse']; // GroupCardResponse!
     login: NexusGenRootTypes['AuthType']; // AuthType!
@@ -162,11 +197,13 @@ export interface NexusGenFieldTypes {
   }
   Query: { // field return type
     getBoard: NexusGenRootTypes['Board'] | null; // Board
+    getBoardPresets: Array<NexusGenRootTypes['BoardPreset'] | null>; // [BoardPreset]!
     getBoards: Array<NexusGenRootTypes['Board'] | null>; // [Board]!
     getBoardsByUserId: Array<NexusGenRootTypes['Board'] | null>; // [Board]!
     getCard: NexusGenRootTypes['Card'] | null; // Card
     getCardsByBoardId: NexusGenRootTypes['Card'][]; // [Card!]!
     getColumn: NexusGenRootTypes['BoardColumn'] | null; // BoardColumn
+    getColumnPresets: Array<NexusGenRootTypes['ColumnPreset'] | null>; // [ColumnPreset]!
     getColumnsByBoardId: NexusGenRootTypes['BoardColumn'][]; // [BoardColumn!]!
     getUser: NexusGenRootTypes['User'] | null; // User
     getUsers: Array<NexusGenRootTypes['User'] | null>; // [User]!
@@ -219,6 +256,15 @@ export interface NexusGenFieldTypeNames {
     name: 'String'
     slot: 'Int'
   }
+  BoardPreset: { // field return type name
+    columnIds: 'Int'
+    columns: 'ColumnPreset'
+    description: 'String'
+    id: 'Int'
+    name: 'String'
+    type: 'String'
+    votes: 'Int'
+  }
   Card: { // field return type name
     board: 'Board'
     boardId: 'Int'
@@ -235,6 +281,13 @@ export interface NexusGenFieldTypeNames {
     message: 'String'
     success: 'Boolean'
   }
+  ColumnPreset: { // field return type name
+    board: 'BoardPreset'
+    boardId: 'Int'
+    color: 'String'
+    id: 'Int'
+    name: 'String'
+  }
   GroupCardResponse: { // field return type name
     message: 'String'
     success: 'Boolean'
@@ -246,8 +299,10 @@ export interface NexusGenFieldTypeNames {
   Mutation: { // field return type name
     addVoteToCard: 'Vote'
     createBoard: 'Board'
+    createBoardPreset: 'BoardPreset'
     createCard: 'Card'
     createColumn: 'BoardColumn'
+    createColumnPreset: 'ColumnPreset'
     deleteCard: 'CardDeleteResponse'
     groupCard: 'GroupCardResponse'
     login: 'AuthType'
@@ -259,11 +314,13 @@ export interface NexusGenFieldTypeNames {
   }
   Query: { // field return type name
     getBoard: 'Board'
+    getBoardPresets: 'BoardPreset'
     getBoards: 'Board'
     getBoardsByUserId: 'Board'
     getCard: 'Card'
     getCardsByBoardId: 'Card'
     getColumn: 'BoardColumn'
+    getColumnPresets: 'ColumnPreset'
     getColumnsByBoardId: 'BoardColumn'
     getUser: 'User'
     getUsers: 'User'
@@ -297,6 +354,11 @@ export interface NexusGenArgTypes {
       userId: number; // Int!
     }
     createBoard: { // args
+      columns: Array<NexusGenInputs['ColumnPresetTypeInput'] | null>; // [ColumnPresetTypeInput]!
+      name: string; // String!
+    }
+    createBoardPreset: { // args
+      description: string; // String!
       name: string; // String!
     }
     createCard: { // args
@@ -308,6 +370,10 @@ export interface NexusGenArgTypes {
       boardId: number; // Int!
       name: string; // String!
       slot: number; // Int!
+    }
+    createColumnPreset: { // args
+      color: string; // String!
+      name: string; // String!
     }
     deleteCard: { // args
       id: number; // Int!
@@ -381,7 +447,7 @@ export interface NexusGenTypeInterfaces {
 
 export type NexusGenObjectNames = keyof NexusGenObjects;
 
-export type NexusGenInputNames = never;
+export type NexusGenInputNames = keyof NexusGenInputs;
 
 export type NexusGenEnumNames = keyof NexusGenEnums;
 
