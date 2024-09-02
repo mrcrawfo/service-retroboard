@@ -1,18 +1,21 @@
+import { useMemo } from 'react';
 import { Button, Stack, Typography } from '@mui/material';
 import { lightBlue } from '@mui/material/colors';
 
 import { getThemeColor } from '../../helpers/theme.js';
 import BoardThumbnailColumn from '../atoms/BoardThumbnailColumn.jsx';
-import { BoardPreset } from '../../../entities/BoardPreset.js';
+import { BoardPreset as BoardPresetType } from '../../../entities/BoardPreset.js';
+import { ColumnPreset as ColumnPresetType } from '../../../entities/ColumnPreset.js';
 import KeyValueTypography from '../atoms/KeyValueTypography.jsx';
 
 export interface BoardThumbnailProps {
-    boardPreset: BoardPreset;
+    boardPreset: BoardPresetType;
     selected: boolean;
-    setSelectedBoardPreset: (boardPreset: BoardPreset) => void;
+    setSelectedBoardPreset: (boardPreset: BoardPresetType) => void;
+    disabled?: boolean;
 }
 
-const BoardThumbnail = ({ boardPreset, selected, setSelectedBoardPreset }: BoardThumbnailProps) => {
+const BoardThumbnail = ({ boardPreset, selected, setSelectedBoardPreset, disabled = false }: BoardThumbnailProps) => {
     const styles = {
         button: {
             '&.MuiButton-contained': {
@@ -24,15 +27,22 @@ const BoardThumbnail = ({ boardPreset, selected, setSelectedBoardPreset }: Board
             justifyContent: 'left',
         },
     };
+
+    const orderedColumns: ColumnPresetType[] = useMemo(() => {
+        const columns = [...boardPreset.columns];
+        return columns.sort((a, b) => a.id - b.id);
+    }, [boardPreset]);
+
     return (
         <Button
             variant={selected ? 'contained' : 'outlined'}
             color='info'
             sx={styles.button}
             onClick={() => setSelectedBoardPreset(boardPreset)}
+            disabled={disabled}
         >
             <div style={{ minWidth: '120px', width: '120px', display: 'flex', flexDirection: 'row' }}>
-                {boardPreset.columns.map((column, index) => (
+                {orderedColumns?.map((column, index) => (
                     <BoardThumbnailColumn key={index} themeColor={getThemeColor(column.color)} />
                 ))}
             </div>

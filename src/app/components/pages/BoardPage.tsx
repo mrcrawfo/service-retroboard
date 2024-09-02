@@ -61,7 +61,7 @@ const BoardPage = ({ boardId }: BoardPageProps) => {
                   }
                 : {},
         },
-        refetchQueries: ['getBoard'],
+        refetchQueries: ['GetBoard'],
     });
 
     const [groupCard, { loading: groupCardLoading }] = useMutation(GROUP_CARD, {
@@ -72,7 +72,7 @@ const BoardPage = ({ boardId }: BoardPageProps) => {
                   }
                 : {},
         },
-        refetchQueries: ['getBoard'],
+        refetchQueries: ['GetBoard'],
     });
 
     useMemo(() => {

@@ -60,7 +60,7 @@ const EditableBoardName = ({
                   }
                 : {},
         },
-        refetchQueries: ['getBoard'],
+        refetchQueries: ['GetBoard'],
     });
 
     const onSave = () => {

@@ -14,6 +14,10 @@ declare global {
 }
 
 export interface NexusGenInputs {
+  ColumnPresetTypeInput: { // input type
+    color: string; // String!
+    name: string; // String!
+  }
 }
 
 export interface NexusGenEnums {
@@ -350,6 +354,7 @@ export interface NexusGenArgTypes {
       userId: number; // Int!
     }
     createBoard: { // args
+      columns: Array<NexusGenInputs['ColumnPresetTypeInput'] | null>; // [ColumnPresetTypeInput]!
       name: string; // String!
     }
     createBoardPreset: { // args
@@ -442,7 +447,7 @@ export interface NexusGenTypeInterfaces {
 
 export type NexusGenObjectNames = keyof NexusGenObjects;
 
-export type NexusGenInputNames = never;
+export type NexusGenInputNames = keyof NexusGenInputs;
 
 export type NexusGenEnumNames = keyof NexusGenEnums;
 

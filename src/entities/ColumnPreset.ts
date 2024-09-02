@@ -13,6 +13,8 @@ import { BoardPreset } from './BoardPreset.js';
 
 @Entity()
 export class ColumnPreset extends BaseEntity {
+    __typename: 'ColumnPreset';
+
     @PrimaryGeneratedColumn()
     id!: number;
 

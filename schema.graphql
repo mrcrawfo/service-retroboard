@@ -67,6 +67,11 @@ type ColumnPreset {
   name: String!
 }
 
+input ColumnPresetTypeInput {
+  color: String!
+  name: String!
+}
+
 type GroupCardResponse {
   message: String
   success: Boolean!
@@ -79,7 +84,7 @@ type MoveCardResponse {
 
 type Mutation {
   addVoteToCard(boardId: Int!, cardId: Int!, userId: Int!): Vote!
-  createBoard(name: String!): Board!
+  createBoard(columns: [ColumnPresetTypeInput]!, name: String!): Board!
   createBoardPreset(description: String!, name: String!): BoardPreset!
   createCard(boardId: Int!, columnId: Int!, text: String!): Card!
   createColumn(boardId: Int!, name: String!, slot: Int!): BoardColumn!

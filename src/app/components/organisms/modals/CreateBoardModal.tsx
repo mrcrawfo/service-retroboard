@@ -92,10 +92,6 @@ const CreateBoardModal = ({ open, handleCloseModal, ...dialogProps }: CreateBoar
     const boardNameInputRef = useRef<HTMLInputElement>(null);
 
     const [createBoard, { loading: createBoardLoading }] = useMutation(CREATE_BOARD, {
-        variables: {
-            // columns: selectedBoardPreset.columns,
-            // name: boardNameInputRef.current?.value,
-        },
         context: {
             headers: token
                 ? {
@@ -103,6 +99,7 @@ const CreateBoardModal = ({ open, handleCloseModal, ...dialogProps }: CreateBoar
                   }
                 : {},
         },
+        refetchQueries: ['GetBoardsByUserId'],
     });
 
     const handleGroupedBoardChange = (_event: SyntheticEvent, newValue: string) => {
@@ -113,13 +110,21 @@ const CreateBoardModal = ({ open, handleCloseModal, ...dialogProps }: CreateBoar
     };
 
     const onCreateBoard = () => {
-        createBoard().then(() => {
+        createBoard({
+            variables: {
+                name: boardNameInputRef.current?.value,
+                columns: selectedBoardPreset.columns.map((column) => {
+                    const { __typename, id, ...rest } = column;
+                    return rest;
+                }),
+            },
+        }).then(() => {
             handleCloseModal();
         });
     };
 
     return (
-        <Dialog open={open} onClose={handleCloseModal} maxWidth='md' fullWidth {...dialogProps}>
+        <Dialog open={open} onClose={handleCloseModal} maxWidth='lg' fullWidth {...dialogProps}>
             <DialogTitle sx={{ lineHeight: 1, mb: 1 }}>Create New Board</DialogTitle>
             <DialogContent>
                 <OutlinedInput
@@ -134,7 +139,7 @@ const CreateBoardModal = ({ open, handleCloseModal, ...dialogProps }: CreateBoar
                 />
                 {groupedBoardPresets?.length > 0 && selectedBoardType && selectedBoardPreset && (
                     <>
-                        <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
+                        <Box sx={{ borderBottom: 1, borderColor: 'divider', marginBottom: '8px' }}>
                             <Tabs value={selectedBoardType} onChange={handleGroupedBoardChange}>
                                 {groupedBoardPresets.map((groupedBoard: GroupedBoardType) => (
                                     <Tab
@@ -152,6 +157,7 @@ const CreateBoardModal = ({ open, handleCloseModal, ...dialogProps }: CreateBoar
                                     boardPreset={boardPreset}
                                     selected={boardPreset.id === selectedBoardPreset.id}
                                     setSelectedBoardPreset={setSelectedBoardPreset}
+                                    disabled={createBoardLoading}
                                 />
                             ))}
                         </Stack>
@@ -165,7 +171,7 @@ const CreateBoardModal = ({ open, handleCloseModal, ...dialogProps }: CreateBoar
                 <Button
                     variant='contained'
                     onClick={onCreateBoard}
-                    disabled={!selectedBoardPreset || boardNameInputRef?.current?.value === '' || createBoardLoading}
+                    disabled={!selectedBoardPreset || boardNameInputRef.current?.value === '' || createBoardLoading}
                 >
                     Create Board
                 </Button>

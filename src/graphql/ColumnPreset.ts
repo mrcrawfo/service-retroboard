@@ -1,8 +1,18 @@
-import { extendType, nonNull, objectType, stringArg } from 'nexus';
+import { extendType, inputObjectType, nonNull, objectType, stringArg } from 'nexus';
 
 import { BoardPreset } from '../entities/BoardPreset.js';
 import { ColumnPreset } from '../entities/ColumnPreset.js';
 import { Context } from '../types/Context.js';
+
+export const ColumnPresetTypeInput = inputObjectType({
+    name: 'ColumnPresetTypeInput',
+    definition(t: any): any {
+        // t.nonNull.int('id');
+        t.nonNull.string('name');
+        t.nonNull.string('color');
+        // t.nonNull.int('boardId');
+    },
+});
 
 export const ColumnPresetType = objectType({
     name: 'ColumnPreset',

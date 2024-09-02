@@ -101,7 +101,7 @@ const Card = ({
     const [cardText, setCardText] = useState<string>(text);
 
     const [updateCard, { loading: updateCardLoading }] = useMutation(UPDATE_CARD, {
-        refetchQueries: ['getBoard'],
+        refetchQueries: ['GetBoard'],
         context: {
             headers: token
                 ? {
@@ -118,7 +118,7 @@ const Card = ({
         variables: {
             id: cardId,
         },
-        refetchQueries: ['getBoard'],
+        refetchQueries: ['GetBoard'],
         context: {
             headers: token
                 ? {
