@@ -139,7 +139,7 @@ const CreateBoardModal = ({ open, handleCloseModal, ...dialogProps }: CreateBoar
                                 {groupedBoardPresets.map((groupedBoard: GroupedBoardType) => (
                                     <Tab
                                         key={groupedBoard.boardType}
-                                        label={groupedBoard.boardType}
+                                        label={`${groupedBoard.boardType} (${groupedBoard.boardPresets.length})`}
                                         value={groupedBoard.boardType}
                                     />
                                 ))}
@@ -148,6 +148,7 @@ const CreateBoardModal = ({ open, handleCloseModal, ...dialogProps }: CreateBoar
                         <Stack direction='column' spacing={0} sx={styles.presetsContainer}>
                             {selectedGroupedBoardPresets.map((boardPreset: BoardPresetType) => (
                                 <BoardThumbnnail
+                                    key={boardPreset.id}
                                     boardPreset={boardPreset}
                                     selected={boardPreset.id === selectedBoardPreset.id}
                                     setSelectedBoardPreset={setSelectedBoardPreset}

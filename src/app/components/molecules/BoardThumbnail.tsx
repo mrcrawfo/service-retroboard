@@ -39,7 +39,6 @@ const BoardThumbnail = ({ boardPreset, selected, setSelectedBoardPreset }: Board
             <Stack direction='column' spacing={0} sx={styles.textContainer}>
                 <Typography variant='h6'>{boardPreset.name}</Typography>
                 <KeyValueTypography selected={selected} keyText='Description' valueText={boardPreset.description} />
-                <KeyValueTypography selected={selected} keyText='Votes' valueText={boardPreset.votes.toString()} />
             </Stack>
         </Button>
     );
