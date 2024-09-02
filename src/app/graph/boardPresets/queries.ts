@@ -13,5 +13,6 @@ query GetBoardPresets {
         id
         name
         type
+        votes
     }
 }`;

@@ -11,6 +11,7 @@ export const BoardPresetType = objectType({
         t.nonNull.string('name');
         t.nonNull.string('description');
         t.nonNull.string('type');
+        t.nonNull.int('votes');
         t.nonNull.list.int('columnIds', {
             resolve(parent, _args, _context, _info): Promise<number[]> {
                 return ColumnPreset.find({ where: { boardId: parent.id } }).then((cards) =>

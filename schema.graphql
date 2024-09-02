@@ -38,6 +38,7 @@ type BoardPreset {
   id: Int!
   name: String!
   type: String!
+  votes: Int!
 }
 
 type Card {

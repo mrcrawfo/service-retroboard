@@ -53,6 +53,7 @@ export interface NexusGenObjects {
     id: number; // Int!
     name: string; // String!
     type: string; // String!
+    votes: number; // Int!
   }
   Card: { // root type
     boardId: number; // Int!
@@ -141,6 +142,7 @@ export interface NexusGenFieldTypes {
     id: number; // Int!
     name: string; // String!
     type: string; // String!
+    votes: number; // Int!
   }
   Card: { // field return type
     board: NexusGenRootTypes['Board'] | null; // Board
@@ -257,6 +259,7 @@ export interface NexusGenFieldTypeNames {
     id: 'Int'
     name: 'String'
     type: 'String'
+    votes: 'Int'
   }
   Card: { // field return type name
     board: 'Board'

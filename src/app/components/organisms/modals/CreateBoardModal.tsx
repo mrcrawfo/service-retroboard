@@ -7,8 +7,8 @@ import {
     DialogContent,
     DialogProps,
     DialogTitle,
-    Grid,
     OutlinedInput,
+    Stack,
     Tab,
     Tabs,
 } from '@mui/material';
@@ -43,6 +43,11 @@ const CreateBoardModal = ({ open, handleCloseModal, ...dialogProps }: CreateBoar
             color: '#000',
             marginBottom: '12px',
         },
+        presetsContainer: {
+            maxHeight: '40vh',
+            minHeight: '40vh',
+            overflowY: 'scroll',
+        },
     };
 
     const token = useAuthStoreToken();
@@ -63,8 +68,6 @@ const CreateBoardModal = ({ open, handleCloseModal, ...dialogProps }: CreateBoar
         const allBoardTypes: string[] = allBoardPresets.map((boardPreset: BoardPresetType) => boardPreset.type);
         const uniqueBoardTypes: string[] = [...new Set(allBoardTypes)];
         for (const boardType of uniqueBoardTypes) {
-            console.log('boardType');
-            console.log(boardType);
             data.push({
                 boardType,
                 boardPresets: allBoardPresets.filter((boardPreset: BoardPresetType) => boardPreset.type === boardType),
@@ -80,9 +83,6 @@ const CreateBoardModal = ({ open, handleCloseModal, ...dialogProps }: CreateBoar
             setSelectedGroupedBoardPresets(groupedBoardPresets[0].boardPresets);
         }
     }, [groupedBoardPresets]);
-
-    console.log('groupedBoardPresets');
-    console.log(groupedBoardPresets);
 
     const [selectedBoardType, setSelectedBoardType] = useState<string>();
     const [selectedBoardPreset, setSelectedBoardPreset] = useState<BoardPresetType>();
@@ -120,12 +120,12 @@ const CreateBoardModal = ({ open, handleCloseModal, ...dialogProps }: CreateBoar
 
     return (
         <Dialog open={open} onClose={handleCloseModal} maxWidth='md' fullWidth {...dialogProps}>
-            <DialogTitle sx={{ lineHeight: 1, mb: 3 }}>Create New Board</DialogTitle>
+            <DialogTitle sx={{ lineHeight: 1, mb: 1 }}>Create New Board</DialogTitle>
             <DialogContent>
                 <OutlinedInput
                     sx={styles.inputText}
                     value={boardName}
-                    ref={boardNameInputRef}
+                    inputRef={boardNameInputRef}
                     onFocus={(e) =>
                         e.currentTarget.setSelectionRange(e.currentTarget.value.length, e.currentTarget.value.length)
                     }
@@ -145,17 +145,15 @@ const CreateBoardModal = ({ open, handleCloseModal, ...dialogProps }: CreateBoar
                                 ))}
                             </Tabs>
                         </Box>
-                        <Grid container spacing={2}>
+                        <Stack direction='column' spacing={0} sx={styles.presetsContainer}>
                             {selectedGroupedBoardPresets.map((boardPreset: BoardPresetType) => (
-                                <Grid key={boardPreset.id} item xs={3}>
-                                    <BoardThumbnnail
-                                        boardPreset={boardPreset}
-                                        selected={boardPreset.id === selectedBoardPreset.id}
-                                        setSelectedBoardPreset={setSelectedBoardPreset}
-                                    />
-                                </Grid>
+                                <BoardThumbnnail
+                                    boardPreset={boardPreset}
+                                    selected={boardPreset.id === selectedBoardPreset.id}
+                                    setSelectedBoardPreset={setSelectedBoardPreset}
+                                />
                             ))}
-                        </Grid>
+                        </Stack>
                     </>
                 )}
             </DialogContent>
@@ -166,7 +164,7 @@ const CreateBoardModal = ({ open, handleCloseModal, ...dialogProps }: CreateBoar
                 <Button
                     variant='contained'
                     onClick={onCreateBoard}
-                    disabled={!selectedBoardPreset || createBoardLoading}
+                    disabled={!selectedBoardPreset || boardNameInputRef?.current?.value === '' || createBoardLoading}
                 >
                     Create Board
                 </Button>
