@@ -7,6 +7,7 @@
         "esModuleInterop": true,
         "forceConsistentCasingInFileNames": true,
         "isolatedModules": false,
+        "strict": true,
         "lib": ["DOM", "DOM.Iterable", "ES2022", "esnext.asynciterable"],
         "module": "NodeNext",
         "moduleResolution": "nodenext",

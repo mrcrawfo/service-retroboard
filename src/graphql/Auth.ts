@@ -154,7 +154,7 @@ export const AuthMutation = extendType({
                 } catch (err) {
                     return {
                         success: false,
-                        message: err,
+                        message: err.toString(),
                     };
                 }
 

@@ -25,6 +25,7 @@
         "@emotion/react": "^11.13.0",
         "@emotion/styled": "^11.13.0",
         "@fontsource/roboto": "^5.0.13",
+        "@hookform/resolvers": "^3.9.0",
         "@mui/icons-material": "^5.16.6",
         "@mui/joy": "^5.0.0-beta.48",
         "@mui/lab": "^5.0.0-alpha.173",
@@ -40,10 +41,12 @@
         "pg": "^8.12.0",
         "react": "^18.3.1",
         "react-dom": "^18.3.1",
+        "react-hook-form": "^7.53.0",
         "tsconfig.json": "^1.0.11",
         "typeorm": "^0.3.20",
         "typescript": "^5.5.3",
         "vite": "^5.3.5",
+        "zod": "^3.23.8",
         "zustand": "^4.5.5"
     },
     "devDependencies": {
@@ -59,6 +62,8 @@
         "lint-staged": "15.2.9"
     },
     "lint-staged": {
-        "*.{js,jsx,ts,tsx,json,md}": ["biome format . --write"]
+        "*.{js,jsx,ts,tsx,json,md}": [
+            "biome format . --write"
+        ]
     }
 }
