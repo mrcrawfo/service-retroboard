@@ -89,7 +89,7 @@ export const BoardColumnQuery = extendType({
 export const BoardColumnMutation = extendType({
     type: 'Mutation',
     definition(t) {
-        t.nonNull.field('createColumn', {
+        t.nonNull.field('createBoardColumn', {
             type: 'BoardColumn',
             args: {
                 name: nonNull(stringArg()),
@@ -105,6 +105,35 @@ export const BoardColumnMutation = extendType({
                 }
 
                 return BoardColumn.create({ name, boardId, creatorId: userId }).save();
+            },
+        });
+        t.nonNull.field('updateBoardColumnName', {
+            type: 'BoardColumn',
+            args: {
+                id: nonNull(intArg()),
+                name: nonNull(stringArg()),
+            },
+            async resolve(_parent, args, context: Context, _info): Promise<BoardColumn> {
+                const { id, name } = args;
+                const { userId } = context;
+
+                if (!userId) {
+                    throw new Error("Can't rename column without logging in");
+                }
+
+                const board: BoardColumn = await BoardColumn.findOne({ where: { id } });
+
+                if (!board) {
+                    throw new Error("Can't update board that doesn't exist");
+                }
+
+                if (board.creatorId !== userId) {
+                    throw new Error("Can't update board that isn't yours");
+                }
+
+                board.name = name;
+
+                return await BoardColumn.save(board);
             },
         });
         // TODO: updateColumn (?)

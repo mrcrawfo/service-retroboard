@@ -180,9 +180,9 @@ export interface NexusGenFieldTypes {
   Mutation: { // field return type
     addVoteToCard: NexusGenRootTypes['Vote']; // Vote!
     createBoard: NexusGenRootTypes['Board']; // Board!
+    createBoardColumn: NexusGenRootTypes['BoardColumn']; // BoardColumn!
     createBoardPreset: NexusGenRootTypes['BoardPreset']; // BoardPreset!
     createCard: NexusGenRootTypes['Card']; // Card!
-    createColumn: NexusGenRootTypes['BoardColumn']; // BoardColumn!
     createColumnPreset: NexusGenRootTypes['ColumnPreset']; // ColumnPreset!
     deleteCard: NexusGenRootTypes['CardDeleteResponse']; // CardDeleteResponse!
     groupCard: NexusGenRootTypes['GroupCardResponse']; // GroupCardResponse!
@@ -190,6 +190,7 @@ export interface NexusGenFieldTypes {
     moveCard: NexusGenRootTypes['MoveCardResponse']; // MoveCardResponse!
     register: NexusGenRootTypes['AuthType']; // AuthType!
     subtractVoteFromCard: NexusGenRootTypes['Vote'] | null; // Vote
+    updateBoardColumnName: NexusGenRootTypes['BoardColumn']; // BoardColumn!
     updateBoardName: NexusGenRootTypes['Board']; // Board!
     updateCard: NexusGenRootTypes['Card']; // Card!
   }
@@ -295,9 +296,9 @@ export interface NexusGenFieldTypeNames {
   Mutation: { // field return type name
     addVoteToCard: 'Vote'
     createBoard: 'Board'
+    createBoardColumn: 'BoardColumn'
     createBoardPreset: 'BoardPreset'
     createCard: 'Card'
-    createColumn: 'BoardColumn'
     createColumnPreset: 'ColumnPreset'
     deleteCard: 'CardDeleteResponse'
     groupCard: 'GroupCardResponse'
@@ -305,6 +306,7 @@ export interface NexusGenFieldTypeNames {
     moveCard: 'MoveCardResponse'
     register: 'AuthType'
     subtractVoteFromCard: 'Vote'
+    updateBoardColumnName: 'BoardColumn'
     updateBoardName: 'Board'
     updateCard: 'Card'
   }
@@ -351,6 +353,11 @@ export interface NexusGenArgTypes {
       columns: Array<NexusGenInputs['ColumnPresetTypeInput'] | null>; // [ColumnPresetTypeInput]!
       name: string; // String!
     }
+    createBoardColumn: { // args
+      boardId: number; // Int!
+      name: string; // String!
+      slot: number; // Int!
+    }
     createBoardPreset: { // args
       description: string; // String!
       name: string; // String!
@@ -359,11 +366,6 @@ export interface NexusGenArgTypes {
       boardId: number; // Int!
       columnId: number; // Int!
       text: string; // String!
-    }
-    createColumn: { // args
-      boardId: number; // Int!
-      name: string; // String!
-      slot: number; // Int!
     }
     createColumnPreset: { // args
       color: string; // String!
@@ -396,6 +398,10 @@ export interface NexusGenArgTypes {
       boardId: number; // Int!
       cardId: number; // Int!
       userId: number; // Int!
+    }
+    updateBoardColumnName: { // args
+      id: number; // Int!
+      name: string; // String!
     }
     updateBoardName: { // args
       id: number; // Int!

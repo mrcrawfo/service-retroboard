@@ -7,6 +7,7 @@ import AddCardButton from '../atoms/AddCardButton.jsx';
 import CardGroup from '../molecules/CardGroup.jsx';
 import NewCard from './NewCard.jsx';
 import { ThemeColor } from '../../helpers/theme.js';
+import EditableBoardColumnName from '../molecules/EditableBoardColumnName.jsx';
 
 export interface BoardColumnProps extends GridProps {
     boardId: number;
@@ -60,15 +61,6 @@ const BoardColumn = ({
             height: 'calc(100vh - 300px)', // TODO: Calculate this better (app header + page header + column header + AddCard)
             display: 'block',
         },
-        h2: {
-            height: '2.25em',
-            overflow: 'hidden',
-            textOverflow: 'ellipsis',
-            display: '-webkit-box',
-            lineClamp: 2,
-            WebkitLineClamp: 2,
-            WebkitBoxOrient: 'vertical',
-        },
     };
 
     const [addingCard, setAddingCard] = useState<boolean>(false);
@@ -104,7 +96,12 @@ const BoardColumn = ({
             sx={styles.grid}
             {...gridProps}
         >
-            <h2 style={styles.h2}>{columnName}</h2>
+            <EditableBoardColumnName
+                boardColumnId={columnId}
+                boardColumnName={columnName}
+                editingCard={editingCard}
+                setEditingCard={setEditingCard}
+            />
             <AddCardButton onClick={addCardToColumn} disabled={addingCard || editingCard} themeColor={themeColor} />
             {cards.length || addingCard ? (
                 <Stack direction='column' spacing={1} sx={styles.stack}>

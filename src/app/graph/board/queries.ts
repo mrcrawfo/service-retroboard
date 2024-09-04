@@ -23,7 +23,6 @@ export const GET_USER_BOARDS = gql`
                     }
                     groupedCardIds
                 }
-                
             }
             cards {
                 columnId
