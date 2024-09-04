@@ -66,9 +66,6 @@ const RegisterPage = ({}: RegisterPageProps) => {
                 });
             }
 
-            console.log('response');
-            console.log(response);
-
             if (response.data?.register) {
                 const user = {
                     id: response.data.register.user.id,
