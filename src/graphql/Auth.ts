@@ -43,19 +43,13 @@ export const AuthQuery = extendType({
                 }
 
                 if (!userId) {
-                    return {
-                        success: false,
-                        message: 'Incorrect username or password',
-                    };
+                    throw new Error('Incorrect username or password');
                 }
 
                 const user = await User.findOne({ where: { id: userId } });
 
                 if (!user) {
-                    return {
-                        success: false,
-                        message: 'Incorrect username or password',
-                    };
+                    throw new Error('Incorrect username or password');
                 }
 
                 return {
@@ -86,19 +80,13 @@ export const AuthMutation = extendType({
                 const user = await User.findOne({ where: { username } });
 
                 if (!user) {
-                    return {
-                        success: false,
-                        message: 'Incorrect username or password',
-                    };
+                    throw new Error('Incorrect username or password');
                 }
 
                 const isValid = await argon2.verify(user.password, password);
 
                 if (!isValid) {
-                    return {
-                        success: false,
-                        message: 'Incorrect username or password',
-                    };
+                    throw new Error('Incorrect username or password');
                 }
 
                 const token =
@@ -121,8 +109,6 @@ export const AuthMutation = extendType({
             type: 'AuthType',
             args: {
                 username: nonNull(stringArg()),
-                firstName: nonNull(stringArg()),
-                lastName: nonNull(stringArg()),
                 email: nonNull(stringArg()),
                 password: nonNull(stringArg()),
             },
@@ -133,9 +119,20 @@ export const AuthMutation = extendType({
                 _info,
             ): Promise<{ token?: string; user?: User; message?: string; success?: boolean } | null> {
                 const { username, password, email } = args;
-                const hashedPassword = await argon2.hash(password);
                 let user: User;
                 let token: string;
+
+                const existingUsername = await User.findOne({ where: { username } });
+                if (existingUsername) {
+                    throw new Error('Could not register with that username');
+                }
+
+                const existingEmail = await User.findOne({ where: { email } });
+                if (existingEmail) {
+                    throw new Error('Could not register with that email');
+                }
+
+                const hashedPassword = await argon2.hash(password);
 
                 try {
                     const result = await context.conn
@@ -154,7 +151,7 @@ export const AuthMutation = extendType({
                 } catch (err) {
                     return {
                         success: false,
-                        message: err,
+                        message: err.toString(),
                     };
                 }
 

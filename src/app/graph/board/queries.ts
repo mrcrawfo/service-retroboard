@@ -44,6 +44,51 @@ export const GET_USER_BOARDS = gql`
     }
 `;
 
+// TODO: Remove this query for version 2 - Once websockets are implemented boards can be user restricted
+export const GET_ALL_BOARDS = gql`
+    query GetBoards {
+        getBoards {
+            id
+            name
+            columns {
+                id
+                name
+                slot
+                color
+                cards {
+                    id
+                    text
+                    votes {
+                        userId
+                        user {
+                            email
+                            username
+                            id
+                        }
+                    }
+                    groupedCardIds
+                }
+                
+            }
+            cards {
+                columnId
+                id
+                text
+                votes {
+                    id
+                    userId
+                    user {
+                        id
+                        username
+                        email
+                    }
+                }
+                groupedCardIds
+            }
+        }
+    }
+`;
+
 export const GET_BOARD = gql`
     query GetBoard($id: Int!) {
         getBoard(id: $id) {

@@ -4,7 +4,7 @@ import { createLazyFileRoute, Link } from '@tanstack/react-router';
 import { useQuery } from '@apollo/client';
 
 import CreateBoardModal from '../components/organisms/modals/CreateBoardModal.js';
-import { GET_USER_BOARDS } from '../graph/board/queries.js';
+import { GET_ALL_BOARDS } from '../graph/board/queries.js';
 import { useAuthStoreToken } from '../store/AuthStore.js';
 
 export const Route = createLazyFileRoute('/boards')({
@@ -16,7 +16,8 @@ function Boards() {
 
     const token = useAuthStoreToken();
 
-    const { data: boardsData } = useQuery(GET_USER_BOARDS, {
+    // TODO: Replace this query with GET_USER_BOARDS for version 2, or other query for boards with user permissions
+    const { data: boardsData } = useQuery(GET_ALL_BOARDS, {
         context: {
             headers: token
                 ? {
@@ -33,7 +34,7 @@ function Boards() {
             </Button>
             {boardsData && (
                 <ul>
-                    {boardsData.getBoardsByUserId.map((board: any) => (
+                    {boardsData.getBoards.map((board: any) => (
                         <li key={board.id}>
                             <Stack direction='row'>
                                 <Link to={`/board/${board.id}`}>

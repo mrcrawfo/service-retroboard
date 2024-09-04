@@ -93,7 +93,7 @@ type Mutation {
   groupCard(cardId: Int!, fromColumnId: Int!, groupedCardIds: [Int!]!, toColumnId: Int!): GroupCardResponse!
   login(password: String!, username: String!): AuthType!
   moveCard(cardId: Int!, fromColumnId: Int!, toColumnId: Int!): MoveCardResponse!
-  register(email: String!, firstName: String!, lastName: String!, password: String!, username: String!): AuthType!
+  register(email: String!, password: String!, username: String!): AuthType!
   subtractVoteFromCard(boardId: Int!, cardId: Int!, userId: Int!): Vote
   updateBoardName(id: Int!, name: String!): Board!
   updateCard(id: Int!, text: String!): Card!
@@ -128,9 +128,7 @@ type User {
   boards: [Board]
   cards: [Card]
   email: String!
-  firstName: String!
   id: Int!
-  lastName: String!
   password: String
   username: String!
 }

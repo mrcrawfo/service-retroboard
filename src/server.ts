@@ -14,8 +14,12 @@ const init = async () => {
         schema,
         context: async ({ req }): Promise<Context> => {
             // TODO: Validate authorization header (confirm actual token, not 'Authorization null')
-            const token = req?.headers?.authorization ? auth(req.headers.authorization) : null;
-            return { conn, userId: token?.userId, tokenExpired: token?.message === 'jwt expired' };
+            const token = (authorization: string) => (authorization ? auth(authorization) : null);
+            return {
+                conn,
+                userId: token(req?.headers?.authorization)?.userId,
+                tokenExpired: token(req?.headers?.authorization)?.message === 'jwt expired',
+            };
         },
     });
 

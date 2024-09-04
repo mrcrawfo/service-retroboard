@@ -1,5 +1,6 @@
 import { Button, ButtonProps } from '@mui/material';
 import { Link, useNavigate } from '@tanstack/react-router';
+import { useApolloClient } from '@apollo/client';
 
 import { useAuthStoreUser, useAuthStoreActions } from '../../store/AuthStore.js';
 
@@ -17,16 +18,20 @@ const LoginButton = ({ ...buttonProps }: LoginButtonProps) => {
     const { setUser, setToken } = useAuthStoreActions();
     const user = useAuthStoreUser();
 
+    const client = useApolloClient();
+
     const logout = () => {
         setUser(null);
         setToken(null);
+
+        client.cache.reset();
     };
 
     const navigate = useNavigate();
 
     const onLogoutClick = () => {
         logout();
-        navigate({ to: '/' });
+        navigate({ to: '/login' });
     };
 
     return (
