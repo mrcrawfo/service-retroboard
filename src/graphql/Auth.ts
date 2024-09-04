@@ -43,19 +43,13 @@ export const AuthQuery = extendType({
                 }
 
                 if (!userId) {
-                    return {
-                        success: false,
-                        message: 'Incorrect username or password',
-                    };
+                    throw new Error('Incorrect username or password');
                 }
 
                 const user = await User.findOne({ where: { id: userId } });
 
                 if (!user) {
-                    return {
-                        success: false,
-                        message: 'Incorrect username or password',
-                    };
+                    throw new Error('Incorrect username or password');
                 }
 
                 return {
@@ -86,19 +80,13 @@ export const AuthMutation = extendType({
                 const user = await User.findOne({ where: { username } });
 
                 if (!user) {
-                    return {
-                        success: false,
-                        message: 'Incorrect username or password',
-                    };
+                    throw new Error('Incorrect username or password');
                 }
 
                 const isValid = await argon2.verify(user.password, password);
 
                 if (!isValid) {
-                    return {
-                        success: false,
-                        message: 'Incorrect username or password',
-                    };
+                    throw new Error('Incorrect username or password');
                 }
 
                 const token =

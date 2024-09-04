@@ -12,8 +12,11 @@ const LoginFormField = ({
 }: LoginFormFieldProps & TextFieldProps) => {
     return (
         <>
-            <TextField inputProps={{ type, placeholder, ...register(name, { required: true }) }} {...textFieldProps} />
-            {validationError && <span className='error-message'>{validationError.message}</span>}
+            <TextField
+                inputProps={{ type, placeholder, ...register(name, { required: true }) }}
+                error={!!validationError}
+                {...textFieldProps}
+            />
         </>
     );
 };

@@ -34,43 +34,34 @@ export type ValidLoginFieldNames = 'username' | 'password';
 export type ValidRegisterFieldNames = 'email' | 'username' | 'password' | 'confirmPassword';
 
 export const LoginSchema: ZodType<LoginFormData> = z.object({
-    username: z.string(),
-    // .min(4, { message: 'Username is too short' }),
-    password: z.string({
-        required_error: 'required field',
-        invalid_type_error: 'Password is required',
-    }),
+    username: z
+        .string()
+        .min(1, { message: 'Username is required' })
+        .transform((value) => value || undefined),
+    password: z
+        .string()
+        .min(1, { message: 'Password is required' })
+        .transform((value) => value || undefined),
 });
 
 export const RegisterSchema: ZodType<RegisterFormData> = z
     .object({
-        email: z
-            .string({
-                required_error: 'required field',
-                invalid_type_error: 'Email is required',
-            })
-            .email({ message: 'Invalid email' }),
+        email: z.string().email({ message: 'Invalid email' }),
         username: z
-            .string({
-                required_error: 'required field',
-                invalid_type_error: 'Username is required',
-            })
+            .string()
             .min(3, { message: 'Username is too short' })
-            .max(20, { message: 'Username is too long' }),
+            .max(20, { message: 'Username is too long' })
+            .transform((value) => value || undefined),
         password: z
-            .string({
-                required_error: 'required field',
-                invalid_type_error: 'Password is required',
-            })
+            .string()
             .min(8, { message: 'Password is too short' })
-            .max(20, { message: 'Password is too long' }),
+            .max(20, { message: 'Password is too long' })
+            .transform((value) => value || undefined),
         confirmPassword: z
-            .string({
-                required_error: 'required field',
-                invalid_type_error: 'Password Confirm is required',
-            })
+            .string()
             .min(8, { message: 'Password is too short' })
-            .max(20, { message: 'Password is too long' }),
+            .max(20, { message: 'Password is too long' })
+            .transform((value) => value || undefined),
     })
     .refine((data) => data.password === data.confirmPassword, {
         message: 'Passwords do not match',
