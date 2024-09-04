@@ -11,8 +11,6 @@ export const UserType = objectType({
         t.nonNull.int('id');
         t.nonNull.string('username');
         t.nullable.string('password');
-        t.nonNull.string('firstName');
-        t.nonNull.string('lastName');
         t.nonNull.string('email');
         t.nullable.list.field('boards', {
             type: 'Board',

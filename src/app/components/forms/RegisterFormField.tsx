@@ -1,4 +1,4 @@
-import { TextField, TextFieldProps } from '@mui/material';
+import { Alert, TextField, TextFieldProps } from '@mui/material';
 
 import { RegisterFormFieldProps } from '../../helpers/types.js';
 
@@ -17,6 +17,7 @@ const RegisterFormField = ({
                 error={!!validationError}
                 {...textFieldProps}
             />
+            {validationError && <Alert severity='error'>{validationError.message}</Alert>}
         </>
     );
 };

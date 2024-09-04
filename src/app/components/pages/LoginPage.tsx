@@ -1,5 +1,5 @@
 import { useMutation } from '@apollo/client';
-import { useNavigate } from '@tanstack/react-router';
+import { Link, useNavigate } from '@tanstack/react-router';
 import { useForm } from 'react-hook-form';
 import { Alert, Box, Container, Typography } from '@mui/material';
 import { LoadingButton } from '@mui/lab';
@@ -67,8 +67,6 @@ const LoginPage = ({}: LoginPageProps) => {
                 const user = {
                     id: response.data.login.user.id,
                     username: response.data.login.user.username,
-                    firstName: response.data.login.user.firstName,
-                    lastName: response.data.login.user.lastName,
                     email: response.data.login.user.email,
                 };
 
@@ -85,7 +83,7 @@ const LoginPage = ({}: LoginPageProps) => {
 
     return (
         <Container sx={styles.container}>
-            <Typography component='h1' variant='h5'>
+            <Typography component='h1' variant='h2'>
                 Sign in
             </Typography>
             <Box component='form' noValidate onSubmit={handleSubmit(onSubmit)} sx={{ width: '25vw', mt: 1 }}>
@@ -103,7 +101,6 @@ const LoginPage = ({}: LoginPageProps) => {
                     autoComplete='username'
                     autoFocus
                 />
-                {errors.username && <Alert severity='error'>{errors.username.message}</Alert>}
                 <LoginFormField
                     type='password'
                     placeholder='Password'
@@ -117,12 +114,13 @@ const LoginPage = ({}: LoginPageProps) => {
                     label='Password'
                     autoComplete='current-password'
                 />
-                {errors.password && <Alert severity='error'>{errors.password.message}</Alert>}
-                {/* <FormControlLabel control={<Checkbox value='remember' color='primary' />} label='Remember me' /> */}
                 {loginError && <Alert severity='error'>Incorrect username or password</Alert>}
                 <LoadingButton loading={loginLoading} type='submit' fullWidth variant='contained' sx={{ mt: 3, mb: 2 }}>
                     Sign In
                 </LoadingButton>
+                <Typography variant='body2' align='center'>
+                    Not already a member? <Link to='/register'>Sign up</Link>
+                </Typography>
             </Box>
         </Container>
     );

@@ -26,7 +26,7 @@ const LoginButton = ({ ...buttonProps }: LoginButtonProps) => {
 
     const onLogoutClick = () => {
         logout();
-        navigate({ to: '/' });
+        navigate({ to: '/login' });
     };
 
     return (

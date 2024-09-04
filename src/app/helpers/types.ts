@@ -46,28 +46,30 @@ export const LoginSchema: ZodType<LoginFormData> = z.object({
 
 export const RegisterSchema: ZodType<RegisterFormData> = z
     .object({
-        email: z.string().email({ message: 'Invalid email' }),
+        email: z.string().min(1, { message: 'Email is required' }).email({ message: 'Invalid email' }),
         username: z
             .string()
-            .min(3, { message: 'Username is too short' })
+            .min(1, { message: 'Username is required' })
+            .min(2, { message: 'Username is too short' })
             .max(20, { message: 'Username is too long' })
             .transform((value) => value || undefined),
         password: z
             .string()
+            .min(1, { message: 'Password is required' })
             .min(8, { message: 'Password is too short' })
             .max(20, { message: 'Password is too long' })
             .transform((value) => value || undefined),
         confirmPassword: z
             .string()
-            .min(8, { message: 'Password is too short' })
-            .max(20, { message: 'Password is too long' })
+            .min(1, { message: 'Password is required' })
             .transform((value) => value || undefined),
     })
-    .refine((data) => data.password === data.confirmPassword, {
-        message: 'Passwords do not match',
-        path: ['confirmPassword'], // path of error
+    .superRefine(({ confirmPassword, password }, ctx) => {
+        if (confirmPassword !== password) {
+            ctx.addIssue({
+                code: 'custom',
+                message: 'The passwords did not match',
+                path: ['confirmPassword'],
+            });
+        }
     });
-// .refine(async (data) => {
-//     const user = await getUserByUsername({ variables: { username: data.username } });
-//     return user ? { message: 'Username already exists', path: ['username'] } : null;
-// ;
