@@ -1,6 +1,6 @@
 import { Alert, TextField, TextFieldProps } from '@mui/material';
 
-import { LoginFormFieldProps } from '../../helpers/types.js';
+import { LoginFormFieldProps } from '../../../helpers/types.js';
 
 const LoginFormField = ({
     type,

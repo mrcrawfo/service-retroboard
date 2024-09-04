@@ -1,6 +1,6 @@
 import { Alert, TextField, TextFieldProps } from '@mui/material';
 
-import { RegisterFormFieldProps } from '../../helpers/types.js';
+import { RegisterFormFieldProps } from '../../../helpers/types.js';
 
 const RegisterFormField = ({
     type,
