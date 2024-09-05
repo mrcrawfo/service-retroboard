@@ -64,7 +64,7 @@ const EditableBoardName = ({
     });
 
     const onSave = () => {
-        if (editText !== boardName) {
+        if (editText && editText !== '' && editText !== boardName) {
             updateBoardName().then(() => {
                 setEditMode(false);
                 setEditingCard(false);
@@ -72,6 +72,7 @@ const EditableBoardName = ({
         } else {
             setEditMode(false);
             setEditingCard(false);
+            setEditText(boardName);
         }
     };
 
@@ -83,7 +84,7 @@ const EditableBoardName = ({
 
     return (
         <>
-            {editMode && editText ? (
+            {editMode ? (
                 <OutlinedInput
                     sx={styles.input}
                     value={editText}
