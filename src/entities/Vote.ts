@@ -19,7 +19,9 @@ export class Vote extends BaseEntity {
     @Column()
     cardId!: number;
 
-    @ManyToOne('Card', 'votes')
+    @ManyToOne('Card', 'votes', {
+        onDelete: 'CASCADE',
+    })
     card: Relation<Card>;
 
     @Column()

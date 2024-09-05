@@ -8,7 +8,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { REGISTER } from '../../graph/auth/queries.js';
 import { useAuthStoreActions } from '../../store/AuthStore.js';
 import { RegisterFormData, RegisterSchema, ValidRegisterFieldNames } from '../../helpers/types.js';
-import RegisterFormField from '../forms/RegisterFormField.jsx';
+import RegisterFormField from '../atoms/forms/RegisterFormField.jsx';
 
 export interface RegisterPageProps {}
 

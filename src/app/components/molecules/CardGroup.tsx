@@ -72,7 +72,6 @@ const CardGroup = ({
                     cardId={card.id}
                     text={card.text}
                     votes={card.votes}
-                    grouped={groupedCards.length > 1}
                 />
             ))}
         </Stack>

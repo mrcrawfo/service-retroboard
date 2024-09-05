@@ -5,6 +5,7 @@ export const GET_USER_BOARDS = gql`
         getBoardsByUserId {
             id
             name
+            votesAllowed
             columns {
                 id
                 name
@@ -23,7 +24,6 @@ export const GET_USER_BOARDS = gql`
                     }
                     groupedCardIds
                 }
-                
             }
             cards {
                 columnId
@@ -50,6 +50,7 @@ export const GET_ALL_BOARDS = gql`
         getBoards {
             id
             name
+            votesAllowed
             columns {
                 id
                 name
@@ -94,6 +95,7 @@ export const GET_BOARD = gql`
         getBoard(id: $id) {
             id
             name
+            votesAllowed
             columns {
                 id
                 name
@@ -115,10 +117,11 @@ export const GET_BOARD = gql`
 `;
 
 export const CREATE_BOARD = gql`
-    mutation createBoard($name: String!, $columns: [ColumnPresetTypeInput!]!) {
-        createBoard(name: $name, columns: $columns) {
+    mutation createBoard($name: String!, $columns: [ColumnPresetTypeInput!]!, $votesAllowed: Int!) {
+        createBoard(name: $name, columns: $columns, votesAllowed: $votesAllowed) {
             id
             name
+            votesAllowed
             columns {
                 id
                 name

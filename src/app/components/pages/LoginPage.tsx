@@ -8,7 +8,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { LOGIN } from '../../graph/auth/queries.js';
 import { useAuthStoreActions } from '../../store/AuthStore.js';
 import { LoginFormData, LoginSchema, ValidLoginFieldNames } from '../../helpers/types.js';
-import LoginFormField from '../forms/LoginFormField.jsx';
+import LoginFormField from '../atoms/forms/LoginFormField.jsx';
 
 export interface LoginPageProps {}
 

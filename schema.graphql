@@ -16,6 +16,7 @@ type Board {
   creatorId: Int!
   id: Int!
   name: String!
+  votesAllowed: Int!
 }
 
 type BoardColumn {
@@ -84,10 +85,10 @@ type MoveCardResponse {
 
 type Mutation {
   addVoteToCard(boardId: Int!, cardId: Int!, userId: Int!): Vote!
-  createBoard(columns: [ColumnPresetTypeInput]!, name: String!): Board!
+  createBoard(columns: [ColumnPresetTypeInput]!, name: String!, votesAllowed: Int!): Board!
+  createBoardColumn(boardId: Int!, name: String!, slot: Int!): BoardColumn!
   createBoardPreset(description: String!, name: String!): BoardPreset!
   createCard(boardId: Int!, columnId: Int!, text: String!): Card!
-  createColumn(boardId: Int!, name: String!, slot: Int!): BoardColumn!
   createColumnPreset(color: String!, name: String!): ColumnPreset!
   deleteCard(id: Int!): CardDeleteResponse!
   groupCard(cardId: Int!, fromColumnId: Int!, groupedCardIds: [Int!]!, toColumnId: Int!): GroupCardResponse!
@@ -95,6 +96,7 @@ type Mutation {
   moveCard(cardId: Int!, fromColumnId: Int!, toColumnId: Int!): MoveCardResponse!
   register(email: String!, password: String!, username: String!): AuthType!
   subtractVoteFromCard(boardId: Int!, cardId: Int!, userId: Int!): Vote
+  updateBoardColumnName(id: Int!, name: String!): BoardColumn!
   updateBoardName(id: Int!, name: String!): Board!
   updateCard(id: Int!, text: String!): Card!
 }

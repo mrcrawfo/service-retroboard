@@ -1,56 +1,68 @@
 import { KeyboardEvent, useEffect, useRef, useState } from 'react';
-import { EditOutlined } from '@mui/icons-material';
-import { Button, IconButton, InputAdornment, InputProps, OutlinedInput, Stack, Typography } from '@mui/material';
+import { Button, InputAdornment, InputProps, OutlinedInput, Typography } from '@mui/material';
 import { useMutation } from '@apollo/client';
 
-import { UPDATE_BOARD_NAME } from '../../graph/board/queries.js';
+import { UPDATE_BOARD_COLUMN_NAME } from '../../graph/boardColumns/queries.js';
 import { useAuthStoreToken } from '../../store/AuthStore.js';
 
-export interface EditableBoardNameProps extends InputProps {
-    boardId: number;
-    boardName: string;
+export interface EditableBoardColumnNameProps extends InputProps {
+    boardColumnId: number;
+    boardColumnName: string;
     editingCard: boolean;
     setEditingCard: (editing: boolean) => void;
 }
 
-const EditableBoardName = ({
-    boardId,
-    boardName,
+const EditableBoardColumnName = ({
+    boardColumnId,
+    boardColumnName,
     editingCard,
     setEditingCard,
     ...inputProps
-}: EditableBoardNameProps) => {
+}: EditableBoardColumnNameProps) => {
     const styles = {
         headerContainer: {
             width: '100%',
             justifyContent: 'center',
-        },
-        header: {
-            maxWidth: '90%',
-            whiteSpace: 'nowrap',
-            textOverflow: 'ellipsis',
-            overflow: 'hidden',
         },
         input: {
             width: '100%',
             height: '64px',
             margin: '4px 0',
         },
+        h2: {
+            maxWidth: '100%',
+            height: '2.25em',
+            overflow: 'hidden',
+            textOverflow: 'ellipsis',
+            display: '-webkit-box',
+            lineClamp: 2,
+            WebkitLineClamp: 2,
+            WebkitBoxOrient: 'vertical',
+            textAlign: 'center',
+            verticalAlign: 'middle',
+            lineHeight: '1.125em',
+            fontFamily: 'Roboto',
+            fontWeight: 'normal',
+            fontSize: '1.75rem',
+            marginBottom: '9px',
+            cursor: editingCard ? 'auto' : 'pointer',
+            pointerEvents: editingCard ? 'none' : 'auto',
+        },
     };
 
     const token = useAuthStoreToken();
 
     const [editMode, setEditMode] = useState<boolean>(false);
-    const [editText, setEditText] = useState<string>(boardName);
+    const [editText, setEditText] = useState<string>(boardColumnName);
     useEffect(() => {
-        setEditText(boardName);
-    }, [boardName]);
+        setEditText(boardColumnName);
+    }, [boardColumnName]);
 
-    const boardNameInputElement = useRef<HTMLInputElement>(null);
+    const boardColumnNameInputElement = useRef<HTMLInputElement>(null);
 
-    const [updateBoardName, { loading: updateBoardNameLoading }] = useMutation(UPDATE_BOARD_NAME, {
+    const [updateBoardName, { loading: updateBoardNameLoading }] = useMutation(UPDATE_BOARD_COLUMN_NAME, {
         variables: {
-            id: boardId,
+            id: boardColumnId,
             name: editText,
         },
         context: {
@@ -64,7 +76,7 @@ const EditableBoardName = ({
     });
 
     const onSave = () => {
-        if (editText && editText !== '' && editText !== boardName) {
+        if (editText && editText !== '' && editText !== boardColumnName) {
             updateBoardName().then(() => {
                 setEditMode(false);
                 setEditingCard(false);
@@ -72,14 +84,14 @@ const EditableBoardName = ({
         } else {
             setEditMode(false);
             setEditingCard(false);
-            setEditText(boardName);
+            setEditText(boardColumnName);
         }
     };
 
     const onCancel = () => {
         setEditMode(false);
         setEditingCard(false);
-        setEditText(boardName);
+        setEditText(boardColumnName);
     };
 
     return (
@@ -88,9 +100,9 @@ const EditableBoardName = ({
                 <OutlinedInput
                     sx={styles.input}
                     value={editText}
-                    ref={boardNameInputElement}
+                    ref={boardColumnNameInputElement}
                     onBlur={(e) => {
-                        if (e.relatedTarget?.id !== 'save-board-input-text') {
+                        if (e.relatedTarget?.id !== 'save-boardColumn-input-text') {
                             // needs timeout to allow the Save button to be clicked
                             setTimeout(() => {
                                 onCancel();
@@ -119,7 +131,7 @@ const EditableBoardName = ({
                     endAdornment={
                         <InputAdornment position='end'>
                             <Button
-                                id='save-board-input-text'
+                                id='save-boardColumn-input-text'
                                 variant='contained'
                                 onClick={onSave}
                                 disabled={updateBoardNameLoading}
@@ -131,23 +143,21 @@ const EditableBoardName = ({
                     {...inputProps}
                 />
             ) : (
-                <Stack direction='row' spacing={1} sx={styles.headerContainer}>
-                    <Typography variant='h2' sx={styles.header}>
-                        {boardName}
-                    </Typography>
-                    <IconButton
-                        onClick={() => {
+                <Typography
+                    variant='h4'
+                    sx={styles.h2}
+                    onClick={() => {
+                        if (!editingCard) {
                             setEditMode(true);
                             setEditingCard(true);
-                        }}
-                        disabled={editingCard}
-                    >
-                        <EditOutlined />
-                    </IconButton>
-                </Stack>
+                        }
+                    }}
+                >
+                    {boardColumnName}
+                </Typography>
             )}
         </>
     );
 };
 
-export default EditableBoardName;
+export default EditableBoardColumnName;

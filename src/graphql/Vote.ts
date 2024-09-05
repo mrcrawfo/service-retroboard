@@ -1,5 +1,7 @@
 import { extendType, intArg, nonNull, objectType } from 'nexus';
 
+import { Board } from '../entities/Board.js';
+import { Card } from '../entities/Card.js';
 import { User } from '../entities/User.js';
 import { Vote } from '../entities/Vote.js';
 import { Context } from '../types/Context.js';
@@ -60,6 +62,16 @@ export const VoteMutation = extendType({
                     throw new Error("Can't vote without logging in");
                 }
 
+                const card: Card = await Card.findOne({ where: { id: cardId } });
+                if (!card) {
+                    throw new Error('Card not found');
+                }
+
+                const board: Board = await Board.findOne({ where: { id: boardId } });
+                if (!board) {
+                    throw new Error('Board not found');
+                }
+
                 return await Vote.create({ boardId, cardId, userId }).save();
             },
         });
@@ -78,14 +90,27 @@ export const VoteMutation = extendType({
                     throw new Error("Can't vote without logging in");
                 }
 
+                const card: Card = await Card.findOne({ where: { id: cardId } });
+                if (!card) {
+                    throw new Error('Card not found');
+                }
+
+                const board: Board = await Board.findOne({ where: { id: boardId } });
+                if (!board) {
+                    throw new Error('Board not found');
+                }
+
                 const vote = await Vote.findOne({ where: { boardId, cardId, userId } });
+
+                const returnVote = { ...vote };
+
                 if (vote) {
                     if (vote) {
                         await Vote.remove(vote);
                     }
                 }
 
-                return vote;
+                return returnVote as Vote;
             },
         });
     },
