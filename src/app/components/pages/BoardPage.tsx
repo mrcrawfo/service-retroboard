@@ -1,6 +1,6 @@
 import { useMutation, useQuery } from '@apollo/client';
 import { CircularProgress, Grid } from '@mui/material';
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import { DndContext, useSensor, useSensors } from '@dnd-kit/core';
 
 import { BoardColumn as BoardColumnType } from '../../../entities/BoardColumn.js';
@@ -11,7 +11,7 @@ import { GET_BOARD } from '../../graph/board/queries.js';
 // import { PAGE_HEADER_HEIGHT, SITE_HEADER_HEIGHT } from '../../helpers/constants.js';
 import { InteractivePointer } from '../../helpers/sensors/InteractivePointer.js';
 import { getThemeColor } from '../../helpers/theme.js';
-import { useAuthStoreToken } from '../../store/AuthStore.js';
+import { useAuthStoreToken, useAuthStoreUser } from '../../store/AuthStore.js';
 import { MOVE_CARD, GROUP_CARD } from '../../graph/cards/queries.js';
 
 export interface BoardPageProps {
@@ -21,18 +21,13 @@ export interface BoardPageProps {
 const BoardPage = ({ boardId }: BoardPageProps) => {
     const [userVotes, setUserVotes] = useState<number[]>([]);
 
-    useEffect(() => {
-        console.log('userVotes');
-        console.log(userVotes);
-    }, [userVotes]);
-
-    const boardVotesAllowed = 6;
-
     const [cards, setCards] = useState<CardType[]>([]);
     const [columns, setColumns] = useState<BoardColumnType[]>([]);
     const [boardName, setBoardName] = useState<string>('');
+    const [boardVotesAllowed, setBoardVotesAllowed] = useState<number>(6);
 
     const token = useAuthStoreToken();
+    const userId = useAuthStoreUser()?.id;
 
     const sensors = useSensors(
         useSensor(InteractivePointer, {
@@ -81,6 +76,12 @@ const BoardPage = ({ boardId }: BoardPageProps) => {
             setCards(getBoard.cards || []);
             setColumns(([...getBoard.columns] || []).sort((a: BoardColumnType, b: BoardColumnType) => a.slot - b.slot));
             setBoardName(getBoard?.name || '');
+            setBoardVotesAllowed(getBoard?.votesAllowed || 6);
+            setUserVotes(
+                getBoard.cards
+                    .map((card: CardType) => card.votes.filter((vote) => vote.userId === userId).map(() => card.id))
+                    .flat(),
+            );
         }
     }, [boardData]);
 
@@ -115,7 +116,6 @@ const BoardPage = ({ boardId }: BoardPageProps) => {
                 });
             }
             if (dragType === 'cardBase' && dropType === 'cardOverlay') {
-                console.log(`combine cards ${dragCardId} and ${dropCardId}`);
                 const groupedCardIds =
                     [...cards.find((c: CardType) => c.id === parseInt(dropCardId)).groupedCardIds] || [];
                 if (!groupedCardIds.includes(parseInt(dropCardId))) {

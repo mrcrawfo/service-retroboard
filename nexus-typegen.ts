@@ -43,6 +43,7 @@ export interface NexusGenObjects {
     creatorId: number; // Int!
     id: number; // Int!
     name: string; // String!
+    votesAllowed: number; // Int!
   }
   BoardColumn: { // root type
     boardId: number; // Int!
@@ -124,6 +125,7 @@ export interface NexusGenFieldTypes {
     creatorId: number; // Int!
     id: number; // Int!
     name: string; // String!
+    votesAllowed: number; // Int!
   }
   BoardColumn: { // field return type
     board: NexusGenRootTypes['Board'] | null; // Board
@@ -240,6 +242,7 @@ export interface NexusGenFieldTypeNames {
     creatorId: 'Int'
     id: 'Int'
     name: 'String'
+    votesAllowed: 'Int'
   }
   BoardColumn: { // field return type name
     board: 'Board'
@@ -352,6 +355,7 @@ export interface NexusGenArgTypes {
     createBoard: { // args
       columns: Array<NexusGenInputs['ColumnPresetTypeInput'] | null>; // [ColumnPresetTypeInput]!
       name: string; // String!
+      votesAllowed: number; // Int!
     }
     createBoardColumn: { // args
       boardId: number; // Int!

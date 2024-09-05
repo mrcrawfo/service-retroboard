@@ -24,6 +24,9 @@ export class Board extends BaseEntity {
     @Column()
     name!: string;
 
+    @Column()
+    votesAllowed!: number;
+
     @OneToMany('Card', 'board')
     cards: Relation<Card>[];
 

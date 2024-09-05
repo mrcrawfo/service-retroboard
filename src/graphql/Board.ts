@@ -12,6 +12,7 @@ export const BoardType = objectType({
     definition(t) {
         t.nonNull.int('id');
         t.nonNull.string('name');
+        t.nonNull.int('votesAllowed');
         t.nullable.list.field('cards', {
             type: 'Card',
             resolve(parent, _args, _context, _info): Promise<Card[]> {
@@ -90,16 +91,23 @@ export const BoardMutation = extendType({
             args: {
                 name: nonNull(stringArg()),
                 columns: nonNull(list(arg({ type: ColumnPresetTypeInput }))),
+                votesAllowed: nonNull(intArg()),
             },
             async resolve(_parent, args, context: Context, _info): Promise<Board> {
-                const { name } = args;
+                const { name, votesAllowed } = args;
                 const { userId } = context;
 
                 if (!userId) {
                     throw new Error("Can't create board without logging in");
                 }
 
-                const board: Board = await Board.create({ name, cards: [], columns: [], creatorId: userId }).save();
+                const board: Board = await Board.create({
+                    name,
+                    votesAllowed,
+                    cards: [],
+                    columns: [],
+                    creatorId: userId,
+                }).save();
 
                 const columns: BoardColumn[] = [];
                 for (let i = 0; i < args.columns.length; i++) {

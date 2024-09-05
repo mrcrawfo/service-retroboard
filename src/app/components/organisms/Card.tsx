@@ -24,7 +24,6 @@ export interface CardProps extends MuiCardProps {
     setUserVotes: (userVotes: number[]) => void;
     editingCard: boolean;
     setEditingCard: (editing: boolean) => void;
-    grouped: boolean;
 }
 
 const Card = ({
@@ -39,7 +38,6 @@ const Card = ({
     setUserVotes,
     editingCard,
     setEditingCard,
-    grouped,
 }: CardProps) => {
     const {
         attributes,
@@ -111,9 +109,6 @@ const Card = ({
         },
     });
 
-    console.log('grouped');
-    console.log(grouped);
-
     const [deleteCard, { loading: deleteCardLoading }] = useMutation(DELETE_CARD, {
         variables: {
             id: cardId,
@@ -162,7 +157,6 @@ const Card = ({
                         />
                         <VoteCounter
                             cardId={cardId}
-                            columnId={columnId}
                             boardId={boardId}
                             boardVotesAllowed={boardVotesAllowed}
                             themeColor={themeColor}

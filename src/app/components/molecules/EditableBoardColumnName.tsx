@@ -1,5 +1,5 @@
 import { KeyboardEvent, useEffect, useRef, useState } from 'react';
-import { Button, InputAdornment, InputProps, OutlinedInput, Stack, Typography } from '@mui/material';
+import { Button, InputAdornment, InputProps, OutlinedInput, Typography } from '@mui/material';
 import { useMutation } from '@apollo/client';
 
 import { UPDATE_BOARD_COLUMN_NAME } from '../../graph/boardColumns/queries.js';
