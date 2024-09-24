@@ -1,5 +1,5 @@
 import { useMutation, useQuery } from '@apollo/client';
-import { CircularProgress, Grid } from '@mui/material';
+import { CircularProgress, Grid, SelectChangeEvent, Stack } from '@mui/material';
 import React, { useMemo, useState } from 'react';
 import { DndContext, useSensor, useSensors } from '@dnd-kit/core';
 
@@ -8,11 +8,14 @@ import { Card as CardType } from '../../../entities/Card.js';
 import BoardColumn from '../organisms/BoardColumn.jsx';
 import EditableBoardName from '../molecules/EditableBoardName.jsx';
 import { GET_BOARD } from '../../graph/board/queries.js';
-// import { PAGE_HEADER_HEIGHT, SITE_HEADER_HEIGHT } from '../../helpers/constants.js';
+import { BOARD_HEADER_HEIGHT, PAGE_HEADER_HEIGHT, SITE_HEADER_HEIGHT } from '../../helpers/constants.js';
 import { InteractivePointer } from '../../helpers/sensors/InteractivePointer.js';
 import { getThemeColor } from '../../helpers/theme.js';
 import { useAuthStoreToken, useAuthStoreUser } from '../../store/AuthStore.js';
 import { MOVE_CARD, GROUP_CARD } from '../../graph/cards/queries.js';
+import BoardSortSelect from '../atoms/BoardSortSelect.jsx';
+import UserVotesDisplay from '../atoms/UserVotesDisplay.jsx';
+import { useLocalStorage } from '../../hooks/useLocalStorage.js';
 
 export interface BoardPageProps {
     boardId: number;
@@ -28,6 +31,14 @@ const BoardPage = ({ boardId }: BoardPageProps) => {
 
     const token = useAuthStoreToken();
     const userId = useAuthStoreUser()?.id;
+
+    const { setItem, getItem } = useLocalStorage();
+    const [sortOrder, setSortOrder] = useState<string>(getItem(`board-sort-${boardId}`) || 'newest');
+
+    const onSortChange = (event: SelectChangeEvent<string>) => {
+        setSortOrder(event.target.value);
+        setItem(`board-sort-${boardId}`, event.target.value);
+    };
 
     const sensors = useSensors(
         useSensor(InteractivePointer, {
@@ -73,17 +84,42 @@ const BoardPage = ({ boardId }: BoardPageProps) => {
     useMemo(() => {
         const { getBoard } = boardData || {};
         if (getBoard) {
-            setCards(getBoard.cards || []);
+            const boardCards = [...getBoard.cards] || [];
+            if (sortOrder === 'newest') {
+                boardCards.sort((a: CardType, b: CardType) => b.id - a.id);
+            }
+            if (sortOrder === 'votes') {
+                // sum votes from grouped cards
+                boardCards.sort((a: CardType, b: CardType) => {
+                    const aVotes = a.groupedCardIds.length
+                        ? a.groupedCardIds.reduce((acc, cardId) => {
+                              const card = boardCards.find((c) => c.id === cardId);
+                              return acc + card.votes.length;
+                          }, 0)
+                        : a.votes.length;
+                    const bVotes = b.groupedCardIds.length
+                        ? b.groupedCardIds.reduce((acc, cardId) => {
+                              const card = boardCards.find((c) => c.id === cardId);
+                              return acc + card.votes.length;
+                          }, 0)
+                        : b.votes.length;
+                    return bVotes - aVotes;
+                });
+            }
+            if (sortOrder === 'random') {
+                boardCards.sort(() => Math.random() - 0.5);
+            }
+            setCards(boardCards);
             setColumns(([...getBoard.columns] || []).sort((a: BoardColumnType, b: BoardColumnType) => a.slot - b.slot));
             setBoardName(getBoard?.name || '');
             setBoardVotesAllowed(getBoard?.votesAllowed || 6);
             setUserVotes(
-                getBoard.cards
+                boardCards
                     .map((card: CardType) => card.votes.filter((vote) => vote.userId === userId).map(() => card.id))
                     .flat(),
             );
         }
-    }, [boardData]);
+    }, [boardData, sortOrder]);
 
     const [editingCard, setEditingCard] = useState<boolean>(false);
 
@@ -91,9 +127,19 @@ const BoardPage = ({ boardId }: BoardPageProps) => {
         grid: {
             margin: '16px 0',
             width: '100vw',
-            // height: `calc(100vh - ${PAGE_HEADER_HEIGHT}px - ${SITE_HEADER_HEIGHT}px + 24px)`,
-            height: 'calc(100vh - 150px)',
+            height: `calc(100vh - ${PAGE_HEADER_HEIGHT}px - ${SITE_HEADER_HEIGHT}px - ${BOARD_HEADER_HEIGHT}px - 58px)`,
+            // height: 'calc(100vh - 198px)',
             overflow: 'hidden',
+        },
+        controlsContainer: {
+            height: `${PAGE_HEADER_HEIGHT}px`,
+            backgroundColor: '#fff',
+            justifyContent: 'flex-end',
+            width: '100%',
+        },
+        titleContainer: {
+            height: `${BOARD_HEADER_HEIGHT}px`,
+            backgroundColor: '#f0f0f0',
         },
     };
 
@@ -136,12 +182,11 @@ const BoardPage = ({ boardId }: BoardPageProps) => {
 
     return (
         <DndContext onDragEnd={handleDragEnd} sensors={sensors}>
-            <div
-                style={{
-                    backgroundColor: '#f0f0f0',
-                    height: `{$PAGE_HEADER_HEIGHT}px`,
-                }}
-            >
+            <Stack direction='row' spacing={4} sx={styles.controlsContainer}>
+                <UserVotesDisplay userVotes={userVotes} boardVotesAllowed={boardVotesAllowed} />
+                <BoardSortSelect onChange={onSortChange} value={sortOrder} />
+            </Stack>
+            <div style={styles.titleContainer}>
                 <EditableBoardName
                     boardId={boardId}
                     boardName={boardName}
