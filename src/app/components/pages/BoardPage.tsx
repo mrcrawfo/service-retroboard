@@ -1,5 +1,5 @@
 import { useMutation, useQuery } from '@apollo/client';
-import { CircularProgress, Grid } from '@mui/material';
+import { CircularProgress, Grid, SelectChangeEvent } from '@mui/material';
 import React, { useMemo, useState } from 'react';
 import { DndContext, useSensor, useSensors } from '@dnd-kit/core';
 
@@ -8,11 +8,13 @@ import { Card as CardType } from '../../../entities/Card.js';
 import BoardColumn from '../organisms/BoardColumn.jsx';
 import EditableBoardName from '../molecules/EditableBoardName.jsx';
 import { GET_BOARD } from '../../graph/board/queries.js';
-// import { PAGE_HEADER_HEIGHT, SITE_HEADER_HEIGHT } from '../../helpers/constants.js';
+import { BOARD_HEADER_HEIGHT, PAGE_HEADER_HEIGHT, SITE_HEADER_HEIGHT } from '../../helpers/constants.js';
 import { InteractivePointer } from '../../helpers/sensors/InteractivePointer.js';
 import { getThemeColor } from '../../helpers/theme.js';
 import { useAuthStoreToken, useAuthStoreUser } from '../../store/AuthStore.js';
 import { MOVE_CARD, GROUP_CARD } from '../../graph/cards/queries.js';
+import BoardSortSelect from '../atoms/BoardSortSelect.jsx';
+import { useLocalStorage } from '../../hooks/useLocalStorage.js';
 
 export interface BoardPageProps {
     boardId: number;
@@ -28,6 +30,14 @@ const BoardPage = ({ boardId }: BoardPageProps) => {
 
     const token = useAuthStoreToken();
     const userId = useAuthStoreUser()?.id;
+
+    const { setItem, getItem } = useLocalStorage();
+    const [sortOrder, setSortOrder] = useState<string>(getItem(`board-sort-${boardId}`) || 'newest');
+
+    const onSortChange = (event: SelectChangeEvent<string>) => {
+        setSortOrder(event.target.value);
+        setItem(`board-sort-${boardId}`, event.target.value);
+    };
 
     const sensors = useSensors(
         useSensor(InteractivePointer, {
@@ -91,9 +101,20 @@ const BoardPage = ({ boardId }: BoardPageProps) => {
         grid: {
             margin: '16px 0',
             width: '100vw',
-            // height: `calc(100vh - ${PAGE_HEADER_HEIGHT}px - ${SITE_HEADER_HEIGHT}px + 24px)`,
-            height: 'calc(100vh - 150px)',
+            height: `calc(100vh - ${PAGE_HEADER_HEIGHT}px - ${SITE_HEADER_HEIGHT}px - ${BOARD_HEADER_HEIGHT}px - 58px)`,
+            // height: 'calc(100vh - 198px)',
             overflow: 'hidden',
+        },
+        controlsContainer: {
+            height: `${PAGE_HEADER_HEIGHT}px`,
+            backgroundColor: '#fff',
+            display: 'flex',
+            justifyContent: 'flex-end',
+            width: '100%',
+        },
+        titleContainer: {
+            height: `${BOARD_HEADER_HEIGHT}px`,
+            backgroundColor: '#f0f0f0',
         },
     };
 
@@ -136,12 +157,10 @@ const BoardPage = ({ boardId }: BoardPageProps) => {
 
     return (
         <DndContext onDragEnd={handleDragEnd} sensors={sensors}>
-            <div
-                style={{
-                    backgroundColor: '#f0f0f0',
-                    height: `{$PAGE_HEADER_HEIGHT}px`,
-                }}
-            >
+            <div style={styles.controlsContainer}>
+                <BoardSortSelect onChange={onSortChange} value={sortOrder} />
+            </div>
+            <div style={styles.titleContainer}>
                 <EditableBoardName
                     boardId={boardId}
                     boardName={boardName}
