@@ -84,17 +84,42 @@ const BoardPage = ({ boardId }: BoardPageProps) => {
     useMemo(() => {
         const { getBoard } = boardData || {};
         if (getBoard) {
-            setCards(getBoard.cards || []);
+            const boardCards = [...getBoard.cards] || [];
+            if (sortOrder === 'newest') {
+                boardCards.sort((a: CardType, b: CardType) => b.id - a.id);
+            }
+            if (sortOrder === 'votes') {
+                // sum votes from grouped cards
+                boardCards.sort((a: CardType, b: CardType) => {
+                    const aVotes = a.groupedCardIds.length
+                        ? a.groupedCardIds.reduce((acc, cardId) => {
+                              const card = boardCards.find((c) => c.id === cardId);
+                              return acc + card.votes.length;
+                          }, 0)
+                        : a.votes.length;
+                    const bVotes = b.groupedCardIds.length
+                        ? b.groupedCardIds.reduce((acc, cardId) => {
+                              const card = boardCards.find((c) => c.id === cardId);
+                              return acc + card.votes.length;
+                          }, 0)
+                        : b.votes.length;
+                    return bVotes - aVotes;
+                });
+            }
+            if (sortOrder === 'random') {
+                boardCards.sort(() => Math.random() - 0.5);
+            }
+            setCards(boardCards);
             setColumns(([...getBoard.columns] || []).sort((a: BoardColumnType, b: BoardColumnType) => a.slot - b.slot));
             setBoardName(getBoard?.name || '');
             setBoardVotesAllowed(getBoard?.votesAllowed || 6);
             setUserVotes(
-                getBoard.cards
+                boardCards
                     .map((card: CardType) => card.votes.filter((vote) => vote.userId === userId).map(() => card.id))
                     .flat(),
             );
         }
-    }, [boardData]);
+    }, [boardData, sortOrder]);
 
     const [editingCard, setEditingCard] = useState<boolean>(false);
 
