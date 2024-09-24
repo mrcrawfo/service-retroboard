@@ -1,5 +1,5 @@
 import { useMutation, useQuery } from '@apollo/client';
-import { CircularProgress, Grid, SelectChangeEvent } from '@mui/material';
+import { CircularProgress, Grid, SelectChangeEvent, Stack } from '@mui/material';
 import React, { useMemo, useState } from 'react';
 import { DndContext, useSensor, useSensors } from '@dnd-kit/core';
 
@@ -14,6 +14,7 @@ import { getThemeColor } from '../../helpers/theme.js';
 import { useAuthStoreToken, useAuthStoreUser } from '../../store/AuthStore.js';
 import { MOVE_CARD, GROUP_CARD } from '../../graph/cards/queries.js';
 import BoardSortSelect from '../atoms/BoardSortSelect.jsx';
+import UserVotesDisplay from '../atoms/UserVotesDisplay.jsx';
 import { useLocalStorage } from '../../hooks/useLocalStorage.js';
 
 export interface BoardPageProps {
@@ -108,7 +109,6 @@ const BoardPage = ({ boardId }: BoardPageProps) => {
         controlsContainer: {
             height: `${PAGE_HEADER_HEIGHT}px`,
             backgroundColor: '#fff',
-            display: 'flex',
             justifyContent: 'flex-end',
             width: '100%',
         },
@@ -157,9 +157,10 @@ const BoardPage = ({ boardId }: BoardPageProps) => {
 
     return (
         <DndContext onDragEnd={handleDragEnd} sensors={sensors}>
-            <div style={styles.controlsContainer}>
+            <Stack direction='row' spacing={4} sx={styles.controlsContainer}>
+                <UserVotesDisplay userVotes={userVotes} boardVotesAllowed={boardVotesAllowed} />
                 <BoardSortSelect onChange={onSortChange} value={sortOrder} />
-            </div>
+            </Stack>
             <div style={styles.titleContainer}>
                 <EditableBoardName
                     boardId={boardId}
