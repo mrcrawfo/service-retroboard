@@ -2,6 +2,8 @@ import { StrictMode } from 'react';
 import ReactDOM from 'react-dom/client';
 import { useApolloClient } from '@apollo/client';
 import { RouterProvider, createRouter } from '@tanstack/react-router';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 import { ApolloWrapper } from './app/components/atoms/ApolloWrapper.js';
 import ApolloAuthProvider from './app/hocs/ApolloAuthProvider.js';
@@ -29,6 +31,7 @@ function App() {
             <ApolloWrapper>
                 <ApolloAuthProvider>
                     <AppContextWrapper />
+                    <ToastContainer position='bottom-left' theme='light' />
                 </ApolloAuthProvider>
             </ApolloWrapper>
         </StrictMode>

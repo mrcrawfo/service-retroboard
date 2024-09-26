@@ -3,6 +3,7 @@ import { CircularProgress, Grid, IconButton, SelectChangeEvent, Stack } from '@m
 import { LinkOutlined } from '@mui/icons-material';
 import React, { useMemo, useState } from 'react';
 import { DndContext, useSensor, useSensors } from '@dnd-kit/core';
+import { toast } from 'react-toastify';
 import { useNavigate } from '@tanstack/react-router';
 
 import { BoardColumn as BoardColumnType } from '../../../entities/BoardColumn.js';
@@ -198,6 +199,7 @@ const BoardPage = ({ boardId }: BoardPageProps) => {
                         onClick={() => {
                             // copy URL to clipboard
                             navigator.clipboard.writeText(window.location.href);
+                            toast('Board URL copied to clipboard');
                         }}
                     >
                         <LinkOutlined />
