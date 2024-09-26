@@ -49,6 +49,7 @@ export const BoardQuery = extendType({
                 }
 
                 return conn.query('select * from board');
+                // return Board.find({ where: { creatorId: userId } });
             },
         });
         t.nonNull.list.field('getBoardsByUserId', {

@@ -99,7 +99,8 @@ const CreateBoardModal = ({ open, handleCloseModal, ...dialogProps }: CreateBoar
                   }
                 : {},
         },
-        refetchQueries: ['GetBoardsByUserId'],
+        // refetchQueries: ['GetBoardsByUserId'],
+        refetchQueries: ['GetBoards'],
     });
 
     const handleGroupedBoardChange = (_event: SyntheticEvent, newValue: string) => {
@@ -117,6 +118,7 @@ const CreateBoardModal = ({ open, handleCloseModal, ...dialogProps }: CreateBoar
                     const { __typename, id, ...rest } = column;
                     return rest;
                 }),
+                votesAllowed: selectedBoardPreset.votes,
             },
         }).then(() => {
             handleCloseModal();
@@ -131,10 +133,7 @@ const CreateBoardModal = ({ open, handleCloseModal, ...dialogProps }: CreateBoar
                     sx={styles.inputText}
                     value={boardName}
                     inputRef={boardNameInputRef}
-                    onFocus={(e) =>
-                        e.currentTarget.setSelectionRange(e.currentTarget.value.length, e.currentTarget.value.length)
-                    }
-                    autoFocus
+                    placeholder='Enter board name'
                     onChange={(event: ChangeEvent<HTMLInputElement>) => setBoardName(event.target.value)}
                 />
                 {groupedBoardPresets?.length > 0 && selectedBoardType && selectedBoardPreset && (

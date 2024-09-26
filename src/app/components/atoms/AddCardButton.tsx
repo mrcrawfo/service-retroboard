@@ -18,7 +18,8 @@ const AddCardButton = ({ themeColor, onClick, ...buttonProps }: AddCardButtonPro
                 backgroundColor: themeColor?.colors?.primary?.base || '#88a8ff',
             },
             ':disabled': {
-                backgroundColor: themeColor?.colors?.secondary?.disabled || '#a0c0ff',
+                backgroundColor: themeColor?.colors?.primary?.disabled || '#a0c0ff',
+                opacity: 0.5,
             },
         },
     };
