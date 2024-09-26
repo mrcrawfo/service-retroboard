@@ -1,10 +1,16 @@
-import { createRootRoute, Link, Outlet } from '@tanstack/react-router';
+import { createRootRouteWithContext, Link, Outlet } from '@tanstack/react-router';
 import { TanStackRouterDevtools } from '@tanstack/router-devtools';
 
+import { User as UserType } from '../../entities/User.js';
 import LoginButton from '../components/atoms/LoginButton.jsx';
 import { SITE_HEADER_HEIGHT } from '../helpers/constants.js';
 
-export const Route = createRootRoute({
+type RouterContext = {
+    user: UserType | null;
+    token: string | null;
+};
+
+export const Route = createRootRouteWithContext<RouterContext>()({
     component: () => (
         <>
             <div className='p-2 flex gap-2' style={{ height: `${SITE_HEADER_HEIGHT}px` }}>
