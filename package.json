@@ -8,6 +8,8 @@
         "dev:watch": "tsc -w",
         "dev:start": "nodemon dist/src/server.js",
         "dev:vite": "vite",
+        "docker:server": "tsc -b && node dist/src/server.js",
+        "docker:vite": "tsc -b && vite build && vite --host 0.0.0.0 --port 3000",
         "build": "tsc -b && vite build",
         "lint": "biome lint .",
         "lint:check": "biome check .",
@@ -63,8 +65,6 @@
         "lint-staged": "15.2.9"
     },
     "lint-staged": {
-        "*.{js,jsx,ts,tsx,json,md}": [
-            "biome format . --write"
-        ]
+        "*.{js,jsx,ts,tsx,json,md}": ["biome format . --write"]
     }
 }

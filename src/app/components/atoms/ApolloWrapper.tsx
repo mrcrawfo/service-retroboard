@@ -3,12 +3,9 @@ import { ApolloClient, ApolloProvider, InMemoryCache } from '@apollo/client';
 import { IProps } from '../../types/interfaces.js';
 
 export const ApolloWrapper = ({ children }: IProps) => {
-    // const token = localStorage.getItem('userAuth') || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsImlhdCI6MTcyMjE1MTUyNX0.oi3KYbTxDzj1M78AvQoquAYO1LFsaIq4_CJNxHnXcQc';
-
     const cache = new InMemoryCache();
     const client = new ApolloClient({
-        // uri: Env('VITE_APP_API_URL'),
-        uri: 'http://localhost:4000/graphql',
+        uri: import.meta?.env ? import.meta.env.VITE_APP_API_URL : 'http://localhost:4000/graphql',
         cache,
     });
 
