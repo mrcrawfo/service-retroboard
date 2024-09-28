@@ -1,5 +1,5 @@
 import { useMutation } from '@apollo/client';
-import { Link, useNavigate } from '@tanstack/react-router';
+import { Link, useNavigate, useSearch } from '@tanstack/react-router';
 import { useForm } from 'react-hook-form';
 import { Alert, Box, Container, Typography } from '@mui/material';
 import { LoadingButton } from '@mui/lab';
@@ -32,6 +32,8 @@ const RegisterPage = ({}: RegisterPageProps) => {
     });
 
     const navigate = useNavigate();
+
+    const search = useSearch({ from: '/register' });
 
     const { setUser, setToken } = useAuthStoreActions();
 
@@ -77,7 +79,7 @@ const RegisterPage = ({}: RegisterPageProps) => {
 
                 login(user, token);
 
-                navigate({ to: '/boards' });
+                navigate({ to: search?.redirect ? search.redirect : '/boards' });
             }
         } catch (error) {
             console.error(error);
@@ -159,7 +161,10 @@ const RegisterPage = ({}: RegisterPageProps) => {
                     Register
                 </LoadingButton>
                 <Typography variant='body2' align='center'>
-                    Already a member? <Link to='/login'>Sign in</Link>
+                    Already a member?{' '}
+                    <Link to='/login' search={search?.redirect ? { redirect: search.redirect } : null}>
+                        Sign in
+                    </Link>
                 </Typography>
             </Box>
         </Container>

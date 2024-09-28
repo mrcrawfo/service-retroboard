@@ -4,7 +4,6 @@ import { LinkOutlined } from '@mui/icons-material';
 import React, { useMemo, useState } from 'react';
 import { DndContext, useSensor, useSensors } from '@dnd-kit/core';
 import { toast } from 'react-toastify';
-import { useNavigate } from '@tanstack/react-router';
 
 import { BoardColumn as BoardColumnType } from '../../../entities/BoardColumn.js';
 import { Card as CardType } from '../../../entities/Card.js';
@@ -34,8 +33,6 @@ const BoardPage = ({ boardId }: BoardPageProps) => {
 
     const token = useAuthStoreToken();
     const userId = useAuthStoreUser()?.id;
-
-    const navigate = useNavigate();
 
     const { setItem, getItem } = useLocalStorage();
     const [sortOrder, setSortOrder] = useState<string>(getItem(`board-sort-${boardId}`) || 'newest');
