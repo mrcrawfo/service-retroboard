@@ -1,7 +1,9 @@
 import { useMutation, useQuery } from '@apollo/client';
-import { CircularProgress, Grid, SelectChangeEvent, Stack } from '@mui/material';
+import { CircularProgress, Grid, IconButton, SelectChangeEvent, Stack } from '@mui/material';
+import { LinkOutlined } from '@mui/icons-material';
 import React, { useMemo, useState } from 'react';
 import { DndContext, useSensor, useSensors } from '@dnd-kit/core';
+import { toast } from 'react-toastify';
 
 import { BoardColumn as BoardColumnType } from '../../../entities/BoardColumn.js';
 import { Card as CardType } from '../../../entities/Card.js';
@@ -134,8 +136,14 @@ const BoardPage = ({ boardId }: BoardPageProps) => {
         controlsContainer: {
             height: `${PAGE_HEADER_HEIGHT}px`,
             backgroundColor: '#fff',
-            justifyContent: 'flex-end',
             width: '100%',
+            justifyContent: 'space-between',
+        },
+        controlsLeft: {
+            justifyContent: 'flex-start',
+        },
+        controlsRight: {
+            justifyContent: 'flex-end',
         },
         titleContainer: {
             height: `${BOARD_HEADER_HEIGHT}px`,
@@ -182,9 +190,22 @@ const BoardPage = ({ boardId }: BoardPageProps) => {
 
     return (
         <DndContext onDragEnd={handleDragEnd} sensors={sensors}>
-            <Stack direction='row' spacing={4} sx={styles.controlsContainer}>
-                <UserVotesDisplay userVotes={userVotes} boardVotesAllowed={boardVotesAllowed} />
-                <BoardSortSelect onChange={onSortChange} value={sortOrder} />
+            <Stack direction='row' sx={styles.controlsContainer}>
+                <Stack direction='row' spacing={4} sx={styles.controlsLeft}>
+                    <IconButton
+                        onClick={() => {
+                            // copy URL to clipboard
+                            navigator.clipboard.writeText(window.location.href);
+                            toast.info('Board URL copied to clipboard');
+                        }}
+                    >
+                        <LinkOutlined />
+                    </IconButton>
+                </Stack>
+                <Stack direction='row' spacing={4} sx={styles.controlsRight}>
+                    <UserVotesDisplay userVotes={userVotes} boardVotesAllowed={boardVotesAllowed} />
+                    <BoardSortSelect onChange={onSortChange} value={sortOrder} />
+                </Stack>
             </Stack>
             <div style={styles.titleContainer}>
                 <EditableBoardName

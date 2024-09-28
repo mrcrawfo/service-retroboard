@@ -13,15 +13,16 @@ import { createFileRoute } from '@tanstack/react-router'
 // Import Routes
 
 import { Route as rootRoute } from './routes/__root'
+import { Route as AuthenticatedImport } from './routes/_authenticated'
+import { Route as AuthenticatedBoardsImport } from './routes/_authenticated/boards'
+import { Route as AuthenticatedBoardBoardIdImport } from './routes/_authenticated/board/$boardId'
 
 // Create Virtual Routes
 
 const ThemeLazyImport = createFileRoute('/theme')()
 const RegisterLazyImport = createFileRoute('/register')()
 const LoginLazyImport = createFileRoute('/login')()
-const BoardsLazyImport = createFileRoute('/boards')()
 const IndexLazyImport = createFileRoute('/')()
-const BoardBoardIdLazyImport = createFileRoute('/board/$boardId')()
 
 // Create/Update Routes
 
@@ -40,22 +41,25 @@ const LoginLazyRoute = LoginLazyImport.update({
   getParentRoute: () => rootRoute,
 } as any).lazy(() => import('./routes/login.lazy').then((d) => d.Route))
 
-const BoardsLazyRoute = BoardsLazyImport.update({
-  path: '/boards',
+const AuthenticatedRoute = AuthenticatedImport.update({
+  id: '/_authenticated',
   getParentRoute: () => rootRoute,
-} as any).lazy(() => import('./routes/boards.lazy').then((d) => d.Route))
+} as any)
 
 const IndexLazyRoute = IndexLazyImport.update({
   path: '/',
   getParentRoute: () => rootRoute,
 } as any).lazy(() => import('./routes/index.lazy').then((d) => d.Route))
 
-const BoardBoardIdLazyRoute = BoardBoardIdLazyImport.update({
+const AuthenticatedBoardsRoute = AuthenticatedBoardsImport.update({
+  path: '/boards',
+  getParentRoute: () => AuthenticatedRoute,
+} as any)
+
+const AuthenticatedBoardBoardIdRoute = AuthenticatedBoardBoardIdImport.update({
   path: '/board/$boardId',
-  getParentRoute: () => rootRoute,
-} as any).lazy(() =>
-  import('./routes/board/$boardId.lazy').then((d) => d.Route),
-)
+  getParentRoute: () => AuthenticatedRoute,
+} as any)
 
 // Populate the FileRoutesByPath interface
 
@@ -68,11 +72,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexLazyImport
       parentRoute: typeof rootRoute
     }
-    '/boards': {
-      id: '/boards'
-      path: '/boards'
-      fullPath: '/boards'
-      preLoaderRoute: typeof BoardsLazyImport
+    '/_authenticated': {
+      id: '/_authenticated'
+      path: ''
+      fullPath: ''
+      preLoaderRoute: typeof AuthenticatedImport
       parentRoute: typeof rootRoute
     }
     '/login': {
@@ -96,12 +100,19 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ThemeLazyImport
       parentRoute: typeof rootRoute
     }
-    '/board/$boardId': {
-      id: '/board/$boardId'
+    '/_authenticated/boards': {
+      id: '/_authenticated/boards'
+      path: '/boards'
+      fullPath: '/boards'
+      preLoaderRoute: typeof AuthenticatedBoardsImport
+      parentRoute: typeof AuthenticatedImport
+    }
+    '/_authenticated/board/$boardId': {
+      id: '/_authenticated/board/$boardId'
       path: '/board/$boardId'
       fullPath: '/board/$boardId'
-      preLoaderRoute: typeof BoardBoardIdLazyImport
-      parentRoute: typeof rootRoute
+      preLoaderRoute: typeof AuthenticatedBoardBoardIdImport
+      parentRoute: typeof AuthenticatedImport
     }
   }
 }
@@ -110,11 +121,13 @@ declare module '@tanstack/react-router' {
 
 export const routeTree = rootRoute.addChildren({
   IndexLazyRoute,
-  BoardsLazyRoute,
+  AuthenticatedRoute: AuthenticatedRoute.addChildren({
+    AuthenticatedBoardsRoute,
+    AuthenticatedBoardBoardIdRoute,
+  }),
   LoginLazyRoute,
   RegisterLazyRoute,
   ThemeLazyRoute,
-  BoardBoardIdLazyRoute,
 })
 
 /* prettier-ignore-end */
@@ -126,18 +139,21 @@ export const routeTree = rootRoute.addChildren({
       "filePath": "__root.tsx",
       "children": [
         "/",
-        "/boards",
+        "/_authenticated",
         "/login",
         "/register",
-        "/theme",
-        "/board/$boardId"
+        "/theme"
       ]
     },
     "/": {
       "filePath": "index.lazy.tsx"
     },
-    "/boards": {
-      "filePath": "boards.lazy.tsx"
+    "/_authenticated": {
+      "filePath": "_authenticated.tsx",
+      "children": [
+        "/_authenticated/boards",
+        "/_authenticated/board/$boardId"
+      ]
     },
     "/login": {
       "filePath": "login.lazy.tsx"
@@ -148,8 +164,13 @@ export const routeTree = rootRoute.addChildren({
     "/theme": {
       "filePath": "theme.lazy.tsx"
     },
-    "/board/$boardId": {
-      "filePath": "board/$boardId.lazy.tsx"
+    "/_authenticated/boards": {
+      "filePath": "_authenticated/boards.tsx",
+      "parent": "/_authenticated"
+    },
+    "/_authenticated/board/$boardId": {
+      "filePath": "_authenticated/board/$boardId.tsx",
+      "parent": "/_authenticated"
     }
   }
 }

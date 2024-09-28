@@ -1,13 +1,13 @@
 import { useState } from 'react';
 import { Button, Stack, Typography } from '@mui/material';
-import { createLazyFileRoute, Link } from '@tanstack/react-router';
+import { createFileRoute, Link } from '@tanstack/react-router';
 import { useQuery } from '@apollo/client';
 
-import CreateBoardModal from '../components/organisms/modals/CreateBoardModal.js';
-import { GET_ALL_BOARDS } from '../graph/board/queries.js';
-import { useAuthStoreToken } from '../store/AuthStore.js';
+import CreateBoardModal from '../../components/organisms/modals/CreateBoardModal.js';
+import { GET_ALL_BOARDS } from '../../graph/board/queries.js';
+import { useAuthStoreToken } from '../../store/AuthStore.js';
 
-export const Route = createLazyFileRoute('/boards')({
+export const Route = createFileRoute('/_authenticated/boards')({
     component: Boards,
 });
 
