@@ -6,7 +6,6 @@ import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 import { ApolloWrapper } from './app/components/atoms/ApolloWrapper.js';
-import ApolloAuthProvider from './app/hocs/ApolloAuthProvider.js';
 import { useAuthStoreActions, useAuthStoreToken, useAuthStoreUser } from './app/store/AuthStore.js';
 
 // Import the generated route tree
@@ -29,10 +28,8 @@ function App() {
     return (
         <StrictMode>
             <ApolloWrapper>
-                <ApolloAuthProvider>
-                    <AppContextWrapper />
-                    <ToastContainer position='bottom-left' theme='light' />
-                </ApolloAuthProvider>
+                <AppContextWrapper />
+                <ToastContainer position='bottom-left' theme='light' />
             </ApolloWrapper>
         </StrictMode>
     );
