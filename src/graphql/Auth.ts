@@ -91,8 +91,8 @@ export const AuthMutation = extendType({
 
                 const token =
                     jsonwebtoken.sign({ userId: user.id }, process.env.TOKEN_SECRET as jsonwebtoken.Secret, {
-                        // expiresIn: '24h',
-                        expiresIn: '1m',
+                        expiresIn: '24h',
+                        // expiresIn: '1m',
                     }) || null;
 
                 if (token) {

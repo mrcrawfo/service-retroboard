@@ -196,7 +196,7 @@ const BoardPage = ({ boardId }: BoardPageProps) => {
                         onClick={() => {
                             // copy URL to clipboard
                             navigator.clipboard.writeText(window.location.href);
-                            toast('Board URL copied to clipboard');
+                            toast.info('Board URL copied to clipboard');
                         }}
                     >
                         <LinkOutlined />
