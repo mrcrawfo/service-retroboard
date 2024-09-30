@@ -86,7 +86,7 @@ const BoardPage = ({ boardId }: BoardPageProps) => {
     useMemo(() => {
         const { getBoard } = boardData || {};
         if (getBoard) {
-            const boardCards = [...getBoard.cards] || [];
+            const boardCards = [...getBoard.cards];
             if (sortOrder === 'newest') {
                 boardCards.sort((a: CardType, b: CardType) => b.id - a.id);
             }
@@ -112,7 +112,7 @@ const BoardPage = ({ boardId }: BoardPageProps) => {
                 boardCards.sort(() => Math.random() - 0.5);
             }
             setCards(boardCards);
-            setColumns(([...getBoard.columns] || []).sort((a: BoardColumnType, b: BoardColumnType) => a.slot - b.slot));
+            setColumns([...getBoard.columns].sort((a: BoardColumnType, b: BoardColumnType) => a.slot - b.slot));
             setBoardName(getBoard?.name || '');
             setBoardVotesAllowed(getBoard?.votesAllowed || 6);
             setUserVotes(
@@ -170,8 +170,7 @@ const BoardPage = ({ boardId }: BoardPageProps) => {
                 });
             }
             if (dragType === 'cardBase' && dropType === 'cardOverlay') {
-                const groupedCardIds =
-                    [...cards.find((c: CardType) => c.id === parseInt(dropCardId)).groupedCardIds] || [];
+                const groupedCardIds = [...cards.find((c: CardType) => c.id === parseInt(dropCardId)).groupedCardIds];
                 if (!groupedCardIds.includes(parseInt(dropCardId))) {
                     groupedCardIds.push(parseInt(dropCardId));
                 }

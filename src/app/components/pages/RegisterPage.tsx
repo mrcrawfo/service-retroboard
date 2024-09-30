@@ -162,7 +162,17 @@ const RegisterPage = ({}: RegisterPageProps) => {
                 </LoadingButton>
                 <Typography variant='body2' align='center'>
                     Already a member?{' '}
-                    <Link to='/login' search={search?.redirect ? { redirect: search.redirect } : null}>
+                    <Link
+                        to='/login'
+                        search={
+                            search?.redirect
+                                ? {
+                                      // @ts-ignore
+                                      redirect: search.redirect,
+                                  }
+                                : null
+                        }
+                    >
                         Sign in
                     </Link>
                 </Typography>

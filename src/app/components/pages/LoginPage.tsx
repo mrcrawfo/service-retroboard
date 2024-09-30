@@ -114,7 +114,17 @@ const LoginPage = ({}: LoginPageProps) => {
                 </LoadingButton>
                 <Typography variant='body2' align='center'>
                     Not already a member?{' '}
-                    <Link to='/register' search={search?.redirect ? { redirect: search.redirect } : null}>
+                    <Link
+                        to='/register'
+                        search={
+                            search?.redirect
+                                ? {
+                                      // @ts-ignore
+                                      redirect: search.redirect,
+                                  }
+                                : null
+                        }
+                    >
                         Sign up
                     </Link>
                 </Typography>

@@ -9,6 +9,7 @@ export const Route = createFileRoute('/_authenticated')({
             throw redirect({
                 to: '/login',
                 search: {
+                    // @ts-ignore
                     redirect: location.href,
                 },
             });
@@ -36,6 +37,7 @@ export const Route = createFileRoute('/_authenticated')({
                 throw redirect({
                     to: '/login',
                     search: {
+                        // @ts-ignore
                         redirect: location.href,
                     },
                 });
