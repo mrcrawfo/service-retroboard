@@ -11,8 +11,43 @@ service-retroboard is the foundation of a versatile web application designed for
 - Editing - Board/Column renaming and card text updates
 - Multiple preset board types with named and colored columns
 
-## Installation
-_TODO: Installation instructions are pending and will be added in a future update._
+## Setup and Installation
+
+### Prerequisites
+- Docker
+- Git
+
+### Local Deployment
+
+1. Clone the repository:
+   ```
+   git clone https://github.com/mrcrawfo/service-retroboard.git
+   ```
+
+2. From within the project folder, launch the containerized environment:
+   ```
+   docker compose up
+   ```
+
+This command initializes and runs four Docker containers:
+
+1. `service-retroboard`: The main application service
+   - `postgres`: PostgreSQL database (Port: 5432)
+   - `server`: Apollo Server for GraphQL API and database communication (Port: 4000)
+   - `vite`: Frontend build and hosting service (Port: 3000)
+   - `seed`: Database seeding service for demo data (this will Exit after populating the database)
+
+### Accessing the Application
+
+After successful deployment, the application is accessible via a web browser:
+
+- New User Registration: http://localhost:3000/register
+- Existing User Login: http://localhost:3000/login
+
+#### Demo Account
+For testing purposes, the following credentials are predefined by the seeder:
+- Username: `admin`
+- Password: `admin1234`
 
 ## Technology Stack
 ### Frontend

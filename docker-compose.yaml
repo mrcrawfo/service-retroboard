@@ -1,0 +1,62 @@
+services:
+  postgres:
+    image: postgres:16
+    container_name: service-retroboard-postgres
+    networks:
+      - backend
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: service-retroboard-db
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d service-retroboard-db"]
+      interval: 10s
+      retries: 5
+      start_period: 30s
+      timeout: 10s
+
+  vite:
+    build:
+      context: ./
+      dockerfile: ./.docker/vite/Dockerfile
+    networks:
+      - backend
+    ports:
+      - "3000:3000"
+      - "8080:8080"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3000"]
+      interval: 4s
+      timeout: 30s
+      retries: 5
+      start_period: 20s
+
+  server:
+    build:
+      context: ./
+      dockerfile: ./.docker/server/Dockerfile
+    networks:
+      - backend
+    ports:
+      - "4000:4000"
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+  seed:
+    build:
+      context: ./
+      dockerfile: ./.docker/seed/Dockerfile
+    networks:
+      - backend
+    depends_on:
+      postgres:
+        condition: service_healthy
+      vite:
+        condition: service_healthy
+
+networks:
+  backend:
+    name: service-retroboard-network
+    driver: bridge

@@ -1,5 +1,6 @@
 import { createRootRouteWithContext, Link, Outlet, useRouterState } from '@tanstack/react-router';
 import { TanStackRouterDevtools } from '@tanstack/router-devtools';
+import { Box, Button } from '@mui/material';
 
 import { User as UserType } from '../../entities/User.js';
 import LoginButton from '../components/atoms/LoginButton.jsx';
@@ -15,27 +16,32 @@ type RouterContext = {
 
 export const Route = createRootRouteWithContext<RouterContext>()({
     component: () => {
+        const styles = {
+            button: {
+                marginTop: '-8px',
+            },
+        };
+
         const matches = useRouterState({ select: (s) => s.matches });
         const context = matches[0]?.context;
 
         return (
             <>
-                <div className='p-2 flex gap-2' style={{ height: `${SITE_HEADER_HEIGHT}px` }}>
+                <Box display='flex' gap={2} sx={{ height: `${SITE_HEADER_HEIGHT}px` }}>
                     <Link to='/' className='[&.active]:font-bold'>
-                        Home
+                        <Button variant='text' sx={styles.button}>
+                            Home
+                        </Button>
                     </Link>
                     {context?.user && (
-                        <>
-                            <Link to='/boards' className='[&.active]:font-bold'>
+                        <Link to='/boards' className='[&.active]:font-bold'>
+                            <Button variant='text' sx={styles.button}>
                                 Boards
-                            </Link>
-                            <Link to='/theme' className='[&.active]:font-bold'>
-                                Theme
-                            </Link>
-                        </>
+                            </Button>
+                        </Link>
                     )}
                     <LoginButton />
-                </div>
+                </Box>
                 <hr />
                 <Outlet />
                 <TanStackRouterDevtools />
