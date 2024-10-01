@@ -36,6 +36,7 @@ const VoteCounter = ({
         counter: {
             fontWeight: 'bold',
             padding: '4px',
+            width: '12px',
         },
         inputText: {
             width: '100%',

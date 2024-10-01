@@ -119,16 +119,101 @@ declare module '@tanstack/react-router' {
 
 // Create and export the route tree
 
-export const routeTree = rootRoute.addChildren({
-  IndexLazyRoute,
-  AuthenticatedRoute: AuthenticatedRoute.addChildren({
-    AuthenticatedBoardsRoute,
-    AuthenticatedBoardBoardIdRoute,
-  }),
-  LoginLazyRoute,
-  RegisterLazyRoute,
-  ThemeLazyRoute,
-})
+interface AuthenticatedRouteChildren {
+  AuthenticatedBoardsRoute: typeof AuthenticatedBoardsRoute
+  AuthenticatedBoardBoardIdRoute: typeof AuthenticatedBoardBoardIdRoute
+}
+
+const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
+  AuthenticatedBoardsRoute: AuthenticatedBoardsRoute,
+  AuthenticatedBoardBoardIdRoute: AuthenticatedBoardBoardIdRoute,
+}
+
+const AuthenticatedRouteWithChildren = AuthenticatedRoute._addFileChildren(
+  AuthenticatedRouteChildren,
+)
+
+export interface FileRoutesByFullPath {
+  '/': typeof IndexLazyRoute
+  '': typeof AuthenticatedRouteWithChildren
+  '/login': typeof LoginLazyRoute
+  '/register': typeof RegisterLazyRoute
+  '/theme': typeof ThemeLazyRoute
+  '/boards': typeof AuthenticatedBoardsRoute
+  '/board/$boardId': typeof AuthenticatedBoardBoardIdRoute
+}
+
+export interface FileRoutesByTo {
+  '/': typeof IndexLazyRoute
+  '': typeof AuthenticatedRouteWithChildren
+  '/login': typeof LoginLazyRoute
+  '/register': typeof RegisterLazyRoute
+  '/theme': typeof ThemeLazyRoute
+  '/boards': typeof AuthenticatedBoardsRoute
+  '/board/$boardId': typeof AuthenticatedBoardBoardIdRoute
+}
+
+export interface FileRoutesById {
+  __root__: typeof rootRoute
+  '/': typeof IndexLazyRoute
+  '/_authenticated': typeof AuthenticatedRouteWithChildren
+  '/login': typeof LoginLazyRoute
+  '/register': typeof RegisterLazyRoute
+  '/theme': typeof ThemeLazyRoute
+  '/_authenticated/boards': typeof AuthenticatedBoardsRoute
+  '/_authenticated/board/$boardId': typeof AuthenticatedBoardBoardIdRoute
+}
+
+export interface FileRouteTypes {
+  fileRoutesByFullPath: FileRoutesByFullPath
+  fullPaths:
+    | '/'
+    | ''
+    | '/login'
+    | '/register'
+    | '/theme'
+    | '/boards'
+    | '/board/$boardId'
+  fileRoutesByTo: FileRoutesByTo
+  to:
+    | '/'
+    | ''
+    | '/login'
+    | '/register'
+    | '/theme'
+    | '/boards'
+    | '/board/$boardId'
+  id:
+    | '__root__'
+    | '/'
+    | '/_authenticated'
+    | '/login'
+    | '/register'
+    | '/theme'
+    | '/_authenticated/boards'
+    | '/_authenticated/board/$boardId'
+  fileRoutesById: FileRoutesById
+}
+
+export interface RootRouteChildren {
+  IndexLazyRoute: typeof IndexLazyRoute
+  AuthenticatedRoute: typeof AuthenticatedRouteWithChildren
+  LoginLazyRoute: typeof LoginLazyRoute
+  RegisterLazyRoute: typeof RegisterLazyRoute
+  ThemeLazyRoute: typeof ThemeLazyRoute
+}
+
+const rootRouteChildren: RootRouteChildren = {
+  IndexLazyRoute: IndexLazyRoute,
+  AuthenticatedRoute: AuthenticatedRouteWithChildren,
+  LoginLazyRoute: LoginLazyRoute,
+  RegisterLazyRoute: RegisterLazyRoute,
+  ThemeLazyRoute: ThemeLazyRoute,
+}
+
+export const routeTree = rootRoute
+  ._addFileChildren(rootRouteChildren)
+  ._addFileTypes<FileRouteTypes>()
 
 /* prettier-ignore-end */
 
